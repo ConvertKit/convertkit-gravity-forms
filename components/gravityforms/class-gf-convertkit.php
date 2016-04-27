@@ -18,6 +18,15 @@ class GFConvertKit extends GFFeedAddOn {
 
 	#endregion Required Variables for GFFeedAddOn class
 
+	public function init() {
+		parent::init();
+		$this->add_delayed_payment_support(
+			array(
+				'option_label' => esc_html__( 'Send to ConvertKit only when payment is received.' )
+			)
+		);
+	}
+
 	#region Singleton
 
 	private static $instance = null;

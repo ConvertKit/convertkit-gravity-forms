@@ -42,7 +42,7 @@ function ckgf_convertkit_api_get_forms($api_key = null) {
 	$query_args = is_null($api_key) ? array() : array('api_key' => $api_key);
 	$response   = ckgf_convertkit_api_request('forms', $query_args, null);
 
-	return is_wp_error($response) ? $responsee : (isset($response['forms']) ? array_combine(wp_list_pluck($response['forms'], 'id'), $response['forms']) : array());
+	return is_wp_error($response) ? $response : (isset($response['forms']) ? array_combine(wp_list_pluck($response['forms'], 'id'), $response['forms']) : array());
 }
 
 function ckgf_convertkit_api_add_email($form, $email, $name, $api_key = null) {
