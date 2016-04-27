@@ -127,7 +127,7 @@ class GFConvertKit extends GFFeedAddOn {
 		ckgf_debug($forms);
 
 		if(is_wp_error($forms)) {
-			$markup = sprintf('%s: %s', __('Error'), $form->get_error_message());
+			$markup = sprintf('%s: %s', __('Error'), $forms->get_error_message());
 		} else if(empty($forms)) {
 			$markup = sprintf('%s: %s', __('Error'), __('Please configure some forms on ConvertKit'));
 		} else {
