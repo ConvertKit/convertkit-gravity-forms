@@ -18,6 +18,15 @@ class GFConvertKit extends GFFeedAddOn {
 
 	#endregion Required Variables for GFFeedAddOn class
 
+	public function init() {
+		parent::init();
+		$this->add_delayed_payment_support(
+			array(
+				'option_label' => esc_html__( 'Send to ConvertKit only when payment is received.' )
+			)
+		);
+	}
+
 	#region Singleton
 
 	private static $instance = null;
@@ -127,7 +136,7 @@ class GFConvertKit extends GFFeedAddOn {
 		ckgf_debug($forms);
 
 		if(is_wp_error($forms)) {
-			$markup = sprintf('%s: %s', __('Error'), $form->get_error_message());
+			$markup = sprintf('%s: %s', __('Error'), $forms->get_error_message());
 		} else if(empty($forms)) {
 			$markup = sprintf('%s: %s', __('Error'), __('Please configure some forms on ConvertKit'));
 		} else {
