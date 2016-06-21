@@ -1,10 +1,10 @@
 === Gravity Forms ConvertKit Add-On ===
-Contributors: nickohrn, nathanbarry, davidlamarwheeler
+Contributors: nathanbarry, davidlamarwheeler, growdev, nickohrn
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 3.6
-Tested up to: 4.5.1
-Stable tag: 1.0.1
+Tested up to: 4.5.2
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,11 @@ Yes, for it to work you must first have an account on ConvertKit.com and own a l
 2. http://convertkit.wpengine.com/wp-content/uploads/2015/09/Screen-Shot-2015-09-07-at-10.37.50-AM-600x352.png
 
 == Changelog ==
+
+### 1.0.2
+
+* Email mapping field can now be mapped to a Simple Text Field
+* Added growdev as contributor
 
 ### 1.0.1
 

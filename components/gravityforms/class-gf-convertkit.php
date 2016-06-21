@@ -106,7 +106,7 @@ class GFConvertKit extends GFFeedAddOn {
 								'name'       => 'e',
 								'label'      => __('Email'),
 								'required'   => true,
-								'field_type' => array('email', 'hidden'),
+								'field_type' => '',
 							),
 
 							array(
