@@ -12,32 +12,13 @@ class CKGF_Components_GravityForms {
 	 */
 	public static function init() {
 		self::add_actions();
-		self::add_filters();
 	}
 
 	/**
-	 *
+	 * Plugin Hooks
 	 */
 	private static function add_actions() {
-		if(is_admin()) {
-
-		} else {
-
-		}
-
 		add_action('gform_loaded', array(__CLASS__, 'load'), 11);
-	}
-
-	/**
-	 *
-	 */
-	private static function add_filters() {
-		if(is_admin()) {
-
-		} else {
-
-		}
-
 	}
 
 	/**
