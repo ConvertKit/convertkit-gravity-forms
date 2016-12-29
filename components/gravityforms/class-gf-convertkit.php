@@ -75,59 +75,102 @@ class GFConvertKit extends GFFeedAddOn {
 	#region Feed Settings Fields
 
 	public function feed_settings_fields() {
-		return array(
-			array(
-				'title'       => __('ConvertKit Feed Settings'),
-				'description' => '',
-				'fields'      => array(
-					array(
-						'name'     => 'feed_name',
-						'label'    => __('Name'),
-						'type'     => 'text',
-						'class'    => 'medium',
-						'required' => true,
-						'tooltip'  => sprintf('<h6>%s</h6>%s', __('Name'), __('Enter a feed name to uniquely identify this setup.')),
-					),
+		$base_fields = array(
+			'title'       => __('ConvertKit Feed Settings'),
+			'description' => '',
+			'fields'      => array(
+				array(
+					'name'     => 'feed_name',
+					'label'    => __('Name'),
+					'type'     => 'text',
+					'class'    => 'medium',
+					'required' => true,
+					'tooltip'  => sprintf('<h6>%s</h6>%s', __('Name'), __('Enter a feed name to uniquely identify this setup.')),
+				),
 
-					array(
-						'name'     => 'form_id',
-						'label'    => __('ConvertKit Form'),
-						'type'     => 'convertkit_form',
-						'required' => true,
-						'tooltip'  => sprintf('<h6>%s</h6>%s', __('ConvertKit Form'), __('Select the ConvertKit form that you would like to add your contacts to.')),
-					),
+				array(
+					'name'     => 'form_id',
+					'label'    => __('ConvertKit Form'),
+					'type'     => 'convertkit_form',
+					'required' => true,
+					'tooltip'  => sprintf('<h6>%s</h6>%s', __('ConvertKit Form'), __('Select the ConvertKit form that you would like to add your contacts to.')),
+				),
 
-					array(
-						'name'      => 'field_map',
-						'label'     => __('Map Fields'),
-						'type'      => 'field_map',
-						'field_map' => array(
-							array(
-								'name'       => 'e',
-								'label'      => __('Email'),
-								'required'   => true,
-								'field_type' => '',
-							),
-
-							array(
-								'name'       => 'n',
-								'label'      => __('Name'),
-								'required'   => true,
-								'field_type' => '',
-							),
+				array(
+					'name'      => 'field_map',
+					'label'     => __('Map Fields'),
+					'type'      => 'field_map',
+					'field_map' => array(
+						array(
+							'name'       => 'e',
+							'label'      => __('Email'),
+							'required'   => true,
+							'field_type' => '',
 						),
-						'tooltip'   => sprintf('<h6>%s</h6>%s', __('Map Fields'), __('Associate email address and subscriber name with the appropriate Gravity Forms fields.')),
-					),
 
-					array(
-						'name'    => 'conditions',
-						'label'   => __('Conditional Logic'),
-						'type'    => 'feed_condition',
-						'tooltip' => sprintf('<h6>%s</h6>%s', __('Conditional Logic'), __('When conditional logic is enabled, form submissions will only be exported to ConvertKit when the conditions are met. When disabled all form submissions will be exported.')),
+						array(
+							'name'       => 'n',
+							'label'      => __('Name'),
+							'required'   => true,
+							'field_type' => '',
+						),
 					),
+					'tooltip'   => sprintf('<h6>%s</h6>%s', __('Map Fields'), __('Associate email address and subscriber name with the appropriate Gravity Forms fields.')),
+				),
+
+				array(
+					'name' => 'convertkit_custom_fields',
+					'label' => '',
+					'type' => 'dynamic_field_map',
+					'field_map' => $this->get_custom_fields(),
+					'disable_custom' => true,
+				),
+
+
+
+				array(
+					'name'    => 'conditions',
+					'label'   => __('Conditional Logic'),
+					'type'    => 'feed_condition',
+					'tooltip' => sprintf('<h6>%s</h6>%s', __('Conditional Logic'), __('When conditional logic is enabled, form submissions will only be exported to ConvertKit when the conditions are met. When disabled all form submissions will be exported.')),
 				),
 			),
 		);
+
+		return array( $base_fields );
+	}
+
+	public function get_custom_fields() {
+
+		$path = 'custom_fields';
+		$query_args = array();
+		$request_body = null;
+		$request_args = array();
+		$fields = array();
+
+		$response = ckgf_convertkit_api_request($path, $query_args, $request_body, $request_args );
+		$custom_fields = $response['custom_fields'];
+
+		if ( $custom_fields && !is_wp_error( $custom_fields ) ) {
+
+
+			$fields[] = array(
+				'label'     => __( 'Choose a ConvertKit Field', 'gfconnectwise' ),
+				);
+
+			foreach ( $custom_fields as $field ){
+
+				$fields[] = array(
+						'value'     => $field['key'],
+						'label'     => $field['label'],
+				);
+			}
+
+
+		}
+
+
+		return $fields;
 	}
 
 	public function settings_convertkit_form($field, $echo = true) {
@@ -196,11 +239,26 @@ class GFConvertKit extends GFFeedAddOn {
 	#region Feed Processing
 
 	public function process_feed($feed, $entry, $form) {
+
 		$field_map_e = rgars($feed, 'meta/field_map_e');
 		$field_map_n = rgars($feed, 'meta/field_map_n');
 		$form_id     = rgars($feed, 'meta/form_id');
 
-		ckgf_convertkit_api_add_email($form_id, $entry[$field_map_e], $entry[$field_map_n]);
+		$convertkit_custom_fields = $this->get_dynamic_field_map_fields( $feed, 'convertkit_custom_fields');
+
+		$fields = array();
+
+		$custom_fields = $this->get_custom_fields();
+		// do we have custom fields in the feed?  add them to fields
+		foreach ( $custom_fields as $field ) {
+			if ( isset( $field['value'] ) ) {
+				if ( isset( $convertkit_custom_fields[ $field['value'] ] ) ) {
+					$fields[ $field['value'] ] = rgar( $entry, $convertkit_custom_fields[ $field['value'] ] );
+				}
+			}
+		}
+
+		ckgf_convertkit_api_add_email( $form_id, $entry[$field_map_e], $entry[$field_map_n], null, $fields );
 	}
 
 	#endregion Feed Processing

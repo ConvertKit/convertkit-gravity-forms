@@ -45,13 +45,24 @@ function ckgf_convertkit_api_get_forms($api_key = null) {
 	return is_wp_error($response) ? $response : (isset($response['forms']) ? array_combine(wp_list_pluck($response['forms'], 'id'), $response['forms']) : array());
 }
 
-function ckgf_convertkit_api_add_email($form, $email, $name, $api_key = null) {
+function ckgf_convertkit_api_add_email($form, $email, $name, $api_key = null, $fields = array() ) {
 	$query_args = is_null($api_key) ? array() : array('api_key' => $api_key);
 
-	return ckgf_convertkit_api_request(sprintf('forms/%d/subscribe', $form), $query_args, array(
+	$custom_fields = array();
+	foreach ( $fields as $key => $value ){
+		$custom_fields[ $key ] = $value;
+	}
+
+	$request_body = array(
 		'name'  => $name,
 		'email' => $email,
-	), array(
-		'method' => 'POST',
-	));
+	);
+
+	if ( !empty( $custom_fields ) ){
+		$request_body['fields'] = $custom_fields;
+	}
+
+	$request_args = array( 'method' => 'POST' );
+
+	return ckgf_convertkit_api_request(sprintf('forms/%d/subscribe', $form), $query_args, $request_body , $request_args);
 }
