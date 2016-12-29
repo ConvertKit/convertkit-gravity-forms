@@ -6,6 +6,7 @@ Description: Integrates Gravity Forms with ConvertKit allowing form submissions 
 Version: 1.0.2
 Author: ConvertKit
 Author URI: http://convertkit.com/
+Text Domain: convertkit
 */
 
 if(!defined('ABSPATH')) { exit; }
