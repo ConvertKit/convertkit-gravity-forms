@@ -285,7 +285,7 @@ class GFConvertKit extends GFFeedAddOn {
 		foreach ( $custom_fields as $field ) {
 			if ( isset( $field['value'] ) ) {
 				if ( isset( $convertkit_custom_fields[ $field['value'] ] ) ) {
-					$fields[ $field['value'] ] = rgar( $entry, $convertkit_custom_fields[ $field['value'] ] );
+					$fields[ $field['value'] ] = $this->get_field_value( $form, $entry, $convertkit_custom_fields[ $field['value'] ] );
 				}
 			}
 		}
