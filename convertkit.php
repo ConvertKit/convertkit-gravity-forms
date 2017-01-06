@@ -1,12 +1,12 @@
 <?php
-
-/*
-Plugin Name: Gravity Forms ConvertKit Add-On
-Description: Integrates Gravity Forms with ConvertKit allowing form submissions to be automatically sent to your ConvertKit account.
-Version: 1.0.2
-Author: ConvertKit
-Author URI: http://convertkit.com/
-*/
+/**
+ * Plugin Name: Gravity Forms ConvertKit Add-On
+ * Description: Integrates Gravity Forms with ConvertKit allowing form submissions to be automatically sent to your ConvertKit account.
+ * Version: 1.0.3
+ * Author: ConvertKit
+ * Author URI: https://convertkit.com/
+ * Text Domain: convertkit
+ */
 
 if(!defined('ABSPATH')) { exit; }
 
