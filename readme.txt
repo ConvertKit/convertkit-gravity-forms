@@ -3,8 +3,8 @@ Contributors: nathanbarry, davidlamarwheeler, growdev, nickohrn
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 3.6
-Tested up to: 4.5.3
-Stable tag: 1.0.2
+Tested up to: 4.7
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,10 +33,15 @@ Yes, for it to work you must first have an account on ConvertKit.com and own a l
 
 == Screenshots ==
 
-1. http://convertkit.wpengine.com/wp-content/uploads/2015/09/Screen-Shot-2015-09-07-at-10.36.51-AM-600x313.png
-2. http://convertkit.wpengine.com/wp-content/uploads/2015/09/Screen-Shot-2015-09-07-at-10.37.50-AM-600x352.png
+1. screenshot-1.png
+2. screenshot-2.png
 
 == Changelog ==
+
+### 1.0.3  2017-01-05
+
+* Added ability to map ConvertKit Custom Fields to GF entries.
+* Cleaned up PHPDoc
 
 ### 1.0.2
 
