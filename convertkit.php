@@ -27,7 +27,7 @@ if(!defined('CKGF_PLUGIN_FILEPATH')) {
 }
 
 if(!defined('CKGF_VERSION')) {
-	define('CKGF_VERSION', '1.0.0');
+	define('CKGF_VERSION', '1.0.3');
 }
 
 if(!defined('CKGF_MIN_GF_VERSION')) {
