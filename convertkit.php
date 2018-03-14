@@ -55,3 +55,14 @@ require_once( path_join( CKGF_PLUGIN_DIRPATH, 'functions/utility.php' ) );
 
 // Gravity Forms Integration
 require_once( path_join( CKGF_PLUGIN_DIRPATH, 'components/gravityforms/gravityforms.php' ) );
+
+
+if ( ! function_exists( 'convertkit_gf_load_textdomain' ) ) {
+	/**
+	 * Load plugin textdomain
+	 */
+	function convertkit_gf_load_textdomain() {
+		load_plugin_textdomain( 'convertkit', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+	}
+	add_action( 'plugins_loaded', 'convertkit_gf_load_textdomain' );
+}
