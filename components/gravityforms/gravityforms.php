@@ -1,6 +1,8 @@
 <?php
 
-if(!defined('ABSPATH')) { exit; }
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Class CKGF_Components_GravityForms
@@ -18,7 +20,7 @@ class CKGF_Components_GravityForms {
 	 * Plugin Hooks
 	 */
 	private static function add_actions() {
-		add_action('gform_loaded', array(__CLASS__, 'load'), 11);
+		add_action( 'gform_loaded', array( __CLASS__, 'load' ), 11 );
 	}
 
 	/**
@@ -26,17 +28,17 @@ class CKGF_Components_GravityForms {
 	 *
 	 */
 	public static function load() {
-		if(!method_exists('GFForms', 'include_payment_addon_framework')) {
+		if ( ! method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
 			return;
 		}
 
-	    require_once('class-gf-convertkit.php');
+		require_once( 'class-gf-convertkit.php' );
 
-		GFAddOn::register('GFConvertKit');
+		GFAddOn::register( 'GFConvertKit' );
 	}
 
 }
 
-require_once('functions/gravityforms.php');
+require_once( 'functions/gravityforms.php' );
 
 CKGF_Components_GravityForms::init();

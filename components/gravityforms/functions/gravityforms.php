@@ -1,8 +1,10 @@
 <?php
 
-if(!defined('ABSPATH')) { exit; }
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-if(!function_exists('ckgf_instance')) {
+if ( ! function_exists( 'ckgf_instance' ) ) {
 	/**
 	 * Get the instance of the GFFeedAddOn
 	 *
