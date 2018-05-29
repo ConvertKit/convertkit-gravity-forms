@@ -6,6 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 GFForms::include_feed_addon_framework();
 
+/**
+ * Class GFConvertKit
+ */
 class GFConvertKit extends GFFeedAddOn {
 
 	protected $_full_path                = CKGF_PLUGIN_FILEPATH;
@@ -162,21 +165,29 @@ class GFConvertKit extends GFFeedAddOn {
 		$fields = array();
 
 		$response = ckgf_convertkit_api_request( $path, $query_args, $request_body, $request_args );
-		$custom_fields = $response['custom_fields'];
+		if ( ! is_wp_error( $response ) ) {
 
-		if ( $custom_fields && ! is_wp_error( $custom_fields ) ) {
 
-			$fields[] = array(
-				'label'     => __( 'Choose a ConvertKit Field', 'convertkit' ),
-				);
+			$custom_fields = $response['custom_fields'];
 
-			foreach ( $custom_fields as $field ) {
+			if ( $custom_fields && ! is_wp_error( $custom_fields ) ) {
 
 				$fields[] = array(
-						'value'     => $field['key'],
-						'label'     => $field['label'],
+					'label' => __( 'Choose a ConvertKit Field', 'convertkit' ),
 				);
+
+				foreach ( $custom_fields as $field ) {
+
+					$fields[] = array(
+						'value' => $field['key'],
+						'label' => $field['label'],
+					);
+				}
 			}
+		} else {
+			$fields[] = array(
+				'label' => __( 'There was an error connecting to ConvertKit', 'convertkit' ),
+			);
 		}
 
 		return $fields;
