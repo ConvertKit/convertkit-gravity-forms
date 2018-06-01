@@ -93,62 +93,80 @@ class GFConvertKit extends GFFeedAddOn {
 	 */
 	public function feed_settings_fields() {
 		$base_fields = array(
-			'title'       => __( 'ConvertKit Feed Settings' ),
-			'description' => '',
-			'fields'      => array(
-				array(
-					'name'     => 'feed_name',
-					'label'    => __( 'Name' ),
-					'type'     => 'text',
-					'class'    => 'medium',
-					'required' => true,
-					'tooltip'  => sprintf( '<h6>%s</h6>%s', __( 'Name' ), __( 'Enter a feed name to uniquely identify this setup.', 'convertkit' ) ),
+			array(
+				'title'       => __( 'ConvertKit Feed Settings' ),
+				'fields'      => array(
+					array(
+						'name'     => 'feed_name',
+						'label'    => __( 'Name' ),
+						'type'     => 'text',
+						'class'    => 'medium',
+						'required' => true,
+						'tooltip'  => sprintf( '<h6>%s</h6>%s', __( 'Name' ), __( 'Enter a feed name to uniquely identify this setup.', 'convertkit' ) ),
+					),
+					array(
+						'name'     => 'form_id',
+						'label'    => __( 'ConvertKit Form' ),
+						'type'     => 'convertkit_form',
+						'required' => true,
+						'tooltip'  => sprintf( '<h6>%s</h6>%s', __( 'ConvertKit Form', 'convertkit' ), __( 'Select the ConvertKit form that you would like to add your contacts to.', 'convertkit' ) ),
+					),
 				),
-				array(
-					'name'     => 'form_id',
-					'label'    => __( 'ConvertKit Form' ),
-					'type'     => 'convertkit_form',
-					'required' => true,
-					'tooltip'  => sprintf( '<h6>%s</h6>%s', __( 'ConvertKit Form', 'convertkit' ), __( 'Select the ConvertKit form that you would like to add your contacts to.', 'convertkit' ) ),
-				),
-				array(
-					'name'      => 'field_map',
-					'label'     => __( 'Map Fields' ),
-					'type'      => 'field_map',
-					'field_map' => array(
-						array(
-							'name'       => 'e',
-							'label'      => __( 'Email' ),
-							'required'   => true,
-							'field_type' => '',
-						),
+			),
+			array(
+				'dependency' => 'form_id',
+				'fields' => array(
 
-						array(
-							'name'       => 'n',
-							'label'      => __( 'Name' ),
-							'required'   => true,
-							'field_type' => '',
+					array(
+						'name'      => 'field_map',
+						'label'     => __( 'Map Fields' ),
+						'type'      => 'field_map',
+						'field_map' => array(
+							array(
+								'name'       => 'e',
+								'label'      => __( 'Email' ),
+								'required'   => true,
+								'field_type' => '',
+							),
+
+							array(
+								'name'       => 'n',
+								'label'      => __( 'Name' ),
+								'required'   => true,
+								'field_type' => '',
+							),
+						),
+						'tooltip'   => sprintf( '<h6>%s</h6>%s', __( 'Map Fields', 'convertkit' ), __( 'Associate email address and subscriber name with the appropriate Gravity Forms fields.', 'convertkit' ) ),
+					),
+					array(
+						'name' => 'convertkit_custom_fields',
+						'label' => '',
+						'type' => 'dynamic_field_map',
+						'field_map' => $this->get_custom_fields(),
+						'disable_custom' => true,
+					),
+					array(
+						'name'       => 'tags',
+						'label'      => esc_html__( 'Tags', 'convertkit' ),
+						'dependency' => array( $this, 'has_tags' ),
+						'type'       => 'convertkit_tags',
+						'tooltip'    => sprintf(
+							'<h6>%s</h6>%s',
+							esc_html__( 'Tags', 'convertkit' ),
+							esc_html__( 'When one or more tags are enabled, users will have tags added.. When disabled, users will not be tagged.', 'convertkit' )
 						),
 					),
-					'tooltip'   => sprintf( '<h6>%s</h6>%s', __( 'Map Fields', 'convertkit' ), __( 'Associate email address and subscriber name with the appropriate Gravity Forms fields.', 'convertkit' ) ),
-				),
-				array(
-					'name' => 'convertkit_custom_fields',
-					'label' => '',
-					'type' => 'dynamic_field_map',
-					'field_map' => $this->get_custom_fields(),
-					'disable_custom' => true,
-				),
-				array(
-					'name'    => 'conditions',
-					'label'   => __( 'Conditional Logic' ),
-					'type'    => 'feed_condition',
-					'tooltip' => sprintf( '<h6>%s</h6>%s', __( 'Conditional Logic', 'convertkit' ), __( 'When conditional logic is enabled, form submissions will only be exported to ConvertKit when the conditions are met. When disabled all form submissions will be exported.', 'convertkit' ) ),
+					array(
+						'name'    => 'conditions',
+						'label'   => __( 'Conditional Logic' ),
+						'type'    => 'feed_condition',
+						'tooltip' => sprintf( '<h6>%s</h6>%s', __( 'Conditional Logic', 'convertkit' ), __( 'When conditional logic is enabled, form submissions will only be exported to ConvertKit when the conditions are met. When disabled all form submissions will be exported.', 'convertkit' ) ),
+					),
 				),
 			),
 		);
 
-		return array( $base_fields );
+		return $base_fields;
 	}
 
 	/**
@@ -194,6 +212,23 @@ class GFConvertKit extends GFFeedAddOn {
 	}
 
 	/**
+	 * Checks for tags in the ConvertKit
+	 *
+	 * @return bool
+	 */
+	public function has_tags(){
+
+		$path = 'tags';
+		$query_args = array();
+		$request_body = null;
+		$request_args = array();
+
+		$response = ckgf_convertkit_api_request( $path, $query_args, $request_body, $request_args );
+
+		return ! empty( $response );
+	}
+
+	/**
 	 * GF Settings callback
 	 *
 	 * Build a SELECT to be shown in Feed Settings to select ConvertKit form
@@ -229,8 +264,9 @@ class GFConvertKit extends GFFeedAddOn {
 			}
 
 			$markup = $this->settings_select(array_merge($field, array(
-				'choices' => $options,
-				'type'    => 'select',
+				'choices'  => $options,
+				'type'     => 'select',
+				'onchange' => 'jQuery(this).parents("form").submit();',
 			)), false);
 		}
 
@@ -239,6 +275,199 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		return $markup;
+	}
+
+	/**
+	 *
+	 */
+	public function settings_convertkit_tags( $field, $echo = true ) {
+
+		// Get tags
+		$path = 'tags';
+		$query_args = array();
+		$request_body = null;
+		$request_args = array();
+
+		$tags = ckgf_convertkit_api_request( $path, $query_args, $request_body, $request_args );
+
+		// If no tags are found, return.
+		if ( empty( $tags['tags'] ) ) {
+			$this->log_debug( __METHOD__ . '(): No tags found.' );
+			return '<p>No tags found</p>';
+		}
+		// Start field markup.
+		$html = "<div id='gaddon-convertkit_tags'>";
+
+		// Open container.
+		$html .= '<div class="gaddon-convertkit-category">';
+
+		// Define label.
+		$label = '';
+
+		// Display tag label.
+		$html .= '<div class="gaddon-convertkit-categoryname">' . esc_html( $label ) . '</div><div class="gf_animate_sub_settings">';
+
+		// Loop through tags.
+		foreach ( $tags['tags'] as $tag ) {
+
+			// Define tag key.
+			$tag_key = 'convetkittag_' . $tag['id'];
+
+			// Define enabled checkbox key.
+			$enabled_key = $tag_key . '_enabled';
+
+			// Get tag checkbox markup.
+			$html .= $this->settings_checkbox(
+				array(
+					'name'    => esc_html( $tag['name'] ),
+					'type'    => 'checkbox',
+					'onclick' => "if(this.checked){jQuery('#{$tag_key}_condition_container').slideDown();} else{jQuery('#{$tag_key}_condition_container').slideUp();}",
+					'choices' => array(
+						array(
+							'name'  => $enabled_key,
+							'label' => esc_html( $tag['name'] ),
+						),
+					),
+				),
+				false
+			);
+
+			$html .= $this->tag_category_condition( $tag_key );
+
+		}
+
+		$html .= '</div></div>';
+
+
+		$html .= '</div>';
+
+		if ( $echo ) {
+			echo $html;
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Define the markup for the tag conditional logic.
+	 *
+	 * @since  4.0
+	 * @access public
+	 *
+	 * @param string $setting_name_root The category setting key.
+	 *
+	 * @return string
+	 */
+	public function tag_category_condition( $setting_name_root ) {
+
+		$condition_enabled_setting = "{$setting_name_root}_enabled";
+		$is_enabled                = $this->get_setting( $condition_enabled_setting ) == '1';
+		$container_style           = ! $is_enabled ? "style='display:none;'" : '';
+
+		$str = "<div id='{$setting_name_root}_condition_container' {$container_style} class='condition_container'>" .
+		       esc_html__( 'Assign to group:', 'convertkit' ) . ' ';
+
+		$str .= $this->settings_select(
+			array(
+				'name'     => "{$setting_name_root}_decision",
+				'type'     => 'select',
+				'choices'  => array(
+					array(
+						'value' => 'always',
+						'label' => esc_html__( 'Always', 'convertkit' )
+					),
+					array(
+						'value' => 'if',
+						'label' => esc_html__( 'If', 'convertkit' )
+					),
+				),
+				'onchange' => "if(jQuery(this).val() == 'if'){jQuery('#{$setting_name_root}_decision_container').show();}else{jQuery('#{$setting_name_root}_decision_container').hide();}",
+			), false
+		);
+
+		$decision = $this->get_setting( "{$setting_name_root}_decision" );
+		if ( empty( $decision ) ) {
+			$decision = 'always';
+		}
+
+		$conditional_style = $decision == 'always' ? "style='display:none;'" : '';
+
+		$str .= '   <span id="' . $setting_name_root . '_decision_container" ' . $conditional_style . '><br />' .
+		        $this->simple_condition( $setting_name_root, $is_enabled ) .
+		        '   </span>' .
+
+		        '</div>';
+
+		return $str;
+
+	}
+
+	/**
+	 * Define which field types can be used for the tag conditional logic.
+	 *
+	 * @since  3.0
+	 * @access public
+	 *
+	 * @uses GFAddOn::get_current_form()
+	 * @uses GFCommon::get_label()
+	 * @uses GF_Field::get_entry_inputs()
+	 * @uses GF_Field::get_input_type()
+	 * @uses GF_Field::is_conditional_logic_supported()
+	 *
+	 * @return array
+	 */
+	public function get_conditional_logic_fields() {
+
+		// Initialize conditional logic fields array.
+		$fields = array();
+
+		// Get the current form.
+		$form = $this->get_current_form();
+
+		// Loop through the form fields.
+		foreach ( $form['fields'] as $field ) {
+
+			// If this field does not support conditional logic, skip it.
+			if ( ! $field->is_conditional_logic_supported() ) {
+				continue;
+			}
+
+			// Get field inputs.
+			$inputs = $field->get_entry_inputs();
+
+			// If field has multiple inputs, add them as individual field options.
+			if ( $inputs && 'checkbox' !== $field->get_input_type() ) {
+
+				// Loop through the inputs.
+				foreach ( $inputs as $input ) {
+
+					// If this is a hidden input, skip it.
+					if ( rgar( $input, 'isHidden' ) ) {
+						continue;
+					}
+
+					// Add input to conditional logic fields array.
+					$fields[] = array(
+						'value' => $input['id'],
+						'label' => GFCommon::get_label( $field, $input['id'] ),
+					);
+
+				}
+
+			} else {
+
+				// Add field to conditional logic fields array.
+				$fields[] = array(
+					'value' => $field->id,
+					'label' => GFCommon::get_label( $field ),
+				);
+
+			}
+
+		}
+
+		return $fields;
+
 	}
 
 	/**
@@ -300,6 +529,118 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		ckgf_convertkit_api_add_email( $form_id, $entry[ $field_map_e ], $entry[ $field_map_n ], null, $fields );
+
+		// add tags
+
+		$categories = $this->get_feed_tags( $feed );
+		foreach ( $categories as $category_id => $category_meta ) {
+
+			// Log that we are evaluating the category conditions.
+			$this->log_debug( __METHOD__ . '(): Evaluating condition for tag "' . $category_id . '": ' . print_r( $category_meta, true ) );
+
+			// Get condition evaluation.
+			$condition_evaluation = $this->is_category_condition_met( $category_meta, $form, $entry );
+
+			// Set tag based on evaluation.
+			$tags[ $category_id ] = $condition_evaluation;
+
+		}
+
+		foreach ( $tags as $tag_id => $value ) {
+			$path = 'tags/' . $tag_id . '/subscribe';
+			$query_args = array();
+			$request_body = array (
+				'email' => $entry[ $field_map_e ],
+			);
+			$request_args = array(
+				'method' => 'POST',
+			);
+
+			// add the tag
+			ckgf_convertkit_api_request( $path, $query_args, $request_body, $request_args);
+
+		}
+
+	}
+
+	public function get_feed_tags ( $feed, $enabled = true ) {
+
+		// Initialize tags array.
+		$categories = array();
+
+		// Loop through feed meta.
+		foreach ( $feed['meta'] as $key => $value ) {
+
+			// If this is not an tag, skip it.
+			if ( 0 !== strpos( $key, 'convetkittag_' ) ) {
+				continue;
+			}
+
+			// Explode the meta key.
+			$key = explode( '_', $key );
+
+			// Add value to categories array.
+			$categories[ $key[1] ][ $key[2] ] = $value;
+
+		}
+
+		// If we are only returning enabled categories, remove disabled categories.
+		if ( $enabled ) {
+
+			// Loop through categories.
+			foreach ( $categories as $category_id => $category_meta ) {
+
+				// If category is enabled, skip it.
+				if ( '1' == $category_meta['enabled'] ) {
+					continue;
+				}
+
+				// Remove category.
+				unset( $categories[ $category_id ] );
+
+			}
+
+		}
+
+		return $categories;
+
+	}
+
+	public function is_category_condition_met( $category, $form, $entry ) {
+
+		if ( ! $category['enabled'] ) {
+
+			$this->log_debug( __METHOD__ . '(): Tag not enabled. Returning false.' );
+
+			return false;
+
+		} else if ( $category['decision'] == 'always' ) {
+
+			$this->log_debug( __METHOD__ . '(): Tag decision is always. Returning true.' );
+
+			return true;
+
+		}
+
+		$field = GFFormsModel::get_field( $form, $category['field'] );
+
+		if ( ! is_object( $field ) ) {
+
+			$this->log_debug( __METHOD__ . "(): Field #{$category['field']} not found. Returning true." );
+
+			return true;
+
+		} else {
+
+			$field_value    = GFFormsModel::get_lead_field_value( $entry, $field );
+			$is_value_match = GFFormsModel::is_value_match( $field_value, $category['value'], $category['operator'] );
+
+			$this->log_debug( __METHOD__ . "(): Add to tag if field #{$category['field']} value {$category['operator']} '{$category['value']}'. Is value match? " . var_export( $is_value_match, 1 ) );
+
+			return $is_value_match;
+
+		}
+
 	}
 
 	/**
