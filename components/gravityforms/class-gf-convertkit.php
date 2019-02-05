@@ -6,6 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 GFForms::include_feed_addon_framework();
 
+/**
+ * Class GFConvertKit
+ */
 class GFConvertKit extends GFFeedAddOn {
 
 	protected $_full_path                = CKGF_PLUGIN_FILEPATH;
@@ -278,6 +281,9 @@ class GFConvertKit extends GFFeedAddOn {
 
 		$fields = array();
 
+		$email = $this->get_field_value( $form, $entry, $field_map_e );
+		$name  = $this->get_field_value( $form, $entry, $field_map_n );
+
 		$custom_fields = $this->get_custom_fields();
 		// do we have custom fields in the feed?  add them to fields
 		foreach ( $custom_fields as $field ) {
@@ -288,7 +294,7 @@ class GFConvertKit extends GFFeedAddOn {
 			}
 		}
 
-		ckgf_convertkit_api_add_email( $form_id, $entry[ $field_map_e ], $entry[ $field_map_n ], null, $fields );
+		ckgf_convertkit_api_add_email( $form_id, $email, $name, null, $fields );
 	}
 
 	/**
