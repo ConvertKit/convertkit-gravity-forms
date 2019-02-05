@@ -250,9 +250,12 @@ class GFConvertKit extends GFFeedAddOn {
 		$form_id = rgars( $feed, 'meta/form_id' );
 
 		if ( is_array( $forms ) && isset( $forms[ $form_id ] ) ) {
-			$form = $forms[ $form_id ];
+			$form_url = "https://app.convertkit.com/forms/designers/$form_id/edit";
 
-			return sprintf( '<a href="%s" target="_blank">%s</a>', esc_attr( esc_url( $form['url'] ) ), esc_html( $forms[ $form_id ]['name'] ) );
+			return sprintf( '<a href="%s" target="_blank">%s</a>',
+			                esc_attr( esc_url( $form_url ) ),
+			                esc_html( $forms[ $form_id ]['name'] )
+			);
 		} else {
 			return __( 'N/A' );
 		}
