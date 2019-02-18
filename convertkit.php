@@ -48,6 +48,14 @@ if ( ! defined( 'CKGF_SHORT_TITLE' ) ) {
 	define( 'CKGF_SHORT_TITLE', 'ConvertKit' );
 }
 
+if ( ! defined( 'CKGF_API_BASE_URL' ) ) {
+	define( 'CKGF_API_BASE_URL', 'https://api.convertkit.com/v3' );
+}
+
+if ( ! defined( 'CKGF_APP_BASE_URL' ) ) {
+	define( 'CKGF_APP_BASE_URL', 'https://app.convertkit.com' );
+}
+
 // Require the plugin's function definitions
 // These files provide generic functions that don't really belong as part of a component
 require_once( path_join( CKGF_PLUGIN_DIRPATH, 'functions/convertkit.php' ) );

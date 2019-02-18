@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function ckgf_convertkit_api_request( $path, $query_args = array(), $request_body = null, $request_args = array() ) {
 	$path        = ltrim( $path, '/' );
-	$request_url = "https://api.convertkit.com/v3/{$path}";
+	$request_url = sprintf( '%s/%s', CKGF_API_BASE_URL,  $path );
 
 	$request_args = array_merge(array(
 		'body'    => $request_body,
