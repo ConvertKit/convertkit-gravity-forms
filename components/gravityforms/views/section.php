@@ -3,5 +3,6 @@
 </p>
 
 <p>
-	<?php printf(__('If you already have an account, <a href="%s" target="_blank">click here to retrieve your API Key</a>.'), esc_attr(esc_html('https://app.convertkit.com/account/edit'))); ?>
+	<?php printf( __( 'If you already have an account, <a href="%s" target="_blank">click here to retrieve your API Key</a>.' ),
+	              esc_attr( esc_html( CKGF_APP_BASE_URL . '/account/edit' ) ) ); ?>
 </p>

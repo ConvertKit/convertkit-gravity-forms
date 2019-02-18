@@ -250,7 +250,7 @@ class GFConvertKit extends GFFeedAddOn {
 		$form_id = rgars( $feed, 'meta/form_id' );
 
 		if ( is_array( $forms ) && isset( $forms[ $form_id ] ) ) {
-			$form_url = "https://app.convertkit.com/forms/designers/$form_id/edit";
+			$form_url = sprintf( '%s/forms/designers/%s/edit', CKGF_APP_BASE_URL, $form_id );
 
 			return sprintf( '<a href="%s" target="_blank">%s</a>',
 			                esc_attr( esc_url( $form_url ) ),
