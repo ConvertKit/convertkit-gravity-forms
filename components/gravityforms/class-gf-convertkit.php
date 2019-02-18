@@ -130,13 +130,6 @@ class GFConvertKit extends GFFeedAddOn {
 					'tooltip'   => sprintf( '<h6>%s</h6>%s', __( 'Map Fields', 'convertkit' ), __( 'Associate email address and subscriber name with the appropriate Gravity Forms fields.', 'convertkit' ) ),
 				),
 				array(
-					'name' => 'convertkit_custom_fields',
-					'label' => '',
-					'type' => 'dynamic_field_map',
-					'field_map' => $this->get_custom_fields(),
-					'disable_custom' => true,
-				),
-				array(
 					'name'    => 'conditions',
 					'label'   => __( 'Conditional Logic' ),
 					'type'    => 'feed_condition',
@@ -145,7 +138,33 @@ class GFConvertKit extends GFFeedAddOn {
 			),
 		);
 
+		$base_fields = $this->maybe_add_custom_field_mapping( $base_fields );
+
 		return array( $base_fields );
+	}
+
+	/**
+	 * If the connected account returns custom fields, add custom field mapping to the feed settings
+	 * Otherwise, don't insert custom field mapping
+	 *
+	 * @param array $base_fields
+	 *
+	 * @return array
+	 */
+	public function maybe_add_custom_field_mapping( $base_fields ) {
+		$custom_mapping = array(
+			'name'           => 'convertkit_custom_fields',
+			'label'          => '',
+			'type'           => 'dynamic_field_map',
+			'field_map'      => $this->get_custom_fields(),
+			'disable_custom' => true,
+		);
+
+		if ( $this->get_custom_fields() ) {
+			array_splice( $base_fields['fields'], 3, 0, array( $custom_mapping ) );
+		}
+
+		return $base_fields;
 	}
 
 	/**
@@ -155,28 +174,34 @@ class GFConvertKit extends GFFeedAddOn {
 	 */
 	public function get_custom_fields() {
 
-		$path = 'custom_fields';
-		$query_args = array();
+		$path         = 'custom_fields';
+		$query_args   = array();
 		$request_body = null;
 		$request_args = array();
-		$fields = array();
+		$fields       = array();
 
 		$response = ckgf_convertkit_api_request( $path, $query_args, $request_body, $request_args );
-		$custom_fields = $response['custom_fields'];
 
-		if ( $custom_fields && ! is_wp_error( $custom_fields ) ) {
+		// We don't want to do anything if there's an error...
+		if ( is_wp_error( $response ) ) {
+			return $fields;
+		}
+
+		// Or if the `custom_fields` field is empty
+		if ( empty( $response['custom_fields'] ) ) {
+			return $fields;
+		}
+
+		$fields[] = array(
+			'label' => __( 'Choose a ConvertKit Field', 'convertkit' ),
+		);
+
+		foreach ( $response['custom_fields'] as $field ) {
 
 			$fields[] = array(
-				'label'     => __( 'Choose a ConvertKit Field', 'convertkit' ),
-				);
-
-			foreach ( $custom_fields as $field ) {
-
-				$fields[] = array(
-						'value'     => $field['key'],
-						'label'     => $field['label'],
-				);
-			}
+				'value' => $field['key'],
+				'label' => $field['label'],
+			);
 		}
 
 		return $fields;
