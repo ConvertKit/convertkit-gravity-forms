@@ -3,8 +3,8 @@ Contributors: nathanbarry, growdev
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 3.6
-Tested up to: 4.9.4
-Stable tag: 1.0.4
+Tested up to: 5.2
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,13 @@ Yes, for it to work you must first have an account on ConvertKit.com and own a l
 2. screenshot-2.png
 
 == Changelog ==
+
+### 1.1.0  2019-06-09
+
+* Correctly send full name to ConvertKit when used in a field mapping
+* Only show field mappings for ConvertKit custom fields if they exist
+* Output correct form URL on feed settings screen
+* No longer requires a name field mapping, for email-only forms
 
 ### 1.0.4  2018-03-14
 

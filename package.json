@@ -3,7 +3,7 @@
   "title": "Gravity Forms ConvertKit Add-On",
   "author": "ConvertKit",
   "license": "GPL-2.0",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "",
   "homepage": "https://github.com/ConvertKit/convertkit-gravity-forms/",
   "main": "Gruntfile.js",
