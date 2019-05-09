@@ -126,7 +126,7 @@ class GFConvertKit extends GFFeedAddOn {
 						array(
 							'name'       => 'n',
 							'label'      => __( 'Name' ),
-							'required'   => true,
+							'required'   => false,
 							'field_type' => '',
 						),
 					),
