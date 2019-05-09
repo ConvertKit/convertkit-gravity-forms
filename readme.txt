@@ -1,5 +1,5 @@
 === Gravity Forms ConvertKit Add-On ===
-Contributors: nathanbarry, growdev
+Contributors: nathanbarry, growdev, travisnorthcutt
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 3.6
