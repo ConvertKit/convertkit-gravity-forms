@@ -74,12 +74,12 @@ function ckgf_convertkit_api_get_forms( $api_key = null ) {
  * @param string $name Subscriber's first name, or full name
  * @param null $api_key ConvertKit API key
  * @param array $fields values for ConvertKit custom fields
- * @param string $tag Convertkit Tag slug
+ * @param int $tag Convertkit Tag ID
  *
  * @return array|mixed|object|WP_Error
  */
 function ckgf_convertkit_api_add_email( $form, $email, $name, $api_key = null, $fields = array(), $tag ) {
-	error_log($tag);
+
 	$query_args = is_null( $api_key ) ? array() : array(
 		'api_key' => $api_key,
 	);

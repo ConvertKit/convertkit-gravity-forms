@@ -172,8 +172,8 @@ class GFConvertKit extends GFFeedAddOn {
 	}
 
 	/**
-	 * If the connected account returns custom fields, add custom field mapping to the feed settings
-	 * Otherwise, don't insert custom field mapping
+	 * If the connected account returns tags, add tags mapping to the feed settings
+	 * Otherwise, don't insert tags mapping
 	 *
 	 * @param array $base_fields
 	 *
@@ -259,7 +259,7 @@ class GFConvertKit extends GFFeedAddOn {
 			return $tags;
 		}
 
-		// Or if the `custom_fields` field is empty
+		// Or if the `tags` field is empty
 		if ( empty( $response['tags'] ) ) {
 			return $tags;
 		}
