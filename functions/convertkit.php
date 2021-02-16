@@ -74,10 +74,12 @@ function ckgf_convertkit_api_get_forms( $api_key = null ) {
  * @param string $name Subscriber's first name, or full name
  * @param null $api_key ConvertKit API key
  * @param array $fields values for ConvertKit custom fields
+ * @param string $tag Convertkit Tag slug
  *
  * @return array|mixed|object|WP_Error
  */
-function ckgf_convertkit_api_add_email( $form, $email, $name, $api_key = null, $fields = array() ) {
+function ckgf_convertkit_api_add_email( $form, $email, $name, $api_key = null, $fields = array(), $tag ) {
+	error_log($tag);
 	$query_args = is_null( $api_key ) ? array() : array(
 		'api_key' => $api_key,
 	);
@@ -96,9 +98,13 @@ function ckgf_convertkit_api_add_email( $form, $email, $name, $api_key = null, $
 		$request_body['fields'] = $custom_fields;
 	}
 
+	if ( ! empty( $tag ) ) {
+		$request_body['tags'] = $tag;
+	}
+
 	$request_args = array(
 		'method' => 'POST',
 	);
 
-	return ckgf_convertkit_api_request( sprintf( 'forms/%d/subscribe', $form ), $query_args, $request_body , $request_args );
+	return ckgf_convertkit_api_request( sprintf( 'forms/%d/subscribe', $form ), $query_args, $request_body, $request_args );
 }

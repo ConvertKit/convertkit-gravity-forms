@@ -142,6 +142,7 @@ class GFConvertKit extends GFFeedAddOn {
 		);
 
 		$base_fields = $this->maybe_add_custom_field_mapping( $base_fields );
+		$base_fields = $this->add_tags_mapping( $base_fields );
 
 		return array( $base_fields );
 	}
@@ -165,6 +166,29 @@ class GFConvertKit extends GFFeedAddOn {
 
 		if ( $this->get_custom_fields() ) {
 			array_splice( $base_fields['fields'], 3, 0, array( $custom_mapping ) );
+		}
+
+		return $base_fields;
+	}
+
+	/**
+	 * If the connected account returns custom fields, add custom field mapping to the feed settings
+	 * Otherwise, don't insert custom field mapping
+	 *
+	 * @param array $base_fields
+	 *
+	 * @return array
+	 */
+	public function add_tags_mapping( $base_fields ) {
+		$tag_selection = array(
+			'name'           => 'convertkit_tag_field',
+			'label'          => 'Choose a Tag',
+			'type'           => 'select',
+			'choices'        => $this->get_tags(),
+			'disable_custom' => true,
+		);
+		if ( $this->get_tags() ) {
+			array_splice( $base_fields['fields'], 4, 0, array( $tag_selection ) );
 		}
 
 		return $base_fields;
@@ -208,6 +232,50 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Get ConvertKit Tags from the API to be used for the dynamic field map
+	 *
+	 * @return array
+	 */
+	public function get_tags() {
+
+		$path         = 'tags';
+		$query_args   = array();
+		$request_body = null;
+		$request_args = array();
+		$tags       = array(
+			array(
+				'value' => null,
+				'label' => 'Choose a Tag',
+			)
+		);
+
+		$response = ckgf_convertkit_api_request( $path, $query_args, $request_body, $request_args );
+
+		// We don't want to do anything if there's an error...
+		if ( is_wp_error( $response ) ) {
+			return $tags;
+		}
+
+		// Or if the `custom_fields` field is empty
+		if ( empty( $response['tags'] ) ) {
+			return $tags;
+		}
+
+		$fields[] = array(
+			'label' => __( 'Choose a Tag', 'convertkit' ),
+		);
+
+		foreach ( $response['tags'] as $tag ) {
+			$tags[] = array(
+				'value' => $tag['id'],
+				'label' => $tag['name'],
+			);
+		}
+
+		return $tags;
 	}
 
 	/**
@@ -309,6 +377,8 @@ class GFConvertKit extends GFFeedAddOn {
 
 		$fields = array();
 
+		$convertkit_tag = $feed['meta']['convertkit_tag_field'];
+
 		$email = $this->get_field_value( $form, $entry, $field_map_e );
 		$name  = $this->get_field_value( $form, $entry, $field_map_n );
 
@@ -322,7 +392,7 @@ class GFConvertKit extends GFFeedAddOn {
 			}
 		}
 
-		ckgf_convertkit_api_add_email( $form_id, $email, $name, null, $fields );
+		ckgf_convertkit_api_add_email( $form_id, $email, $name, null, $fields, $convertkit_tag );
 	}
 
 	/**
