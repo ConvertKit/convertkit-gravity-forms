@@ -107,7 +107,8 @@ class GFConvertKit extends GFFeedAddOn {
 				array(
 					'name'     => 'form_id',
 					'label'    => __( 'ConvertKit Form' ),
-					'type'     => 'convertkit_form',
+					'type'     => 'select',
+					'choices'  => $this->get_convertkit_forms(),
 					'required' => true,
 					'tooltip'  => sprintf( '<h6>%s</h6>%s', __( 'ConvertKit Form', 'convertkit' ), __( 'Select the ConvertKit form that you would like to add your contacts to.', 'convertkit' ) ),
 				),
@@ -211,51 +212,40 @@ class GFConvertKit extends GFFeedAddOn {
 	}
 
 	/**
-	 * GF Settings callback
+	 * Return an array of ConvertKit forms
 	 *
-	 * Build a SELECT to be shown in Feed Settings to select ConvertKit form
-	 * form data will be posted to.
-	 *
-	 * @param array $field
-	 * @param bool|true $echo
-	 *
-	 * @return string
+	 * @return array List of CK Forms
 	 */
-	public function settings_convertkit_form( $field, $echo = true ) {
+	public function get_convertkit_forms() {
 		$forms = ckgf_convertkit_api_get_forms();
 
 		ckgf_debug( $forms );
 
 		if ( is_wp_error( $forms ) ) {
-			$markup = sprintf( '%s: %s', __( 'Error', 'convertkit' ), $forms->get_error_message() );
+			$error = sprintf( '%s: %s', __( 'Error', 'convertkit' ), $forms->get_error_message() );
+      ckgf_debug( $error );
+      return array();
 		} elseif ( empty( $forms ) ) {
-			$markup = sprintf( '%s: %s', __( 'Error', 'convertkit' ), __( 'Please configure some forms on ConvertKit', 'convertkit' ) );
-		} else {
-			$options = array(
-				array(
-					'label' => __( 'Select a ConvertKit form', 'convertkit' ),
-					'value' => '',
-				),
-			);
-
-			foreach ( $forms as $form ) {
-				$options[] = array(
-					'label' => esc_html( $form['name'] ),
-					'value' => esc_attr( $form['id'] ),
-				);
-			}
-
-			$markup = $this->settings_select(array_merge($field, array(
-				'choices' => $options,
-				'type'    => 'select',
-			)), false);
+			$error = sprintf( '%s: %s', __( 'Error', 'convertkit' ), __( 'Please configure some forms on ConvertKit', 'convertkit' ) );
+      ckgf_debug( $error );
+      return array();
 		}
 
-		if ( $echo ) {
-			echo $markup;
-		}
+    $options = array(
+      array(
+        'label' => __( 'Select a ConvertKit form', 'convertkit' ),
+        'value' => '',
+      ),
+    );
 
-		return $markup;
+    foreach ( $forms as $form ) {
+      $options[] = array(
+        'label' => esc_html( $form['name'] ),
+        'value' => esc_attr( $form['id'] ),
+      );
+    }
+
+		return $options;
 	}
 
 	/**
