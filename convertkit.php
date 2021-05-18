@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Gravity Forms ConvertKit Add-On
  * Description: Integrates Gravity Forms with ConvertKit allowing form submissions to be automatically sent to your ConvertKit account.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: ConvertKit
  * Author URI: https://convertkit.com/
  * Text Domain: convertkit
@@ -29,7 +29,7 @@ if ( ! defined( 'CKGF_PLUGIN_FILEPATH' ) ) {
 }
 
 if ( ! defined( 'CKGF_VERSION' ) ) {
-	define( 'CKGF_VERSION', '1.1.0' );
+	define( 'CKGF_VERSION', '1.2.0' );
 }
 
 if ( ! defined( 'CKGF_MIN_GF_VERSION' ) ) {
