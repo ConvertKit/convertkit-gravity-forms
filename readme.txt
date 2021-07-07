@@ -4,7 +4,7 @@ Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 3.6
 Tested up to: 5.2
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,10 @@ Yes, for it to work you must first have an account on ConvertKit.com and own a l
 2. screenshot-2.png
 
 == Changelog ==
+
+### 1.2.0  2021-05-18
+
+* Support Gravity Forms v2.5
 
 ### 1.1.0  2019-06-09
 

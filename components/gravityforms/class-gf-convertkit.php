@@ -216,7 +216,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 * Build a SELECT to be shown in Feed Settings to select ConvertKit form
 	 * form data will be posted to.
 	 *
-	 * @param array $field
+	 * @param array|\Gravity_Forms\Gravity_Forms\Settings\Fields\Base $field
 	 * @param bool|true $echo
 	 *
 	 * @return string
@@ -243,6 +243,18 @@ class GFConvertKit extends GFFeedAddOn {
 					'label' => esc_html( $form['name'] ),
 					'value' => esc_attr( $form['id'] ),
 				);
+			}
+
+			// $field is an object post GF-2.5; and was an associative array previously; support both
+			if( !is_array( $field ) ) {
+				$field = [
+					'name' =>  $field->name,
+					'label' =>  $field->label,
+					'type' =>  $field->type,
+					'required' => $field->required,
+					'tooltip' =>  $field->tooltip,
+					'error' => $field->get_error(),
+				];
 			}
 
 			$markup = $this->settings_select(array_merge($field, array(
