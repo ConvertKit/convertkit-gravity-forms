@@ -246,7 +246,6 @@ class GFConvertKit extends GFFeedAddOn {
 			}
 
 			// $field is an object post GF-2.5; and was an associative array previously; support both
-			// ?: It's impossible to tell from the docs if these members actually exist on the object; test with a user?
 			if( !is_array( $field ) ) {
 				$field = [
 					'name' =>  $field->name,
