@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Gravity Forms ConvertKit Add-On
+ * Plugin Name: ConvertKit for Gravity Forms
  * Description: Integrates Gravity Forms with ConvertKit allowing form submissions to be automatically sent to your ConvertKit account.
  * Version: 1.2.0
  * Author: ConvertKit
