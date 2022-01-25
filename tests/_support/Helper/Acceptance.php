@@ -10,6 +10,8 @@ class Acceptance extends \Codeception\Module
 	 * Helper method to assert that there are non PHP errors, warnings or notices output
 	 * 
 	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 	AcceptanceTester.
 	 */
 	public function checkNoWarningsAndNoticesOnScreen($I)
 	{
@@ -25,6 +27,8 @@ class Acceptance extends \Codeception\Module
 	 * Helper method to assert that the field's value contains the given value.
 	 * 
 	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 	AcceptanceTester.
 	 */
 	public function seeFieldContains($I, $element, $value)
 	{
@@ -36,10 +40,10 @@ class Acceptance extends \Codeception\Module
 	 * 
 	 * @since 	1.2.1
 	 * 
-	 * @param 	AcceptanceTester 	$I
-	 * @param 	string 				$container 	Field CSS Class / ID
-	 * @param 	string 				$value 		Field Value
-	 * @param 	string 				$ariaAttributeName 	Aria Attribute Name (aria-controls|aria-owns)
+	 * @param 	AcceptanceTester 	$I 			AcceptanceTester.
+	 * @param 	string 				$container 	Field CSS Class / ID.
+	 * @param 	string 				$value 		Field Value.
+	 * @param 	string 				$ariaAttributeName 	Aria Attribute Name (aria-controls|aria-owns).
 	 */
 	public function fillSelect2Field($I, $container, $value, $ariaAttributeName = 'aria-controls')
 	{
@@ -58,6 +62,8 @@ class Acceptance extends \Codeception\Module
 	 * remembering that the user dismissed the dialog.
 	 * 
 	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I AcceptanceTester.
 	 */
 	public function maybeCloseGutenbergWelcomeModal($I)
 	{
@@ -73,6 +79,8 @@ class Acceptance extends \Codeception\Module
 	 * Helper method to activate the Plugin.
 	 * 
 	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I AcceptanceTester.
 	 */
 	public function activateConvertKitPlugin($I)
 	{
@@ -96,6 +104,8 @@ class Acceptance extends \Codeception\Module
 	 * Helper method to activate the Gravity Forms Plugin and the ConvertKit for Gravity Forms Plugin.
 	 * 
 	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I AcceptanceTester.
 	 */
 	public function activateGravityFormsAndConvertKitPlugins($I)
 	{
@@ -128,6 +138,8 @@ class Acceptance extends \Codeception\Module
 	 * Helper method to deactivate the Plugin.
 	 * 
 	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I AcceptanceTester.
 	 */
 	public function deactivateConvertKitPlugin($I)
 	{
@@ -151,6 +163,8 @@ class Acceptance extends \Codeception\Module
 	 * Helper method to load the Gravity Forms > Settings > ConvertKit screen.
 	 * 
 	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 	AcceptanceTester.
 	 */
 	public function loadConvertKitSettingsScreen($I)
 	{
@@ -164,6 +178,8 @@ class Acceptance extends \Codeception\Module
 	 * Helper method to setup the Plugin's API Key and Secret, and enable the integration.
 	 * 
 	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 	AcceptanceTester.
 	 */
 	public function setupConvertKitPlugin($I)
 	{
@@ -187,13 +203,14 @@ class Acceptance extends \Codeception\Module
 	}
 
 	/**
-	 * Creates a Gravity Form.
+	 * Creates a Gravity Forms Form.
 	 * 
 	 * @since 	1.2.1
 	 * 
-	 * @return 	int 	Form ID.
+	 * @param 	AcceptanceTester 	$I  AcceptanceTester.
+	 * @return 	int 					Form ID.
 	 */
-	public function createForm($I)
+	public function createGravityFormsForm($I)
 	{
 		// Navigate to Forms > New Form.
 		$I->amOnAdminPage('admin.php?page=gf_new_form');
@@ -244,21 +261,106 @@ class Acceptance extends \Codeception\Module
 	}
 
 	/**
+	 * Creates a Gravity Forms ConvertKit Feed (a feed sends form entries to ConvertKit) for the given Gravity Form.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 				AcceptanceTester.
+	 * @param 	int 				$gravityFormID 	Gravity Forms Form ID.
+	 * @param 	string 				$formName 		ConvertKit Form Name.
+	 */
+	public function createGravityFormsFeed($I, $gravityFormID, $formName)
+	{
+		// Navigate to Form's Settings > ConvertKit.
+		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
+
+		// Click Add New.
+		$I->click('#form_settings a.add-new-h2');
+
+		// Complete Feed's Form Fields.
+		$I->completeGravityFormsFeedFields($I, $formName);
+
+		// Click Update Settings.
+		$I->click('Update Settings');
+
+		// Confirm Feed Settings saved successfully.
+		$I->seeInSource('Feed updated successfully.');
+
+		// Confirm Feed Fields contain saved values.
+		$I->seeInField('_gaddon_setting_feed_name', 'ConvertKit Feed');
+		$I->seeOptionIsSelected('_gaddon_setting_form_id', $formName);
+		$I->seeOptionIsSelected('_gaddon_setting_field_map_e', 'Email');
+		$I->seeOptionIsSelected('_gaddon_setting_field_map_n', 'Name (First)');
+		$I->seeOptionIsSelected('_gaddon_setting_convertkit_custom_fields_key', 'Last Name');
+		$I->seeOptionIsSelected('_gaddon_setting_convertkit_custom_fields_custom_value', 'Name (Last)');
+	}
+
+	/**
+	 * Completes form fields for a Gravity Forms ConvertKit Feed Settings.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 				AcceptanceTester.
+	 * @param 	string 				$formName 		ConvertKit Form Name.
+	 */
+	public function completeGravityFormsFeedFields($I, $formName)
+	{
+		// Check ConvertKit Form option exists and is populated.
+		$I->seeElementInDOM('select[name="_gaddon_setting_form_id"]');
+
+		// Define Feed Name.
+		$I->fillField('_gaddon_setting_feed_name', 'ConvertKit Feed');
+
+		// Define ConvertKit Form to send entries to.
+		$I->selectOption('_gaddon_setting_form_id', $formName);
+
+		// Map Email Field.
+		$I->selectOption('_gaddon_setting_field_map_e', 'Email');
+
+		// Map Name Field.
+		$I->selectOption('_gaddon_setting_field_map_n', 'Name (First)');
+
+		// Map ConvertKit Account Custom Field 'Last Name'.
+		$I->selectOption('_gaddon_setting_convertkit_custom_fields_key', 'Last Name');
+		$I->selectOption('_gaddon_setting_convertkit_custom_fields_custom_value', 'Name (Last)');
+	}
+
+	/**
+	 * Disables the given feed for the given Gravity Form ID.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 					AcceptanceTester.
+	 * @param 	int 				$gravityFormID 		Gravity Forms Form ID.
+	 * @param 	int 				$gravityFormFeedID 	Gravity Forms Feed ID.
+	 */
+	public function disableGravityFormsFeed($I, $gravityFormID, $gravityFormFeedID = 1)
+	{
+		// Load Form's ConvertKit Feed Settings.
+		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
+
+		// Deactivate the Feed - yes, it's really deactivated by clicking an image.
+		$I->click('table.feeds tbody tr:nth-child(' . $gravityFormFeedID . ') th.manage-column img');
+	}
+
+	/**
 	 * Creates a WordPress Page with the Gravity Form shortcode as the content
 	 * to render the Gravity Form.
 	 * 
 	 * @since 	1.2.1
 	 * 
-	 * @return 	int 	Page ID
+	 * @param 	AcceptanceTester 	$I 				AcceptanceTester.
+	 * @param 	int 				$gravityFormID 	Gravity Forms Form ID.
+	 * @return 	int 								Page ID
 	 */
-	public function createPageWithGravityFormShortcode($I, $formID)
+	public function createPageWithGravityFormShortcode($I, $gravityFormID)
 	{
 		return $I->havePostInDatabase([
 			'post_type'		=> 'page',
 			'post_status'	=> 'publish',
-			'post_name' 	=> 'gravity-form-' . $formID,
-			'post_title'	=> 'Gravity Form #' . $formID,
-			'post_content'	=> '[gravityform id="' . $formID . '" title="false" description="false"]',
+			'post_name' 	=> 'gravity-form-' . $gravityFormID,
+			'post_title'	=> 'Gravity Form #' . $gravityFormID,
+			'post_content'	=> '[gravityform id="' . $gravityFormID . '" title="false" description="false"]',
 		]);
 	}
 
@@ -267,9 +369,10 @@ class Acceptance extends \Codeception\Module
 	 * 
 	 * @since 	1.2.1
 	 * 
-	 * @param 	AcceptanceTester $I 			AcceptanceTester
-	 * @param 	string 			$emailAddress 	Email Address
-	 * @param 	string 			$name 			Name
+	 * @param 	AcceptanceTester $I 			AcceptanceTester.
+	 * @param 	string 			$emailAddress 	Email Address.
+	 * @param 	mixed 			$firstName 		First Name (false = don't test).
+	 * @param 	mixed 			$customFields 	Custom Field Key/Value pairs (false = don't test).
 	 */ 	
 	public function apiCheckSubscriberExists($I, $emailAddress, $firstName = false, $customFields = false)
 	{
@@ -279,9 +382,6 @@ class Acceptance extends \Codeception\Module
 		]);
 
 		// Check at least one subscriber was returned.
-		var_dump($results);
-		die();
-		
 		$I->assertGreaterThan(0, $results['total_subscribers']);
 		$subscriber = $results['subscribers'][0];
 
@@ -290,13 +390,15 @@ class Acceptance extends \Codeception\Module
 
 		// Check that the first name matches.
 		if ($firstName) {
-			$I->assertEquals($name, $results['subscribers'][0]['first_name']);	
+			$I->assertEquals($firstName, $results['subscribers'][0]['first_name']);	
 		}
 
 		// Check custom field key/value pairs.
 		if ($customFields) {
-			var_dump($subscriber);
-			die();	
+			foreach ($customFields as $key => $value) {
+				$I->assertArrayHasKey($key, $subscriber['fields']);
+				$I->assertEquals($value, $subscriber['fields'][$key]);
+			}
 		}
 	}
 
