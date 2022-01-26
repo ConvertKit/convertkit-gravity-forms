@@ -38,6 +38,11 @@ Yes, for it to work you must first have an account on ConvertKit.com and own a l
 
 == Changelog ==
 
+### 1.2.1 2022-01-xx
+* Added: Settings: Debug option
+* Fix: Settings: API Key: Show error notification and contextual tooltip error message when an invalid API Key is specified
+
+
 ### 1.2.0  2021-05-18
 
 * Support Gravity Forms v2.5

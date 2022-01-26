@@ -37,8 +37,8 @@ class SettingAPIKeyCest
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
 
-		// Confirm that a message is displayed telling the user that the API Credentials are invalid.
-		$I->seeInSource('Your ConvertKit API Key appears to be invalid. Please double check the value.');
+		// Confirm that a message is displayed telling the user that an error occured whilst saving.
+		$I->seeInSource('There was an error while saving your settings.');
 	}
 
 	/**
@@ -55,8 +55,8 @@ class SettingAPIKeyCest
 		// Enable Integration and define its API Keys.
 		$I->setupConvertKitPlugin($I);
 
-		// Confirm that a message is not displayed telling the user that the API Credentials are invalid.
-		$I->dontSeeInSource('Your ConvertKit API Key appears to be invalid. Please double check the value.');
+		// Confirm that a message is not displayed telling the user that an error occured whilst saving.
+		$I->dontSeeInSource('There was an error while saving your settings.');
 	}
 
 	/**
@@ -85,7 +85,10 @@ class SettingAPIKeyCest
 		// Check the value of the fields match the inputs provided.
 		$I->seeInField('_gaddon_setting_api_key', 'invalidApiKey');
 
-		// Confirm that a message is displayed telling the user that the API Credentials are invalid.
-		$I->seeInSource('Your ConvertKit API Key appears to be invalid. Please double check the value.');
+		// Confirm that a message is displayed telling the user that an error occured whilst saving.
+		$I->seeInSource('There was an error while saving your settings.');
+
+		// Confirm that a tooltip notification exists with the precise API error.
+		$I->seeInSource('Authorization Failed: API Key not valid');
 	}
 }

@@ -1,76 +1,57 @@
 <?php
 /**
+ * ConvertKit for Gravity Forms Plugin.
+ *
+ * @package CKGF
+ * @author ConvertKit
+ *
+ * @wordpress-plugin
  * Plugin Name: ConvertKit for Gravity Forms
  * Description: Integrates Gravity Forms with ConvertKit allowing form submissions to be automatically sent to your ConvertKit account.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: ConvertKit
  * Author URI: https://convertkit.com/
  * Text Domain: convertkit
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+// Define ConverKit Plugin paths and version number.
+define( 'CKGF_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'CKGF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'CKGF_PLUGIN_PATH', __DIR__ );
+define( 'CKGF_PLUGIN_FILEPATH', __FILE__ );
+define( 'CKGF_PLUGIN_VERSION', '1.2.1' );
+define( 'CKGF_MIN_GF_VERSION', '1.9.3' );
+define( 'CKGF_SLUG', 'ckgf' );
+define( 'CKGF_TITLE', __( 'ConvertKit Gravity Forms Add-On', 'convertkit' ) );
+define( 'CKGF_SHORT_TITLE', __( 'ConvertKit', 'convertkit' ) );
+
+// Load files that are always used.
+require_once CKGF_PLUGIN_PATH . '/includes/functions.php';
+require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-api.php';
+require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-log.php';
+require_once CKGF_PLUGIN_PATH . '/includes/class-wp-ckgf.php';
+
+/**
+ * Main function to return Plugin instance.
+ *
+ * @since   1.2.1
+ */
+function WP_CKGF() { // phpcs:ignore
+
+	return WP_CKGF::get_instance();
+
 }
 
-if ( ! defined( 'CKGF_CACHE_PERIOD' ) ) {
-	define( 'CKGF_CACHE_PERIOD', 6 * HOUR_IN_SECONDS );
+/**
+ * Main function to return the Gravity Forms Integration class.
+ *
+ * @since   1.2.1
+ */
+function WP_CKGF_Integration() { // phpcs:ignore
+
+	return GFConvertKit::get_instance();
+
 }
 
-if ( ! defined( 'CKGF_PLUGIN_BASENAME' ) ) {
-	define( 'CKGF_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-}
-
-if ( ! defined( 'CKGF_PLUGIN_DIRPATH' ) ) {
-	define( 'CKGF_PLUGIN_DIRPATH', trailingslashit( dirname( __FILE__ ) ) );
-}
-
-if ( ! defined( 'CKGF_PLUGIN_FILEPATH' ) ) {
-	define( 'CKGF_PLUGIN_FILEPATH', __FILE__ );
-}
-
-if ( ! defined( 'CKGF_VERSION' ) ) {
-	define( 'CKGF_VERSION', '1.2.0' );
-}
-
-if ( ! defined( 'CKGF_MIN_GF_VERSION' ) ) {
-	define( 'CKGF_MIN_GF_VERSION', '1.9.3' );
-}
-
-if ( ! defined( 'CKGF_SLUG' ) ) {
-	define( 'CKGF_SLUG', 'ckgf' );
-}
-
-if ( ! defined( 'CKGF_TITLE' ) ) {
-	define( 'CKGF_TITLE', 'Gravity Forms ConvertKit Add-On' );
-}
-
-if ( ! defined( 'CKGF_SHORT_TITLE' ) ) {
-	define( 'CKGF_SHORT_TITLE', 'ConvertKit' );
-}
-
-if ( ! defined( 'CKGF_API_BASE_URL' ) ) {
-	define( 'CKGF_API_BASE_URL', 'https://api.convertkit.com/v3' );
-}
-
-if ( ! defined( 'CKGF_APP_BASE_URL' ) ) {
-	define( 'CKGF_APP_BASE_URL', 'https://app.convertkit.com' );
-}
-
-// Require the plugin's function definitions
-// These files provide generic functions that don't really belong as part of a component
-require_once( path_join( CKGF_PLUGIN_DIRPATH, 'functions/convertkit.php' ) );
-require_once( path_join( CKGF_PLUGIN_DIRPATH, 'functions/utility.php' ) );
-
-// Gravity Forms Integration
-require_once( path_join( CKGF_PLUGIN_DIRPATH, 'components/gravityforms/gravityforms.php' ) );
-
-
-if ( ! function_exists( 'convertkit_gf_load_textdomain' ) ) {
-	/**
-	 * Load plugin textdomain
-	 */
-	function convertkit_gf_load_textdomain() {
-		load_plugin_textdomain( 'convertkit', false, basename( dirname( __FILE__ ) ) . '/languages/' );
-	}
-	add_action( 'plugins_loaded', 'convertkit_gf_load_textdomain' );
-}
+// Finally, initialize the Plugin.
+WP_CKGF();
