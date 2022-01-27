@@ -2,9 +2,10 @@
 Contributors: nathanbarry, growdev, travisnorthcutt
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
-Requires at least: 3.6
-Tested up to: 5.8
-Stable tag: 1.2.0
+Requires at least: 5.0
+Tested up to: 5.9
+Requires PHP: 5.6.20
+Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,34 +15,36 @@ ConvertKit is an email marketing platform for capturing leads from your WordPres
 
 [ConvertKit](https://convertkit.com) makes it easy to capture more leads and sell more products by easily embedding email capture forms anywhere.
 
-Integrates Gravity Forms with ConvertKit allowing form submissions to be automatically sent to your ConvertKit account.
+This Plugin integrates Gravity Forms with ConvertKit, allowing form submissions to be automatically sent to your ConvertKit account.
+
+Full plugin documentation is located [here](https://help.convertkit.com/en/articles/2502569-gravity-forms-integration).
 
 == Installation ==
 
-1. Upload `gravityformsconvertkit` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Visit the settings page by clicking on the link under the plugin's name
-4. Enter your ConvertKit API key, which you can find [here](https://app.convertkit.com/account/edit), and save the settings
-5. Select your default form and save the settings
-6. If you wish, choose particular forms for each post or page by visiting the edit screen and choosing the correct form
+1. Upload the `convertkit-gravity-forms` folder to the `/wp-content/plugins/` directory
+2. Active the ConvertKit for Gravity Forms plugin through the 'Plugins' menu in WordPress
+
+== Configuration ==
+
+1. Configure the plugin by navigating to Forms > Settings > ConvertKit in the WordPress Administration Menu, entering your [API Key](https://app.convertkit.com/account_settings/advanced_settings)
+2. Configure sending Gravity Form Entries to ConvertKit by defining one or more Feeds. This is done by editing your Gravity Form, and navigating to Settings > ConvertKit within the Form.
 
 == Frequently asked questions ==
 
 = Does this plugin require a paid service? =
 
-Yes, for it to work you must first have an account on ConvertKit.com and own a license of Gravity Forms.
+No. You must first have an account on ConvertKit.com, but you do not have to use a paid plan!
 
 == Screenshots ==
 
-1. screenshot-1.png
-2. screenshot-2.png
+1. 
+2. 
 
 == Changelog ==
 
 ### 1.2.1 2022-01-xx
 * Added: Settings: Debug option
 * Fix: Settings: API Key: Show error notification and contextual tooltip error message when an invalid API Key is specified
-
 
 ### 1.2.0  2021-05-18
 
