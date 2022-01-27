@@ -91,16 +91,16 @@ class FormCest
 		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
 
 		// Click Add New.
-		$I->click('#form_settings a.add-new-h2');
+		$I->click('#gform-settings div.tablenav.top div.alignright a.button');
 
 		// Complete Feed's Form Fields.
 		$I->completeGravityFormsFeedFields($I, 'Select a ConvertKit form');
 
-		// Click Update Settings.
-		$I->click('Update Settings');
+		// Click Save Settings.
+		$I->click('#gform-settings-save');
 
 		// Confirm an error message is displayed.
-		$I->seeInSource('There was an error updating this feed. Please review all errors below and try again.');
+		$I->seeInSource('There was an error while saving your settings.');
 
 		// Create a Page with the Gravity Forms shortcode as its content.
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
@@ -187,4 +187,5 @@ class FormCest
 		// Check API to confirm email address was not sent to ConvertKit.
 		$I->apiCheckSubscriberDoesNotExist($I, $emailAddress);
 	}
+	
 }

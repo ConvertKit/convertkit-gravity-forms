@@ -187,19 +187,19 @@ class Acceptance extends \Codeception\Module
 		$I->loadConvertKitSettingsScreen($I);
 
 		// Complete API Fields.
-		$I->fillField('_gaddon_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
+		$I->fillField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
 		
-		// Click the Update Settings button.
-		$I->click('Update Settings');
+		// Click the Save Settings button.
+		$I->click('#gform-settings-save');
 
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
 
 		// Confirm that a message is displayed confirming settings saved.
-		$I->seeInSource('ConvertKit settings updated.');
+		$I->seeInSource('Settings updated.');
 
 		// Check the value of the fields match the inputs provided.
-		$I->seeInField('_gaddon_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
+		$I->seeInField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
 	}
 
 	/**
@@ -222,42 +222,30 @@ class Acceptance extends \Codeception\Module
 		$I->click('Create Form');
 
 		// Wait for the Form Edit screen to load.
-		$I->waitForElementVisible('.gf_admin_page_formid');
+		$I->waitForElementVisible('#no-fields');
 
-		// Open Advanced Fields 
-		$I->click('#add_advanced_fields');
+		// Open Advanced Fields Panel.
+		$I->click('button[aria-controls="add_advanced_fields"]');
+		$I->wait(2);
 
 		// Add fields.
-		$I->waitForElementVisible('#add_advanced_fields input[data-type="name"]');
-		$I->click('Name');
-
+		$I->click('#add_advanced_fields button[data-type="name"]');
 		$I->wait(2);
 
-		$I->waitForElementVisible('#add_advanced_fields input[data-type="email"]');
-		$I->click('Email');
-
+		$I->click('#add_advanced_fields button[data-type="email"]');
 		$I->wait(2);
 
-		// Open Standard Fields 
-		$I->click('#add_standard_fields');
-		$I->wait(2);
-		
-		// Add fields.
-		$I->waitForElementVisible('#add_standard_fields input[data-type="text"]');
-		$I->click('Single Line Text');
-
+		$I->click('#add_standard_fields button[data-type="text"]');
 		$I->wait(2);
 
-		$I->waitForElementVisible('#add_standard_fields input[data-type="textarea"]');
-		$I->click('Paragraph Text');
-
+		$I->click('#add_standard_fields button[data-type="textarea"]');
 		$I->wait(2);
 
 		// Update.
-		$I->click('input.update-form');
+		$I->click('button.update-form');
 
 		// Return Form ID.
-		return (int) filter_var($I->grabTextFrom('.gf_admin_page_formid'), FILTER_SANITIZE_NUMBER_INT);
+		return (int) $I->grabFromCurrentUrl('~(\d+)$~');
 	}
 
 	/**
@@ -275,24 +263,24 @@ class Acceptance extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
 
 		// Click Add New.
-		$I->click('#form_settings a.add-new-h2');
+		$I->click('#gform-settings div.tablenav.top div.alignright a.button');
 
 		// Complete Feed's Form Fields.
 		$I->completeGravityFormsFeedFields($I, $formName);
 
-		// Click Update Settings.
-		$I->click('Update Settings');
+		// Click Save Settings.
+		$I->click('#gform-settings-save');
 
 		// Confirm Feed Settings saved successfully.
-		$I->seeInSource('Feed updated successfully.');
+		$I->seeInSource('Settings updated.');
 
 		// Confirm Feed Fields contain saved values.
-		$I->seeInField('_gaddon_setting_feed_name', 'ConvertKit Feed');
-		$I->seeOptionIsSelected('_gaddon_setting_form_id', $formName);
-		$I->seeOptionIsSelected('_gaddon_setting_field_map_e', 'Email');
-		$I->seeOptionIsSelected('_gaddon_setting_field_map_n', 'Name (First)');
-		$I->seeOptionIsSelected('_gaddon_setting_convertkit_custom_fields_key', 'Last Name');
-		$I->seeOptionIsSelected('_gaddon_setting_convertkit_custom_fields_custom_value', 'Name (Last)');
+		$I->seeInField('_gform_setting_feed_name', 'ConvertKit Feed');
+		$I->seeOptionIsSelected('_gform_setting_form_id', $formName);
+		$I->seeOptionIsSelected('#_gform_setting_field_map_e', 'Email');
+		$I->seeOptionIsSelected('#_gform_setting_field_map_n', 'Name (First)');
+		$I->seeOptionIsSelected('#_gform_setting_convertkit_custom_fields_custom_key_0', 'Last Name');
+		$I->seeOptionIsSelected('#_gform_setting_convertkit_custom_fields_custom_value_0', 'Name (Last)');
 	}
 
 	/**
@@ -306,23 +294,23 @@ class Acceptance extends \Codeception\Module
 	public function completeGravityFormsFeedFields($I, $formName)
 	{
 		// Check ConvertKit Form option exists and is populated.
-		$I->seeElementInDOM('select[name="_gaddon_setting_form_id"]');
+		$I->seeElementInDOM('select[name="_gform_setting_form_id"]');
 
 		// Define Feed Name.
-		$I->fillField('_gaddon_setting_feed_name', 'ConvertKit Feed');
+		$I->fillField('_gform_setting_feed_name', 'ConvertKit Feed');
 
 		// Define ConvertKit Form to send entries to.
-		$I->selectOption('_gaddon_setting_form_id', $formName);
+		$I->selectOption('_gform_setting_form_id', $formName);
 
 		// Map Email Field.
-		$I->selectOption('_gaddon_setting_field_map_e', 'Email');
+		$I->selectOption('#_gform_setting_field_map_e', 'Email');
 
 		// Map Name Field.
-		$I->selectOption('_gaddon_setting_field_map_n', 'Name (First)');
+		$I->selectOption('#_gform_setting_field_map_n', 'Name (First)');
 
 		// Map ConvertKit Account Custom Field 'Last Name'.
-		$I->selectOption('_gaddon_setting_convertkit_custom_fields_key', 'Last Name');
-		$I->selectOption('_gaddon_setting_convertkit_custom_fields_custom_value', 'Name (Last)');
+		$I->selectOption('#_gform_setting_convertkit_custom_fields_custom_key_0', 'Last Name');
+		$I->selectOption('#_gform_setting_convertkit_custom_fields_custom_value_0', 'Name (Last)');
 	}
 
 	/**
@@ -339,8 +327,8 @@ class Acceptance extends \Codeception\Module
 		// Load Form's ConvertKit Feed Settings.
 		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
 
-		// Deactivate the Feed - yes, it's really deactivated by clicking an image.
-		$I->click('table.feeds tbody tr:nth-child(' . $gravityFormFeedID . ') th.manage-column img');
+		// Deactivate the Feed
+		$I->click('table.feeds tbody tr:nth-child(' . $gravityFormFeedID . ') th.manage-column button.gform-status--active');
 	}
 
 	/**

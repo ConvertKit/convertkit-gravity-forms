@@ -31,14 +31,14 @@ class SettingAPIKeyCest
 		// Load Settings screen.
 		$I->loadConvertKitSettingsScreen($I);
 
-		// Click the Update Settings button.
-		$I->click('Update Settings');
+		// Click the Save Settings button.
+		$I->click('#gform-settings-save');
 
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
 
-		// Confirm that a message is displayed telling the user that an error occured whilst saving.
-		$I->seeInSource('There was an error while saving your settings.');
+		// Confirm that a message is displayed telling the their API key is not present.
+		$I->seeInSource('Authorization Failed: API Key not present');
 	}
 
 	/**
@@ -54,9 +54,6 @@ class SettingAPIKeyCest
 	{
 		// Enable Integration and define its API Keys.
 		$I->setupConvertKitPlugin($I);
-
-		// Confirm that a message is not displayed telling the user that an error occured whilst saving.
-		$I->dontSeeInSource('There was an error while saving your settings.');
 	}
 
 	/**
@@ -74,16 +71,16 @@ class SettingAPIKeyCest
 		$I->loadConvertKitSettingsScreen($I);
 
 		// Complete API Fields.
-		$I->fillField('_gaddon_setting_api_key', 'invalidApiKey');
+		$I->fillField('_gform_setting_api_key', 'invalidApiKey');
 		
-		// Click the Update Settings button.
-		$I->click('Update Settings');
+		// Click the Save Settings button.
+		$I->click('#gform-settings-save');
 
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
 
 		// Check the value of the fields match the inputs provided.
-		$I->seeInField('_gaddon_setting_api_key', 'invalidApiKey');
+		$I->seeInField('_gform_setting_api_key', 'invalidApiKey');
 
 		// Confirm that a message is displayed telling the user that an error occured whilst saving.
 		$I->seeInSource('There was an error while saving your settings.');
