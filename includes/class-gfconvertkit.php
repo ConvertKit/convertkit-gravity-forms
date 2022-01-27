@@ -82,6 +82,42 @@ class GFConvertKit extends GFFeedAddOn {
 	protected $_short_title = CKGF_SHORT_TITLE; // phpcs:ignore
 
 	/**
+	 * Holds a list of capabilities to add to roles for Members plugin (https://wordpress.org/plugins/members/) integration. L
+	 *
+	 * @since 	1.2.1
+	 * 
+	 * @var 	array
+	 */
+	protected $_capabilities = array( 'ckgf_convertkit', 'ckgf_convertkit_uninstall' );
+
+	/**
+	 * Holds capabilities or roles that have access to this Plugin's Settings page.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @var 	string
+	 */
+	protected $_capabilities_settings_page = 'ckgf_convertkit_settings_page';
+
+	/**
+	 * Holds capabilities or roles that have access to this Plugin's Form Settings page.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @var 	string
+	 */
+	protected $_capabilities_form_page = 'ckgf_convertkit_form_page';
+
+	/**
+	 * Holds capabilities or roles that can install this Plugin.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @var 	string
+	 */
+	protected $_capabilities_uninstall = 'ckgf_convertkit_uninstall';
+
+	/**
 	 * Holds the class object.
 	 *
 	 * @since   1.0.0
