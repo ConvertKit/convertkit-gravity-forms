@@ -149,9 +149,10 @@ class CKGF_API {
 	 * @param   string $email      Email Address.
 	 * @param   string $first_name First Name.
 	 * @param   mixed  $fields     Custom Fields (false|array).
+	 * @param   mixed  $tag_ids    Tags (false|array).
 	 * @return  mixed               WP_Error | array
 	 */
-	public function form_subscribe( $form_id, $email, $first_name, $fields = false ) {
+	public function form_subscribe( $form_id, $email, $first_name, $fields = false, $tag_ids = false ) {
 
 		// Backward compat. if $email is an array comprising of email and name keys.
 		if ( is_array( $email ) ) {
@@ -170,6 +171,9 @@ class CKGF_API {
 		);
 		if ( $fields ) {
 			$params['fields'] = $fields;
+		}
+		if ( $tag_ids ) {
+			$params['tags'] = $tag_ids;
 		}
 
 		// Send request.

@@ -127,6 +127,15 @@ class GFConvertKit extends GFFeedAddOn {
 	private static $_instance = null; // phpcs:ignore
 
 	/**
+	 * Holds the API instance.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @var 	CKGF_API
+	 */
+	private $api;
+
+	/**
 	 * Called when the integration is initialized by Gravity Forms.
 	 *
 	 * @since   1.0.0
@@ -415,6 +424,19 @@ class GFConvertKit extends GFFeedAddOn {
 			);
 		}
 
+		// Add Tag selection.
+		$tag_fields = $this->get_tags();
+		if ( ! is_wp_error( $tag_fields ) ) {
+			$base_fields['fields'][] = array(
+				'name'     => 'tag_id',
+				'label'    => __( 'ConvertKit Tag', 'convertkit' ),
+				'type'     => 'select',
+				'required' => false,
+				'choices'  => $tag_fields,
+				'tooltip'  => sprintf( '<h6>%s</h6>%s', __( 'ConvertKit Tag', 'convertkit' ), __( 'Select the ConvertKit tag that you would like to assign your contacts to.', 'convertkit' ) ),
+			);
+		}
+
 		// Add Field Mapping.
 		$base_fields['fields'][] = array(
 			'name'      => 'field_map',
@@ -430,6 +452,12 @@ class GFConvertKit extends GFFeedAddOn {
 				array(
 					'name'       => 'n',
 					'label'      => __( 'Name', 'convertkit' ),
+					'required'   => false,
+					'field_type' => '',
+				),
+				array(
+					'name'       => 'tag',
+					'label'      => __( 'Tag', 'convertkit' ),
 					'required'   => false,
 					'field_type' => '',
 				),
@@ -570,17 +598,17 @@ class GFConvertKit extends GFFeedAddOn {
 	}
 
 	/**
-	 * Returns an array of Tags registered in ConvertKit, in an array compatible with
+	 * Returns an array of Custom Fields registered in ConvertKit, in an array compatible with
 	 * Gravity Form's Feed Settings.
 	 *
-	 * @since   1.2.1
+	 * @since   1.0.0
 	 *
 	 * @return  mixed   WP_Error | array
 	 */
 	private function get_tags() {
 
-		// Get Tags.
-		$api = new CKGF_API(
+		// Get Custom Fields.
+		$api           = new CKGF_API(
 			$this->api_key(),
 			'',
 			$this->debug_enabled()
@@ -593,14 +621,16 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		// Map to Gravity Forms Feed compatible array.
-		$fields = array();
+		$fields = array(
+			array(
+				'label' => __( '(No Tag)', 'convertkit' ),
+				'value' => '',
+			),
+		);
 		foreach ( $tags as $tag ) {
-			var_dump( $tag );
-			die();
-
 			$fields[] = array(
-				'value' => esc_attr( $custom_field['key'] ),
-				'label' => esc_html( $custom_field['label'] ),
+				'value' => esc_attr( $tag['id'] ),
+				'label' => esc_html( $tag['name'] ),
 			);
 		}
 
@@ -622,27 +652,64 @@ class GFConvertKit extends GFFeedAddOn {
 
 		// Get ConvertKit Feed Settings.
 		$form_id                  = rgars( $feed, 'meta/form_id' );
+		$tag_ids 				  = array( rgars( $feed, 'meta/tag_id' ) );
 		$field_map_e              = rgars( $feed, 'meta/field_map_e' );
 		$field_map_n              = rgars( $feed, 'meta/field_map_n' );
+		$field_map_tag            = rgars( $feed, 'meta/field_map_tag' );
 		$convertkit_custom_fields = $this->get_dynamic_field_map_fields( $feed, 'convertkit_custom_fields' );
 
 		// Get Entry Values.
 		$email  = $this->get_field_value( $form, $entry, $field_map_e );
 		$name   = $this->get_field_value( $form, $entry, $field_map_n );
+		$tag 	= $this->get_field_value( $form, $entry, $field_map_tag );
 		$fields = array(); // Populated later in this function.
-
-		// Get Custom Fields.
-		$api           = new CKGF_API(
+		
+		// Initialize API class.
+		$this->api = new CKGF_API(
 			$this->api_key(),
 			'',
 			$this->debug_enabled()
 		);
-		$custom_fields = $api->get_custom_fields();
 
-		// If Custom Fields could not be fetched, just send the name and email to ConvertKit.
+		// Get Custom Fields and Tag ID.
+		$fields = $this->process_feed_custom_fields( $form, $entry, $convertkit_custom_fields );
+		$tag_ids[] = $this->process_feed_tag( $tag );
+
+		// Iterate through Tag IDs array, removing blank and false values.
+		foreach ( $tag_ids as $key => $value ) {
+			if ( empty( $value ) || ! $value ) {
+				unset( $tag_ids[ $key ] );
+			}
+		}
+
+		// If Tag IDs array is now empty, set it to boolean false
+		if ( ! count( $tag_ids ) ) {
+			$tag_ids = false;
+		}
+
+		// Call API to subscribe the email address to the given Form.
+		$this->api->form_subscribe( $form_id, $email, $name, $fields, $tag_ids );
+
+	}
+
+	/**
+	 * Map Gravity Form Entry values to Custom Fields.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param   array $entry  						Gravity Forms Entry / Submission.
+	 * @param   array $form   						Gravity Forms Form.
+	 * @param 	array $convertkit_custom_fields 	Gravity Forms Custom Fields.
+	 * @return 	mixed 								WP_Error | array
+	 */
+	private function process_feed_custom_fields( $form, $entry, $convertkit_custom_fields ) {
+
+		// Get Custom Fields from the API.
+		$custom_fields = $this->api->get_custom_fields();
+
+		// If Custom Fields could not be fetched, bail.
 		if ( is_wp_error( $custom_fields ) ) {
-			$api->form_subscribe( $form_id, $email, $name );
-			return;
+			return $custom_fields;
 		}
 
 		foreach ( $custom_fields as $custom_field ) {
@@ -655,8 +722,37 @@ class GFConvertKit extends GFFeedAddOn {
 			$fields[ $custom_field['key'] ] = $this->get_field_value( $form, $entry, $convertkit_custom_fields[ $custom_field['key'] ] );
 		}
 
-		// Call API to subscribe the email address to the given Form.
-		$api->form_subscribe( $form_id, $email, $name, $fields );
+		return $fields;
+
+	}
+
+	/**
+	 * Returns the Tag ID for the given Tag Name.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	string 	$tag 	Tag Name.
+	 * @return 	int 			Tag ID
+	 */
+	private function process_feed_tag( $tag_name ) {
+
+		// Get Tags from the API.
+		$tags = $this->api->get_tags();
+
+		// If Tags could not be fetched, bail.
+		if ( is_wp_error( $tags ) ) {
+			return $tags;
+		}
+
+		foreach ( $tags as $tag ) {
+			// If the tag's name matches the $tag_name, return its ID.
+			if ( $tag['name'] == $tag_name ) {
+				return $tag['id'];
+			}
+		}
+
+		// No matching tag was found in ConvertKit.
+		return false;
 
 	}
 
