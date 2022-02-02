@@ -65,7 +65,7 @@ class WP_CKGF {
 	 */
 	public function load_language_files() {
 
-		load_plugin_textdomain( 'convertkit', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'convertkit', false, basename( dirname( CKGF_PLUGIN_BASENAME ) ) . '/languages/' );
 
 	}
 

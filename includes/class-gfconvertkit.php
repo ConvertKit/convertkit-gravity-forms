@@ -133,6 +133,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 */
 	public function init() {
 
+		// Initialize parent class.
 		parent::init();
 
 		// Register support for sending data to ConvertKit once payment is received from a payment gateway,
@@ -142,6 +143,68 @@ class GFConvertKit extends GFFeedAddOn {
 				'option_label' => esc_html__( 'Send to ConvertKit only when payment is received.', 'convertkit' ),
 			)
 		);
+
+	}
+
+	/**
+	 * Register CSS to load for this Integration on Gravity Form screens.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @return 	array
+	 */
+	public function styles() {
+
+		// Initialize parent styles.
+		parent::styles();
+
+		return array(
+			array(
+				'handle'  => 'ckgf_form_settings_css',
+				'src'     => CKGF_PLUGIN_URL . 'resources/backend/css/form-settings.css',
+				'version' => CKGF_PLUGIN_VERSION,
+				'enqueue' => array(
+					array( 
+						'admin_page' => array( 
+							'form_editor',
+							'form_list',
+							'form_settings',
+							'plugin_settings',
+							'app_settings',
+							'plugin_page',
+						)
+					),
+				)
+			),
+		);
+
+	}
+
+	/**
+	 * Return the CSS class for the Plugin's icon, used on Form Settings Menus.
+	 * 
+	 * @since 	1.2.1
+	 *
+	 * @return 	string
+	 */
+	public function get_menu_icon() {
+
+		// Must be prefixed with gform-icon--, otherwise no CSS class is applied.
+		return 'gform-icon--convertkit';
+		
+	}
+
+	public function app_settings_icon() {
+
+		die( 'App Icon' );
+
+	}
+
+	public function form_settings_icon() {
+
+		die( 'Hit' );
+
+		return 'foo';
 
 	}
 
@@ -496,6 +559,45 @@ class GFConvertKit extends GFFeedAddOn {
 		// Map to Gravity Forms Feed compatible array.
 		$fields = array();
 		foreach ( $custom_fields as $custom_field ) {
+			$fields[] = array(
+				'value' => esc_attr( $custom_field['key'] ),
+				'label' => esc_html( $custom_field['label'] ),
+			);
+		}
+
+		return $fields;
+
+	}
+
+	/**
+	 * Returns an array of Tags registered in ConvertKit, in an array compatible with
+	 * Gravity Form's Feed Settings.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @return  mixed   WP_Error | array
+	 */
+	private function get_tags() {
+
+		// Get Tags.
+		$api = new CKGF_API(
+			$this->api_key(),
+			'',
+			$this->debug_enabled()
+		);
+		$tags = $api->get_tags();
+
+		// Bail if an error occured.
+		if ( is_wp_error( $tags ) ) {
+			return $tags;
+		}
+
+		// Map to Gravity Forms Feed compatible array.
+		$fields = array();
+		foreach ( $tags as $tag ) {
+			var_dump( $tag );
+			die();
+
 			$fields[] = array(
 				'value' => esc_attr( $custom_field['key'] ),
 				'label' => esc_html( $custom_field['label'] ),
