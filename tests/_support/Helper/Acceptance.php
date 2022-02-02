@@ -207,7 +207,7 @@ class Acceptance extends \Codeception\Module
 	 * 
 	 * @since 	1.2.1
 	 * 
-	 * @param 	AcceptanceTester 	$I  AcceptanceTester.
+	 * @param 	AcceptanceTester 	$I  				AcceptanceTester.
 	 * @return 	int 					Form ID.
 	 */
 	public function createGravityFormsForm($I)
@@ -228,19 +228,41 @@ class Acceptance extends \Codeception\Module
 		$I->click('button[aria-controls="add_advanced_fields"]');
 		$I->wait(2);
 
-		// Add fields.
+		// Add Name Field.
 		$I->click('#add_advanced_fields button[data-type="name"]');
 		$I->wait(2);
 
+		// Add Email Field.
 		$I->click('#add_advanced_fields button[data-type="email"]');
 		$I->wait(2);
 
+		// Add Text Field.
 		$I->click('#add_standard_fields button[data-type="text"]');
 		$I->wait(2);
 
+		// Add Textarea Field.
 		$I->click('#add_standard_fields button[data-type="textarea"]');
 		$I->wait(2);
 
+		// Add Select Field, with values matching ConvertKit Tags.
+		$I->click('#add_standard_fields button[data-type="select"]');
+		$I->wait(2);
+
+		$I->click('#field_5');
+		$I->wait(2);
+
+		$I->fillField('#field_label', 'Tag');
+		$I->click('label[for=field_choice_values_enabled]');
+		
+		$I->fillField('#select_choice_text_0', 'Select Tag');
+		$I->fillField('#select_choice_value_0', '');
+		
+		$I->fillField('#select_choice_text_1', 'Tag Label 1');
+		$I->fillField('#select_choice_value_1', $_ENV['CONVERTKIT_API_TAG_NAME']);
+
+		$I->fillField('#select_choice_text_2', 'Tag Label 2');
+		$I->fillField('#select_choice_value_2', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME']);
+	
 		// Update.
 		$I->click('button.update-form');
 
@@ -256,8 +278,9 @@ class Acceptance extends \Codeception\Module
 	 * @param 	AcceptanceTester 	$I 				AcceptanceTester.
 	 * @param 	int 				$gravityFormID 	Gravity Forms Form ID.
 	 * @param 	string 				$formName 		ConvertKit Form Name.
+	 * @param 	string 				$tagName 		ConvertKit Tag Name.
 	 */
-	public function createGravityFormsFeed($I, $gravityFormID, $formName)
+	public function createGravityFormsFeed($I, $gravityFormID, $formName, $tagName = false, $mapTagField = false)
 	{
 		// Navigate to Form's Settings > ConvertKit.
 		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
@@ -266,7 +289,7 @@ class Acceptance extends \Codeception\Module
 		$I->click('#gform-settings div.tablenav.top div.alignright a.button');
 
 		// Complete Feed's Form Fields.
-		$I->completeGravityFormsFeedFields($I, $formName);
+		$I->completeGravityFormsFeedFields($I, $formName, $tagName, $mapTagField);
 
 		// Click Save Settings.
 		$I->click('#gform-settings-save');
@@ -277,10 +300,16 @@ class Acceptance extends \Codeception\Module
 		// Confirm Feed Fields contain saved values.
 		$I->seeInField('_gform_setting_feed_name', 'ConvertKit Feed');
 		$I->seeOptionIsSelected('_gform_setting_form_id', $formName);
+		if ($tagName) {
+			$I->seeOptionIsSelected('_gform_setting_tag_id', $tagName);
+		}
 		$I->seeOptionIsSelected('#_gform_setting_field_map_e', 'Email');
 		$I->seeOptionIsSelected('#_gform_setting_field_map_n', 'Name (First)');
 		$I->seeOptionIsSelected('#_gform_setting_convertkit_custom_fields_custom_key_0', 'Last Name');
 		$I->seeOptionIsSelected('#_gform_setting_convertkit_custom_fields_custom_value_0', 'Name (Last)');
+		if ($mapTagField) {
+			
+		}
 	}
 
 	/**
@@ -290,8 +319,9 @@ class Acceptance extends \Codeception\Module
 	 * 
 	 * @param 	AcceptanceTester 	$I 				AcceptanceTester.
 	 * @param 	string 				$formName 		ConvertKit Form Name.
+	 * @param 	string 				$tagName 		ConvertKit Tag Name.
 	 */
-	public function completeGravityFormsFeedFields($I, $formName)
+	public function completeGravityFormsFeedFields($I, $formName, $tagName = false, $mapTagField = false)
 	{
 		// Check ConvertKit Form option exists and is populated.
 		$I->seeElementInDOM('select[name="_gform_setting_form_id"]');
@@ -302,11 +332,21 @@ class Acceptance extends \Codeception\Module
 		// Define ConvertKit Form to send entries to.
 		$I->selectOption('_gform_setting_form_id', $formName);
 
+		// Define ConvertKit Tag to apply to subscribers.
+		if ($tagName) {
+			$I->selectOption('_gform_setting_tag_id', $tagName);
+		}
+
 		// Map Email Field.
 		$I->selectOption('#_gform_setting_field_map_e', 'Email');
 
 		// Map Name Field.
 		$I->selectOption('#_gform_setting_field_map_n', 'Name (First)');
+
+		// Map Tag Field.
+		if ($mapTagField) {
+
+		}
 
 		// Map ConvertKit Account Custom Field 'Last Name'.
 		$I->selectOption('#_gform_setting_convertkit_custom_fields_custom_key_0', 'Last Name');

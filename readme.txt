@@ -47,8 +47,9 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 * Added: Developers: Action and filter hooks.  See https://github.com/ConvertKit/convertkit-woocommerce/blob/1.4.2/ACTIONS-FILTERS.md
 * Added: Developers: Capabilities for Settings Page, Form Settings and Uninstall actions
 * Added: Settings: Debug option
+* Added: Form: Feed Settings: Optionally tag subscriber
+* Added: Form: Feed Settings: Optionally map a Form Field to be used as the value for tagging a subscriber
 * Fix: Settings: API Key: Show error notification and contextual tooltip error message when an invalid API Key is specified
-
 
 ### 1.2.0  2021-05-18
 
