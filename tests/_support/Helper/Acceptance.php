@@ -258,10 +258,10 @@ class Acceptance extends \Codeception\Module
 		$I->fillField('#select_choice_value_0', '');
 		
 		$I->fillField('#select_choice_text_1', 'Tag Label 1');
-		$I->fillField('#select_choice_value_1', $_ENV['CONVERTKIT_API_TAG_NAME']);
+		$I->fillField('#select_choice_value_1', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME']);
 
 		$I->fillField('#select_choice_text_2', 'Tag Label 2');
-		$I->fillField('#select_choice_value_2', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME']);
+		$I->fillField('#select_choice_value_2', 'fakeTagNotInConvertKit');
 	
 		// Update.
 		$I->click('button.update-form');

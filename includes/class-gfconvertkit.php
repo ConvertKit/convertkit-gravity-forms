@@ -84,38 +84,38 @@ class GFConvertKit extends GFFeedAddOn {
 	/**
 	 * Holds a list of capabilities to add to roles for Members plugin (https://wordpress.org/plugins/members/) integration. L
 	 *
-	 * @since 	1.2.1
-	 * 
-	 * @var 	array
+	 * @since   1.2.1
+	 *
+	 * @var     array
 	 */
-	protected $_capabilities = array( 'ckgf_convertkit', 'ckgf_convertkit_uninstall' );
+	protected $_capabilities = array( 'ckgf_convertkit', 'ckgf_convertkit_uninstall' ); // phpcs:ignore
 
 	/**
 	 * Holds capabilities or roles that have access to this Plugin's Settings page.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @var 	string
+	 *
+	 * @since   1.2.1
+	 *
+	 * @var     string
 	 */
-	protected $_capabilities_settings_page = 'ckgf_convertkit_settings_page';
+	protected $_capabilities_settings_page = 'ckgf_convertkit_settings_page'; // phpcs:ignore
 
 	/**
 	 * Holds capabilities or roles that have access to this Plugin's Form Settings page.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @var 	string
+	 *
+	 * @since   1.2.1
+	 *
+	 * @var     string
 	 */
-	protected $_capabilities_form_page = 'ckgf_convertkit_form_page';
+	protected $_capabilities_form_page = 'ckgf_convertkit_form_page'; // phpcs:ignore
 
 	/**
 	 * Holds capabilities or roles that can install this Plugin.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @var 	string
+	 *
+	 * @since   1.2.1
+	 *
+	 * @var     string
 	 */
-	protected $_capabilities_uninstall = 'ckgf_convertkit_uninstall';
+	protected $_capabilities_uninstall = 'ckgf_convertkit_uninstall'; // phpcs:ignore
 
 	/**
 	 * Holds the class object.
@@ -128,10 +128,10 @@ class GFConvertKit extends GFFeedAddOn {
 
 	/**
 	 * Holds the API instance.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @var 	CKGF_API
+	 *
+	 * @since   1.2.1
+	 *
+	 * @var     CKGF_API
 	 */
 	private $api;
 
@@ -157,10 +157,10 @@ class GFConvertKit extends GFFeedAddOn {
 
 	/**
 	 * Register CSS to load for this Integration on Gravity Form screens.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @return 	array
+	 *
+	 * @since   1.2.1
+	 *
+	 * @return  array
 	 */
 	public function styles() {
 
@@ -173,17 +173,17 @@ class GFConvertKit extends GFFeedAddOn {
 				'src'     => CKGF_PLUGIN_URL . 'resources/backend/css/form-settings.css',
 				'version' => CKGF_PLUGIN_VERSION,
 				'enqueue' => array(
-					array( 
-						'admin_page' => array( 
+					array(
+						'admin_page' => array(
 							'form_editor',
 							'form_list',
 							'form_settings',
 							'plugin_settings',
 							'app_settings',
 							'plugin_page',
-						)
+						),
 					),
-				)
+				),
 			),
 		);
 
@@ -191,29 +191,15 @@ class GFConvertKit extends GFFeedAddOn {
 
 	/**
 	 * Return the CSS class for the Plugin's icon, used on Form Settings Menus.
-	 * 
-	 * @since 	1.2.1
 	 *
-	 * @return 	string
+	 * @since   1.2.1
+	 *
+	 * @return  string
 	 */
 	public function get_menu_icon() {
 
 		// Must be prefixed with gform-icon--, otherwise no CSS class is applied.
 		return 'gform-icon--convertkit';
-		
-	}
-
-	public function app_settings_icon() {
-
-		die( 'App Icon' );
-
-	}
-
-	public function form_settings_icon() {
-
-		die( 'Hit' );
-
-		return 'foo';
 
 	}
 
@@ -608,7 +594,7 @@ class GFConvertKit extends GFFeedAddOn {
 	private function get_tags() {
 
 		// Get Custom Fields.
-		$api           = new CKGF_API(
+		$api  = new CKGF_API(
 			$this->api_key(),
 			'',
 			$this->debug_enabled()
@@ -652,7 +638,7 @@ class GFConvertKit extends GFFeedAddOn {
 
 		// Get ConvertKit Feed Settings.
 		$form_id                  = rgars( $feed, 'meta/form_id' );
-		$tag_ids 				  = array( rgars( $feed, 'meta/tag_id' ) );
+		$tag_ids                  = array( rgars( $feed, 'meta/tag_id' ) );
 		$field_map_e              = rgars( $feed, 'meta/field_map_e' );
 		$field_map_n              = rgars( $feed, 'meta/field_map_n' );
 		$field_map_tag            = rgars( $feed, 'meta/field_map_tag' );
@@ -661,9 +647,9 @@ class GFConvertKit extends GFFeedAddOn {
 		// Get Entry Values.
 		$email  = $this->get_field_value( $form, $entry, $field_map_e );
 		$name   = $this->get_field_value( $form, $entry, $field_map_n );
-		$tag 	= $this->get_field_value( $form, $entry, $field_map_tag );
+		$tag    = $this->get_field_value( $form, $entry, $field_map_tag );
 		$fields = array(); // Populated later in this function.
-		
+
 		// Initialize API class.
 		$this->api = new CKGF_API(
 			$this->api_key(),
@@ -672,7 +658,7 @@ class GFConvertKit extends GFFeedAddOn {
 		);
 
 		// Get Custom Fields and Tag ID.
-		$fields = $this->process_feed_custom_fields( $form, $entry, $convertkit_custom_fields );
+		$fields    = $this->process_feed_custom_fields( $form, $entry, $convertkit_custom_fields );
 		$tag_ids[] = $this->process_feed_tag( $tag );
 
 		// Iterate through Tag IDs array, removing blank and false values.
@@ -682,7 +668,7 @@ class GFConvertKit extends GFFeedAddOn {
 			}
 		}
 
-		// If Tag IDs array is now empty, set it to boolean false
+		// If Tag IDs array is now empty, set it to boolean false.
 		if ( ! count( $tag_ids ) ) {
 			$tag_ids = false;
 		}
@@ -694,13 +680,13 @@ class GFConvertKit extends GFFeedAddOn {
 
 	/**
 	 * Map Gravity Form Entry values to Custom Fields.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param   array $entry  						Gravity Forms Entry / Submission.
-	 * @param   array $form   						Gravity Forms Form.
-	 * @param 	array $convertkit_custom_fields 	Gravity Forms Custom Fields.
-	 * @return 	mixed 								WP_Error | array
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   array $form                         Gravity Forms Form.
+	 * @param   array $entry                        Gravity Forms Entry / Submission.
+	 * @param   array $convertkit_custom_fields     Gravity Forms Custom Fields.
+	 * @return  mixed                               WP_Error | array
 	 */
 	private function process_feed_custom_fields( $form, $entry, $convertkit_custom_fields ) {
 
@@ -728,11 +714,11 @@ class GFConvertKit extends GFFeedAddOn {
 
 	/**
 	 * Returns the Tag ID for the given Tag Name.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	string 	$tag 	Tag Name.
-	 * @return 	int 			Tag ID
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   string $tag_name    Tag Name.
+	 * @return  int                 Tag ID
 	 */
 	private function process_feed_tag( $tag_name ) {
 
@@ -746,7 +732,7 @@ class GFConvertKit extends GFFeedAddOn {
 
 		foreach ( $tags as $tag ) {
 			// If the tag's name matches the $tag_name, return its ID.
-			if ( $tag['name'] == $tag_name ) {
+			if ( $tag['name'] === $tag_name ) {
 				return $tag['id'];
 			}
 		}
