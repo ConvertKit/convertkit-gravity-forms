@@ -228,7 +228,7 @@ class GFConvertKit extends GFFeedAddOn {
 							esc_html__( '%1$s Required for proper plugin function. %2$s Don\'t have a ConvertKit account? %3$s', 'convertkit' ),
 							'<p><a href="' . esc_url( ckgf_get_api_key_url() ) . '" target="_blank">' . esc_html__( 'Get your ConvertKit API Key.', 'convertkit' ) . '</a>',
 							'<br />',
-							'<a href="' . esc_url( ckgf_get_signup_url() ) . '" target="_blank">' . esc_html__( 'Sign up here.', 'convertkit' ) . '</a></p>',
+							'<a href="' . esc_url( ckgf_get_signup_url() ) . '" target="_blank">' . esc_html__( 'Sign up here.', 'convertkit' ) . '</a></p>'
 						),
 						'feedback_callback'   => array( $this, 'plugin_settings_fields_feedback_callback_api_key' ),
 						'validation_callback' => array( $this, 'plugin_settings_fields_validation_callback_api_key' ),
