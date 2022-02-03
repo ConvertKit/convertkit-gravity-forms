@@ -165,7 +165,7 @@ class FormCest
 		$feedID = $I->createGravityFormsFeed(
 			$I,
 			$gravityFormID,
-			$_ENV['CONVERTKIT_API_FORM_NAME'],
+			$_ENV['CONVERTKIT_API_FORM_NAME']
 		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
