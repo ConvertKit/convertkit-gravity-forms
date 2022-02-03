@@ -666,6 +666,7 @@ class GFConvertKit extends GFFeedAddOn {
 			$this->add_note(
 				$entry['id'],
 				sprintf(
+					/* translators: Field Value */
 					__( 'Error Subscribing: The field mapped to the email address contains the invalid email value %s.', 'convertkit' ),
 					$email
 				),
