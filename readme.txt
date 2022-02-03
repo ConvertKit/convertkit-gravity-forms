@@ -37,8 +37,8 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 
 == Screenshots ==
 
-1. 
-2. 
+1. Gravity Forms Form's Feed ConvertKit Settings
+2. Gravity Forms ConvertKit Settings
 
 == Changelog ==
 
