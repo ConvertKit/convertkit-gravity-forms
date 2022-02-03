@@ -122,6 +122,7 @@ jobs:
         run: |
           wp-cli config set WP_DEBUG true --raw
           wp-cli config set FS_METHOD direct
+          wp-cli config set GF_LICENSE_KEY ${{ env.GRAVITY_FORMS_LICENSE_KEY }}
 
       # This step is deliberately after WordPress installation and configuration, as enabling PHP 8.x before using WP-CLI results
       # in the workflow failing due to incompatibilities between WP-CLI and PHP 8.x.
