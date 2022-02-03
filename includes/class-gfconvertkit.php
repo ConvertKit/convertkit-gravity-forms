@@ -240,7 +240,7 @@ class GFConvertKit extends GFFeedAddOn {
 						'choices' => array(
 							array(
 								'name'    => 'debug',
-								'label'   => esc_html__( 'Log requests to file and output browser console messages.', 'convertkit' ),
+								'label'   => esc_html__( 'Log requests to file.', 'convertkit' ),
 								'tooltip' => '',
 							),
 						),
@@ -488,7 +488,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Inject Custom Fields after Email + Name, but before Conditions.
 		array_splice(
 			$base_fields['fields'],
-			3,
+			4,
 			0,
 			array(
 				array(
@@ -638,7 +638,7 @@ class GFConvertKit extends GFFeedAddOn {
 
 		// Get ConvertKit Feed Settings.
 		$form_id                  = rgars( $feed, 'meta/form_id' );
-		$tag_ids                  = array( rgars( $feed, 'meta/tag_id' ) );
+		$tag_id                   = rgars( $feed, 'meta/tag_id' );
 		$field_map_e              = rgars( $feed, 'meta/field_map_e' );
 		$field_map_n              = rgars( $feed, 'meta/field_map_n' );
 		$field_map_tag            = rgars( $feed, 'meta/field_map_tag' );
@@ -649,6 +649,7 @@ class GFConvertKit extends GFFeedAddOn {
 		$name   = $this->get_field_value( $form, $entry, $field_map_n );
 		$tag    = $this->get_field_value( $form, $entry, $field_map_tag );
 		$fields = array(); // Populated later in this function.
+		$entry_tag_id = false; // Populated later in this function.
 
 		// Initialize API class.
 		$this->api = new CKGF_API(
@@ -657,24 +658,69 @@ class GFConvertKit extends GFFeedAddOn {
 			$this->debug_enabled()
 		);
 
-		// Get Custom Fields and Tag ID.
-		$fields    = $this->process_feed_custom_fields( $form, $entry, $convertkit_custom_fields );
-		$tag_ids[] = $this->process_feed_tag( $tag );
+		// Get Custom Fields.
+		$fields = $this->process_feed_custom_fields( $form, $entry, $convertkit_custom_fields );
 
-		// Iterate through Tag IDs array, removing blank and false values.
-		foreach ( $tag_ids as $key => $value ) {
-			if ( empty( $value ) || ! $value ) {
-				unset( $tag_ids[ $key ] );
+		// If an error occured, log it as a note in the Gravity Forms Entry,
+		// and set fields to false so we can still attempt to subscribe the user.
+		if ( is_wp_error( $fields ) ) {
+			$this->add_note( 
+				$entry['id'],
+				sprintf(
+					/* translators: Error message */
+					__( 'Error processing Custom Field Mappings: %s', 'convertkit' ),
+					$fields->get_error_message()
+				),
+				'error'
+			);
+			
+			$fields = false;
+		}
+
+		// Get Entry's Tag ID Mapping.
+		if ( ! empty( $tag ) ) {
+			$entry_tag_id = $this->process_feed_tag( $tag );
+
+			// If an error occured, log it as a note in the Gravity Forms Entry.
+			if ( is_wp_error( $entry_tag_id ) ) {
+				$this->add_note( 
+					$entry['id'],
+					sprintf(
+						/* translators: Error message */
+						__( 'Error processing Tag Field Mapping: %s', 'convertkit' ),
+						$entry_tag_id->get_error_message()
+					),
+					'error'
+				);
 			}
 		}
 
-		// If Tag IDs array is now empty, set it to boolean false.
-		if ( ! count( $tag_ids ) ) {
-			$tag_ids = false;
-		}
+		// Build array of Tag IDs, which might comprise of the Feed's Tag, Entry's Tag Field value, both or neither.
+		$tag_ids = $this->build_tag_ids_array( array( $tag_id, $entry_tag_id ) );
 
 		// Call API to subscribe the email address to the given Form.
-		$this->api->form_subscribe( $form_id, $email, $name, $fields, $tag_ids );
+		$result = $this->api->form_subscribe( $form_id, $email, $name, $fields, $tag_ids );
+
+		// If an error occured, log it as a note in the Gravity Forms Entry.
+		if ( is_wp_error( $result ) ) {
+			$this->add_note( 
+				$entry['id'], 
+				sprintf(
+					/* translators: Error message */
+					__( 'Error Subscribing: %s', 'convertkit' ),
+					$result->get_error_message()
+				),
+				'error'
+			);
+			return;
+		}
+
+		// Add success note to Gravity Forms Entry.
+		$this->add_note( 
+			$entry['id'], 
+			__( 'Subscribed to ConvertKit successfully', 'convertkit' ),
+			'success'
+		);
 
 	}
 
@@ -739,6 +785,47 @@ class GFConvertKit extends GFFeedAddOn {
 
 		// No matching tag was found in ConvertKit.
 		return false;
+
+	}
+
+	/**
+	 * Iterates through the supplied array of possible Tag IDs, checking that
+	 * they are not WP_Error instances, empty or false, returning an array
+	 * of Tag IDs or false if no Tag IDs are present.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	array 	$possible_tag_ids 	Possible Tag IDs.
+	 * @return 	mixed 						false | array
+	 */
+	private function build_tag_ids_array( $possible_tag_ids ) {
+
+		$tag_ids = array();
+
+		// Iterate through array of possible Tag IDs, adding to the array if they're
+		// valid IDs.
+		foreach ( $possible_tag_ids as $possible_tag_id ) {
+			// Skip if a WP_Error.
+			if ( is_wp_error( $possible_tag_id ) ) {
+				continue;
+			}
+
+			// Skip if empty or false.
+			if ( empty( $value ) || ! $value ) {
+				continue;
+			}
+
+			// Add to array.
+			$tag_ids[] = $possible_tag_id;
+		}
+
+		// If Tag IDs array is now empty, set it to boolean false.
+		if ( ! count( $tag_ids ) ) {
+			return false;
+		}
+
+		// Return a zero based index array.
+		return array_values( $tag_ids );
 
 	}
 
