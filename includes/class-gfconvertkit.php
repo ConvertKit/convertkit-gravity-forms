@@ -651,6 +651,29 @@ class GFConvertKit extends GFFeedAddOn {
 		$fields       = array(); // Populated later in this function.
 		$entry_tag_id = false; // Populated later in this function.
 
+		// If no Email Address is specified, bail.
+		if ( empty( $email ) ) {
+			$this->add_note(
+				$entry['id'],
+				__( 'Error Subscribing: The field mapped to the email address contains no value.', 'convertkit' ),
+				'error'
+			);
+			return;
+		}
+
+		// If the Email Address isn't actually an email address, bail.
+		if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+			$this->add_note(
+				$entry['id'],
+				sprintf(
+					__( 'Error Subscribing: The field mapped to the email address contains the invalid email value %s.', 'convertkit' ),
+					$email
+				),
+				'error'
+			);
+			return;
+		}
+
 		// Initialize API class.
 		$this->api = new CKGF_API(
 			$this->api_key(),

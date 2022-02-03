@@ -149,6 +149,113 @@ class FormCest
 	/**
 	 * Test that the Plugin works when:
 	 * - Creating a Gravity Form's Form, and
+	 * - Adding a Feed to send entries to ConvertKit,
+	 * - Submitting the Form on the frontend web site, without an email address, results in no attempt to send data to ConvertKit.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 	Tester
+	 */
+	public function testCreateFormAndFeedWithNoEmailAddressSpecified(AcceptanceTester $I)
+	{
+		// Create Form.
+		$gravityFormID = $I->createGravityFormsForm($I);
+
+		// Create ConvertKit Feed for Form.
+		$feedID = $I->createGravityFormsFeed(
+			$I,
+			$gravityFormID,
+			$_ENV['CONVERTKIT_API_FORM_NAME'],
+		);
+
+		// Create a Page with the Gravity Forms shortcode as its content.
+		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
+
+		// Define Name.
+		$firstName = 'First';
+		$lastName = 'Last';
+
+		// Logout as the WordPress Administrator.
+		$I->logOut();
+
+		// Load the Page on the frontend site.
+		$I->amOnPage('/?p=' . $pageID);
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Complete Form Fields.
+		$I->fillField('.name_first input[type=text]', $firstName);
+		$I->fillField('.name_last input[type=text]', $lastName);
+
+		// Submit Form.
+		$I->click('Submit');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Check a ConvertKit Error Note were added to the Entry.
+		$I->checkGravityFormsErrorNotesExist($I);
+	}
+
+	/**
+	 * Test that the Plugin works when:
+	 * - Creating a Gravity Form's Form, and
+	 * - Adding a Feed to send entries to ConvertKit, with the Email mapped to a non-Email field 
+	 * - Submitting the Form on the frontend web site, with an invalid formatted email address, results in no attempt to send data to ConvertKit.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 	Tester
+	 */
+	public function testCreateFormAndFeedWithInvalidEmailAddressSpecified(AcceptanceTester $I)
+	{
+		// Create Form.
+		$gravityFormID = $I->createGravityFormsForm($I);
+
+		// Create ConvertKit Feed for Form.
+		$feedID = $I->createGravityFormsFeed(
+			$I,
+			$gravityFormID,
+			$_ENV['CONVERTKIT_API_FORM_NAME'],
+			false,
+			false,
+			'Name (First)'
+		);
+
+		// Create a Page with the Gravity Forms shortcode as its content.
+		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
+
+		// Define Name.
+		$firstName = 'First';
+		$lastName = 'Last';
+
+		// Logout as the WordPress Administrator.
+		$I->logOut();
+
+		// Load the Page on the frontend site.
+		$I->amOnPage('/?p=' . $pageID);
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Complete Form Fields.
+		$I->fillField('.name_first input[type=text]', $firstName);
+		$I->fillField('.name_last input[type=text]', $lastName);
+
+		// Submit Form.
+		$I->click('Submit');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Check a ConvertKit Error Note were added to the Entry.
+		$I->checkGravityFormsErrorNotesExist($I);
+	}
+
+	/**
+	 * Test that the Plugin works when:
+	 * - Creating a Gravity Form's Form, and
 	 * - Adding a Feed to send entries to ConvertKit, with a Tag selected, and
 	 * - Submitting the Form on the frontend web site, with a Tag selected from the <select> field, results in the email address subscribing to the ConvertKit Form, and
 	 * - The subscribed email address has the expected ConvertKit Tag assigned to it.

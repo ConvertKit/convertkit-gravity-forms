@@ -25,7 +25,7 @@ jobs:
     # The base folder will always be /home/runner/work/github-repo-name/github-repo-name
     env:
       ROOT_DIR: /home/runner/work/convertkit-gravity-forms/convertkit-gravity-forms/wordpress
-      PLUGIN_DIR: /home/runner/work/convertkit-gravity-forms/convertkit-gravity-forms/wordpress/wp-content/plugins/convertkit
+      PLUGIN_DIR: /home/runner/work/convertkit-gravity-forms/convertkit-gravity-forms/wordpress/wp-content/plugins/convertkit-gravity-forms
       DB_NAME: test
       DB_USER: root
       DB_PASS: root
@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         wp-versions: [ '5.9' ] #[ '5.6.7', '5.7.5', '5.8.3', '5.9' ]
-        php-versions: [ '7.3', '7.4', '8.0' ] #[ '7.3', '7.4', '8.0', '8.1' ]
+        php-versions: [ '7.2', '7.3', '7.4', '8.0' ] #[ '7.3', '7.4', '8.0', '8.1' ]
       max-parallel: 1 # Run one at a time, otherwise reading API data after tests results in false positives due to concurrency
 
     # Steps to install, configure and run tests
@@ -117,13 +117,11 @@ jobs:
       
       # WP_DEBUG = true is required so any WordPress / PHP errors are output and caught by tests.
       # FS_METHOD = direct is required for WP_Filesystem to operate without suppressed PHP fopen() errors that trip up tests.
-      # GF_LICENSE_KEY is required so activating Gravity Forms doesn't display the first time setup wizard.
       - name: Enable WP_DEBUG
         working-directory: ${{ env.ROOT_DIR }}
         run: |
           wp-cli config set WP_DEBUG true --raw
           wp-cli config set FS_METHOD direct
-          wp-cli config set GF_LICENSE_KEY ${{ env.GRAVITY_FORMS_LICENSE_KEY }}     
 
       # This step is deliberately after WordPress installation and configuration, as enabling PHP 8.x before using WP-CLI results
       # in the workflow failing due to incompatibilities between WP-CLI and PHP 8.x.
@@ -217,4 +215,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-results
-          path: /home/runner/work/convertkit-gravity-forms/convertkit-gravity-forms/wordpress/wp-content/plugins/convertkit/tests/_output/
+          path: ${{ env.PLUGIN_DIR }}/tests/_output/
+
+      - name: Upload Plugin Log File to Artifact
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: log
+          path: ${{ env.PLUGIN_DIR }}/log.txt

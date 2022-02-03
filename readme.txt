@@ -51,6 +51,7 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 * Added: Form: Feed Settings: Optionally map a Form Field to be used as the value for tagging a subscriber
 * Added: Form: Entries: Log success and error messages to Form Entries' Notes
 * Fix: Settings: API Key: Show error notification and contextual tooltip error message when an invalid API Key is specified
+* Fix: Form: Feed Settings: Don't attempt to subscribe to ConvertKit if the Email field's value isn't an email address 
 
 ### 1.2.0  2021-05-18
 

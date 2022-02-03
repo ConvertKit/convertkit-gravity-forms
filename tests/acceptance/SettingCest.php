@@ -1,10 +1,10 @@
 <?php
 /**
- * Tests the API Key Setting.
+ * Tests the Settings at Forms > Settings > ConvertKit.
  * 
  * @since 	1.2.1
  */
-class SettingAPIKeyCest
+class SettingCest
 {
 	/**
 	 * Run common actions before running the test functions in this class.
@@ -87,5 +87,43 @@ class SettingAPIKeyCest
 
 		// Confirm that a tooltip notification exists with the precise API error.
 		$I->seeInSource('Authorization Failed: API Key not valid');
+	}
+
+	/**
+	 * Test that no PHP errors or notices are displayed on the Plugin's Setting screen when the Debug option
+	 * is enabled and disabled, and that the setting is honored.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	AcceptanceTester 	$I 	Tester
+	 */
+	public function testEnableAndDisableDebug(AcceptanceTester $I)
+	{
+		// Enable Integration and define its API Keys.
+		$I->setupConvertKitPlugin($I);
+
+		// Check Debug option.
+		$I->checkOption('#debug');
+
+		// Click the Save Settings button.
+		$I->click('#gform-settings-save');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Confirm that the checkbox is checked.
+		$I->seeCheckboxIsChecked('#debug');
+
+		// Untick field.
+		$I->uncheckOption('#debug');
+
+		// Click the Save Settings button.
+		$I->click('#gform-settings-save');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Check the field remains unticked.
+		$I->dontSeeCheckboxIsChecked('#debug');
 	}
 }
