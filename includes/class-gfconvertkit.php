@@ -645,10 +645,10 @@ class GFConvertKit extends GFFeedAddOn {
 		$convertkit_custom_fields = $this->get_dynamic_field_map_fields( $feed, 'convertkit_custom_fields' );
 
 		// Get Entry Values.
-		$email  = $this->get_field_value( $form, $entry, $field_map_e );
-		$name   = $this->get_field_value( $form, $entry, $field_map_n );
-		$tag    = $this->get_field_value( $form, $entry, $field_map_tag );
-		$fields = array(); // Populated later in this function.
+		$email        = $this->get_field_value( $form, $entry, $field_map_e );
+		$name         = $this->get_field_value( $form, $entry, $field_map_n );
+		$tag          = $this->get_field_value( $form, $entry, $field_map_tag );
+		$fields       = array(); // Populated later in this function.
 		$entry_tag_id = false; // Populated later in this function.
 
 		// Initialize API class.
@@ -664,7 +664,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// If an error occured, log it as a note in the Gravity Forms Entry,
 		// and set fields to false so we can still attempt to subscribe the user.
 		if ( is_wp_error( $fields ) ) {
-			$this->add_note( 
+			$this->add_note(
 				$entry['id'],
 				sprintf(
 					/* translators: Error message */
@@ -673,7 +673,7 @@ class GFConvertKit extends GFFeedAddOn {
 				),
 				'error'
 			);
-			
+
 			$fields = false;
 		}
 
@@ -683,7 +683,7 @@ class GFConvertKit extends GFFeedAddOn {
 
 			// If an error occured, log it as a note in the Gravity Forms Entry.
 			if ( is_wp_error( $entry_tag_id ) ) {
-				$this->add_note( 
+				$this->add_note(
 					$entry['id'],
 					sprintf(
 						/* translators: Error message */
@@ -703,8 +703,8 @@ class GFConvertKit extends GFFeedAddOn {
 
 		// If an error occured, log it as a note in the Gravity Forms Entry.
 		if ( is_wp_error( $result ) ) {
-			$this->add_note( 
-				$entry['id'], 
+			$this->add_note(
+				$entry['id'],
 				sprintf(
 					/* translators: Error message */
 					__( 'Error Subscribing: %s', 'convertkit' ),
@@ -716,8 +716,8 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		// Add success note to Gravity Forms Entry.
-		$this->add_note( 
-			$entry['id'], 
+		$this->add_note(
+			$entry['id'],
 			__( 'Subscribed to ConvertKit successfully', 'convertkit' ),
 			'success'
 		);
@@ -792,11 +792,11 @@ class GFConvertKit extends GFFeedAddOn {
 	 * Iterates through the supplied array of possible Tag IDs, checking that
 	 * they are not WP_Error instances, empty or false, returning an array
 	 * of Tag IDs or false if no Tag IDs are present.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	array 	$possible_tag_ids 	Possible Tag IDs.
-	 * @return 	mixed 						false | array
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   array $possible_tag_ids   Possible Tag IDs.
+	 * @return  mixed                       false | array
 	 */
 	private function build_tag_ids_array( $possible_tag_ids ) {
 
@@ -811,7 +811,7 @@ class GFConvertKit extends GFFeedAddOn {
 			}
 
 			// Skip if empty or false.
-			if ( empty( $value ) || ! $value ) {
+			if ( empty( $possible_tag_id ) || ! $possible_tag_id ) {
 				continue;
 			}
 

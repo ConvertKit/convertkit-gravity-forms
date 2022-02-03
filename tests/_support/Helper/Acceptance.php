@@ -397,6 +397,58 @@ class Acceptance extends \Codeception\Module
 	}
 
 	/**
+	 * Checks that a success or error note was added by the Plugin to the most recent Gravity Forms Entry.
+	 * 
+	 * @since 	1.2.1
+	 */
+	public function checkGravityFormsNotesExist($I)
+	{
+		$I->loginAsAdmin();
+		$I->amOnAdminPage('admin.php?page=gf_entries');
+		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
+		$I->seeElementInDOM('#notes div[data-type="ckgf"]');
+	}
+
+	/**
+	 * Checks that a success note was added by the Plugin to the most recent Gravity Forms Entry.
+	 * 
+	 * @since 	1.2.1
+	 */
+	public function checkGravityFormsSuccessNotesExist($I)
+	{
+		$I->loginAsAdmin();
+		$I->amOnAdminPage('admin.php?page=gf_entries');
+		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
+		$I->seeElementInDOM('#notes div[data-type="ckgf"][data-sub-type="success"]');
+	}
+
+	/**
+	 * Checks that an error note was added by the Plugin to the most recent Gravity Forms Entry.
+	 * 
+	 * @since 	1.2.1
+	 */
+	public function checkGravityFormsErrorNotesExist($I)
+	{
+		$I->loginAsAdmin();
+		$I->amOnAdminPage('admin.php?page=gf_entries');
+		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
+		$I->seeElementInDOM('#notes div[data-type="ckgf"][data-sub-type="error"]');
+	}
+
+	/**
+	 * Checks that no Notes were added by the Plugin to the most recent Gravity Forms Entry.
+	 * 
+	 * @since 	1.2.1
+	 */
+	public function checkGravityFormsNotesDoNotExist($I)
+	{
+		$I->loginAsAdmin();
+		$I->amOnAdminPage('admin.php?page=gf_entries');
+		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
+		$I->dontSeeElementInDOM('#notes div[data-type="ckgf"]');
+	}
+
+	/**
 	 * Check the given email address and name exists as a subscriber on ConvertKit.
 	 * 
 	 * @since 	1.2.1

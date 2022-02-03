@@ -74,6 +74,9 @@ class FormCest
 
 		// Check API to confirm subscriber was sent and data mapped to fields correctly.
 		$I->apiCheckSubscriberExists($I, $emailAddress, $firstName, $customFields);
+
+		// Check ConvertKit Notes were added to the Entry.
+		$I->checkGravityFormsSuccessNotesExist($I);
 	}
 
 	/**
@@ -138,6 +141,9 @@ class FormCest
 
 		// Check API to confirm email address was not sent to ConvertKit.
 		$I->apiCheckSubscriberDoesNotExist($I, $emailAddress);
+
+		// Check ConvertKit Notes were not added to the Entry.
+		$I->checkGravityFormsNotesDoNotExist($I);
 	}
 
 	/**
@@ -208,6 +214,9 @@ class FormCest
 
 		// Check API to confirm subscriber has Tag set in Form's <select> field.
 		$I->apiCheckSubscriberHasTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
+
+		// Check ConvertKit Notes were added to the Entry.
+		$I->checkGravityFormsSuccessNotesExist($I);
 	}
 
 	/**
@@ -278,6 +287,9 @@ class FormCest
 
 		// Check API to confirm subscriber has Tag set in Form's <select> field.
 		$I->apiCheckSubscriberHasTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
+
+		// Check ConvertKit Notes were added to the Entry.
+		$I->checkGravityFormsSuccessNotesExist($I);
 	}
 
 	/**
@@ -348,6 +360,9 @@ class FormCest
 
 		// Check API to confirm subscriber does not have Tag set in Form's <select> field, as it's an invalid tag.
 		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
+
+		// Check ConvertKit Notes were added to the Entry.
+		$I->checkGravityFormsSuccessNotesExist($I);
 	}
 
 	/**
@@ -417,6 +432,9 @@ class FormCest
 
 		// Check API to confirm subscriber does not have Tag set in Form's <select> field, as no value was chosen.
 		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
+
+		// Check ConvertKit Notes were added to the Entry.
+		$I->checkGravityFormsSuccessNotesExist($I);
 	}
 
 	/**
@@ -483,8 +501,9 @@ class FormCest
 		// Check API to confirm subscriber does not have tags.
 		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_TAG_ID']);
 		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
+
+		// Check no ConvertKit Notes were added to the Entry.
+		$I->checkGravityFormsNotesDoNotExist($I);
 	}
 
-	// @TODO Note tests.
-	
 }
