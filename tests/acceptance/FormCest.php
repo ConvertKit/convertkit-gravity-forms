@@ -66,6 +66,9 @@ class FormCest
 		// Submit Form.
 		$I->click('Submit');
 
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
 		// Confirm submission was successful.
 		$I->seeInSource('Thanks for contacting us! We will get in touch with you shortly.');
 
@@ -127,6 +130,9 @@ class FormCest
 		// Submit Form.
 		$I->click('Submit');
 
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
 		// Confirm submission was successful.
 		$I->seeInSource('Thanks for contacting us! We will get in touch with you shortly.');
 
@@ -154,8 +160,9 @@ class FormCest
 		$feedID = $I->createGravityFormsFeed(
 			$I,
 			$gravityFormID,
-			$_ENV['CONVERTKIT_API_FORM_NAME'],
-			$_ENV['CONVERTKIT_API_TAG_NAME']
+			$_ENV['CONVERTKIT_API_FORM_NAME'], // Define Feed's Form.
+			$_ENV['CONVERTKIT_API_TAG_NAME'], // Define Feed's Tag.
+			true // Map Feed's Tag Field to Form's Tag Field.
 		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
@@ -182,10 +189,13 @@ class FormCest
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
 		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
-		$I->selectOption( 'select.gfield_select', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME'] );
+		$I->selectOption('select.gfield_select', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME']);
 
 		// Submit Form.
 		$I->click('Submit');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
 
 		// Confirm submission was successful.
 		$I->seeInSource('Thanks for contacting us! We will get in touch with you shortly.');
@@ -193,8 +203,11 @@ class FormCest
 		// Check API to confirm subscriber was sent and data mapped to fields correctly.
 		$I->apiCheckSubscriberExists($I, $emailAddress, $firstName, $customFields);
 
-		// Check API to confirm subscriber has expected tags.
-		// @TODO
+		// Check API to confirm subscriber has Tag set in Form's Feed.
+		$I->apiCheckSubscriberHasTag($I, $emailAddress, $_ENV['CONVERTKIT_API_TAG_ID']);
+
+		// Check API to confirm subscriber has Tag set in Form's <select> field.
+		$I->apiCheckSubscriberHasTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
 	}
 
 	/**
@@ -217,7 +230,9 @@ class FormCest
 		$feedID = $I->createGravityFormsFeed(
 			$I,
 			$gravityFormID,
-			$_ENV['CONVERTKIT_API_FORM_NAME']
+			$_ENV['CONVERTKIT_API_FORM_NAME'], // Define Feed's Form.
+			false, // Don't define Feed's Tag.
+			true // Map Feed's Tag Field to Form's Tag Field.
 		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
@@ -244,10 +259,13 @@ class FormCest
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
 		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
-		$I->selectOption( 'select.gfield_select', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME'] );
+		$I->selectOption('select.gfield_select', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME']);
 
 		// Submit Form.
 		$I->click('Submit');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
 
 		// Confirm submission was successful.
 		$I->seeInSource('Thanks for contacting us! We will get in touch with you shortly.');
@@ -255,8 +273,11 @@ class FormCest
 		// Check API to confirm subscriber was sent and data mapped to fields correctly.
 		$I->apiCheckSubscriberExists($I, $emailAddress, $firstName, $customFields);
 
-		// Check API to confirm subscriber has expected tags.
-		// @TODO
+		// Check API to confirm subscriber does not have Tag, as none was defined in the Form's Feed.
+		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_TAG_ID']);
+
+		// Check API to confirm subscriber has Tag set in Form's <select> field.
+		$I->apiCheckSubscriberHasTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
 	}
 
 	/**
@@ -279,7 +300,9 @@ class FormCest
 		$feedID = $I->createGravityFormsFeed(
 			$I,
 			$gravityFormID,
-			$_ENV['CONVERTKIT_API_FORM_NAME']
+			$_ENV['CONVERTKIT_API_FORM_NAME'], // Define Feed's Form.
+			false, // Don't define Feed's Tag.
+			true // Map Feed's Tag Field to Form's Tag Field.
 		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
@@ -306,10 +329,13 @@ class FormCest
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
 		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
-		$I->selectOption( 'select.gfield_select', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME'] );
+		$I->selectOption( 'select.gfield_select', 'fakeTagNotInConvertKit' );
 
 		// Submit Form.
 		$I->click('Submit');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
 
 		// Confirm submission was successful.
 		$I->seeInSource('Thanks for contacting us! We will get in touch with you shortly.');
@@ -317,8 +343,11 @@ class FormCest
 		// Check API to confirm subscriber was sent and data mapped to fields correctly.
 		$I->apiCheckSubscriberExists($I, $emailAddress, $firstName, $customFields);
 
-		// Check API to confirm subscriber has no tags.
-		// @TODO
+		// Check API to confirm subscriber does not have Tag, as none was defined in the Form's Feed.
+		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_TAG_ID']);
+
+		// Check API to confirm subscriber does not have Tag set in Form's <select> field, as it's an invalid tag.
+		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
 	}
 
 	/**
@@ -341,8 +370,9 @@ class FormCest
 		$feedID = $I->createGravityFormsFeed(
 			$I,
 			$gravityFormID,
-			$_ENV['CONVERTKIT_API_FORM_NAME'],
-			$_ENV['CONVERTKIT_API_TAG_NAME']
+			$_ENV['CONVERTKIT_API_FORM_NAME'], // Define Feed's Form.
+			$_ENV['CONVERTKIT_API_TAG_NAME'], // Define Feed's Tag.
+			false // Don't map Feed's Tag Field.
 		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
@@ -373,14 +403,20 @@ class FormCest
 		// Submit Form.
 		$I->click('Submit');
 
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
 		// Confirm submission was successful.
 		$I->seeInSource('Thanks for contacting us! We will get in touch with you shortly.');
 
 		// Check API to confirm subscriber was sent and data mapped to fields correctly.
 		$I->apiCheckSubscriberExists($I, $emailAddress, $firstName, $customFields);
 
-		// Check API to confirm subscriber has expected tags.
-		// @TODO
+		// Check API to confirm subscriber has Tag set in Form's Feed.
+		$I->apiCheckSubscriberHasTag($I, $emailAddress, $_ENV['CONVERTKIT_API_TAG_ID']);
+
+		// Check API to confirm subscriber does not have Tag set in Form's <select> field, as no value was chosen.
+		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
 	}
 
 	/**
@@ -435,11 +471,20 @@ class FormCest
 		// Submit Form.
 		$I->click('Submit');
 
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
 		// Confirm submission was successful.
 		$I->seeInSource('Thanks for contacting us! We will get in touch with you shortly.');
 
 		// Check API to confirm email address was not sent to ConvertKit.
 		$I->apiCheckSubscriberDoesNotExist($I, $emailAddress);
+
+		// Check API to confirm subscriber does not have tags.
+		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_TAG_ID']);
+		$I->apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_ID']);
 	}
+
+	// @TODO Note tests.
 	
 }

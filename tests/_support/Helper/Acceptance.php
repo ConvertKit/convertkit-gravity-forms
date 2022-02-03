@@ -308,7 +308,9 @@ class Acceptance extends \Codeception\Module
 		$I->seeOptionIsSelected('#_gform_setting_convertkit_custom_fields_custom_key_0', 'Last Name');
 		$I->seeOptionIsSelected('#_gform_setting_convertkit_custom_fields_custom_value_0', 'Name (Last)');
 		if ($mapTagField) {
-			
+			$I->seeOptionIsSelected('#_gform_setting_field_map_tag', 'Tag');
+		} else {
+			$I->seeOptionIsSelected('#_gform_setting_field_map_tag', 'Select a Field');
 		}
 	}
 
@@ -345,7 +347,9 @@ class Acceptance extends \Codeception\Module
 
 		// Map Tag Field.
 		if ($mapTagField) {
-
+			$I->selectOption('#_gform_setting_field_map_tag', 'Tag');
+		} else {
+			$I->selectOption('#_gform_setting_field_map_tag', 'Select a Field');
 		}
 
 		// Map ConvertKit Account Custom Field 'Last Name'.
@@ -431,6 +435,58 @@ class Acceptance extends \Codeception\Module
 	}
 
 	/**
+	 * Checks if the given email address has the given tag.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	$I
+	 * @param 	$emailAddress 	Email Address.
+	 * @param 	$tagID 			Tag ID.
+	 */
+	public function apiCheckSubscriberHasTag($I, $emailAddress, $tagID)
+	{
+		// Get Subscribers.
+		$subscribers = $this->apiGetSubscribersByTagID($tagID);
+			
+		$subscriberTagged = false;
+		foreach ($subscribers as $subscriber) {
+			if ($subscriber['subscriber']['email_address'] == $emailAddress) {
+				$subscriberTagged = true;
+				break;
+			}
+		}
+
+		// Check that the Subscriber is tagged.
+		$I->assertTrue($subscriberTagged);
+	}
+
+	/**
+	 * Checks if the given email address does not have the given tag.
+	 * 
+	 * @since 	1.2.1
+	 * 
+	 * @param 	$I
+	 * @param 	$emailAddress 	Email Address.
+	 * @param 	$tagID 			Tag ID.
+	 */
+	public function apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $tagID)
+	{
+		// Get Subscribers.
+		$subscribers = $this->apiGetSubscribersByTagID($tagID);
+			
+		$subscriberTagged = false;
+		foreach ($subscribers as $subscriber) {
+			if ($subscriber['subscriber']['email_address'] == $emailAddress) {
+				$subscriberTagged = true;
+				break;
+			}
+		}
+
+		// Check that the Subscriber is not tagged.
+		$I->assertFalse($subscriberTagged);
+	}
+
+	/**
 	 * Check the given email address does not exists as a subscriber on ConvertKit.
 	 * 
 	 * @since 	1.2.1
@@ -463,6 +519,35 @@ class Acceptance extends \Codeception\Module
 		$this->apiRequest('unsubscribe', 'PUT', [
 			'email' => $emailAddress,
 		]);
+	}
+
+	/**
+	 * Returns all subscribers to the given Tag ID from the API.
+	 * 
+	 * @param 	int 	$tagID 	Tag ID.
+	 * @return 	array
+	 */
+	public function apiGetSubscribersByTagID($tagID)
+	{
+		// Get first page of subscribers.
+		$subscribers = $this->apiRequest('tags/'.$tagID.'/subscriptions', 'GET');
+		$data = $subscribers['subscriptions'];
+		$totalPages = $subscribers['total_pages'];
+
+		if ($totalPages == 1) {
+			return $data;
+		}
+
+		// Get additional pages of purchases.
+		for ($page = 2; $page <= $totalPages; $page++) {
+			$subscribers = $this->apiRequest('tags/'.$tagID.'/subscriptions', 'GET', [
+				'page' => $page,
+			]);
+
+			$data = array_merge($data, $subscribers['subscriptions']);
+		}
+
+		return $data;
 	}
 
 	/**
