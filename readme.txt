@@ -3,7 +3,7 @@ Contributors: nathanbarry, growdev, travisnorthcutt
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 5.0
-Tested up to: 5.9
+Tested up to: 5.9.2
 Requires PHP: 5.6.20
 Stable tag: trunk
 License: GPLv2 or later
@@ -42,9 +42,9 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 
 == Changelog ==
 
-### 1.2.1 2022-02-xx
+### 1.2.1 2022-03-17
 * Added: PHP 8.x compatibility
-* Added: Developers: Action and filter hooks.  See https://github.com/ConvertKit/convertkit-gravity-forms/blob/1.2.1/ACTIONS-FILTERS.md
+* Added: Developers: Action and filter hooks.  See https://github.com/ConvertKit/convertkit-gravity-forms/blob/master/ACTIONS-FILTERS.md
 * Added: Developers: Capabilities for Settings Page, Form Settings and Uninstall actions
 * Added: Settings: Debug option
 * Added: Form: Feed Settings: Optionally tag subscriber
