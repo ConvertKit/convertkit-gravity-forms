@@ -52,7 +52,8 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_path = CKGF_PLUGIN_BASENAME; // phpcs:ignore @phpstan-ignore-line.
+	// @phpstan-ignore-next-line
+	protected $_path = CKGF_PLUGIN_BASENAME; // phpcs:ignore
 
 	/**
 	 * Holds the full path to this Plugin.
@@ -70,7 +71,8 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_title = CKGF_TITLE; // phpcs:ignore @phpstan-ignore-line.
+	// @phpstan-ignore-next-line
+	protected $_title = CKGF_TITLE; // phpcs:ignore
 
 	/**
 	 * Holds the short title of this Plugin.
@@ -79,10 +81,11 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_short_title = CKGF_SHORT_TITLE; // phpcs:ignore @phpstan-ignore-line.
+	// @phpstan-ignore-next-line
+	protected $_short_title = CKGF_SHORT_TITLE; // phpcs:ignore
 
 	/**
-	 * Holds a list of capabilities to add to roles for Members plugin (https://wordpress.org/plugins/members/) integration. L
+	 * Holds a list of capabilities to add to roles for Members plugin (https://wordpress.org/plugins/members/) integration.
 	 *
 	 * @since   1.2.1
 	 *
@@ -632,7 +635,8 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @param   array $feed   ConvertKit Feed.
 	 * @param   array $entry  Gravity Forms Entry / Submission.
-	 * @return  array|null 	  Returns a modified entry object or null.
+	 * @param   array $form   Gravity Forms Form.
+	 * @return  array|null    Returns a modified entry object or null.
 	 */
 	public function process_feed( $feed, $entry, $form ) {
 
@@ -791,7 +795,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.2.1
 	 *
 	 * @param   string $tag_name    Tag Name.
-	 * @return  WP_Error|bool|int 	Tag ID
+	 * @return  WP_Error|bool|int   Tag ID
 	 */
 	private function process_feed_tag( $tag_name ) {
 

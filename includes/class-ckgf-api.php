@@ -63,7 +63,7 @@ class CKGF_API {
 	 *
 	 * @param   bool|string $api_key        ConvertKit API Key.
 	 * @param   bool|string $api_secret     ConvertKit API Secret.
-	 * @param   bool  		$debug          Save data to log.
+	 * @param   bool        $debug          Save data to log.
 	 */
 	public function __construct( $api_key = false, $api_secret = false, $debug = false ) {
 
@@ -399,7 +399,7 @@ class CKGF_API {
 		 * @since   1.9.6
 		 *
 		 * @param   array   $response   API Response
-		 * @param   int  	$tag_id     Tag ID
+		 * @param   int     $tag_id     Tag ID
 		 * @param   string  $email      Email Address
 		 * @param   mixed   $fields     Custom Fields (false|array).
 		 */
@@ -846,9 +846,9 @@ class CKGF_API {
 	 *
 	 * This isn't specifically an API function, but for now it's best suited here.
 	 *
-	 * @param   string $url    		URL of Form or Landing Page.
+	 * @param   string $url         URL of Form or Landing Page.
 	 * @param   bool   $body_only   Return HTML between <body> and </body> tags only.
-	 * @return  WP_Error|string 	HTML
+	 * @return  WP_Error|string     HTML
 	 */
 	private function get_html( $url, $body_only = true ) {
 
