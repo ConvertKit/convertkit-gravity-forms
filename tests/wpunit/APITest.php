@@ -12,7 +12,7 @@ class APITest extends \Codeception\TestCase\WPTestCase
 	 * 
 	 * @since 	1.2.2
 	 * 
-	 * @var 	ConvertKit_API
+	 * @var 	CKGF_API
 	 */
 	private $api;
 
@@ -33,7 +33,7 @@ class APITest extends \Codeception\TestCase\WPTestCase
 	public function setUp(): void
 	{
 		parent::setUp();
-		$this->api = new ConvertKit_API( $_ENV['CONVERTKIT_API_KEY'], $_ENV['CONVERTKIT_API_SECRET'] );
+		$this->api = new CKGF_API( $_ENV['CONVERTKIT_API_KEY'], $_ENV['CONVERTKIT_API_SECRET'] );
 		sleep(2);
 	}
 
@@ -55,7 +55,7 @@ class APITest extends \Codeception\TestCase\WPTestCase
 	 */
 	public function testNoAPICredentials()
 	{
-		$api = new ConvertKit_API();
+		$api = new CKGF_API();
 		$result = $api->account();
 		$this->assertInstanceOf(WP_Error::class, $result);
 		$this->assertEquals($result->get_error_code(), $this->errorCode);

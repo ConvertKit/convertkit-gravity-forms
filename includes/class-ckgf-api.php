@@ -12,7 +12,7 @@
  * @package CKGF
  * @author ConvertKit
  */
-class ConvertKit_API {
+class CKGF_API {
 
 	/**
 	 * ConvertKit API Key
