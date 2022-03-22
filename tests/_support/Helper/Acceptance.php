@@ -76,38 +76,36 @@ class Acceptance extends \Codeception\Module
 	}
 
 	/**
-	 * Helper method to activate the Plugin.
+	 * Helper method to activate the ConvertKit Plugin, checking
+	 * it activated and no errors were output.
 	 * 
 	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I AcceptanceTester.
 	 */
 	public function activateConvertKitPlugin($I)
 	{
-		// Login as the Administrator
-		$I->loginAsAdmin();
-
-		// Go to the Plugins screen in the WordPress Administration interface.
-		$I->amOnPluginsPage();
-
-		// Activate the Plugin.
-		$I->activatePlugin('convertkit-gravity-forms');
-
-		// Check that the Plugin activated successfully.
-		$I->seePluginActivated('convertkit-gravity-forms');
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
+		$I->activateThirdPartyPlugin($I, 'convertkit-gravity-forms');
 	}
 
 	/**
-	 * Helper method to activate the Gravity Forms Plugin and the ConvertKit for Gravity Forms Plugin.
+	 * Helper method to deactivate the ConvertKit Plugin, checking
+	 * it activated and no errors were output.
 	 * 
 	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I AcceptanceTester.
 	 */
-	public function activateGravityFormsAndConvertKitPlugins($I)
+	public function deactivateConvertKitPlugin($I)
+	{
+		$I->deactivateThirdPartyPlugin($I, 'convertkit-gravity-forms');
+	}
+
+	/**
+	 * Helper method to activate a third party Plugin, checking
+	 * it activated and no errors were output.
+	 * 
+	 * @since 	1.2.2
+	 * 
+	 * @param 	string 	$name 	Plugin Slug.
+	 */
+	public function activateThirdPartyPlugin($I, $name)
 	{
 		// Login as the Administrator
 		$I->loginAsAdmin();
@@ -115,33 +113,33 @@ class Acceptance extends \Codeception\Module
 		// Go to the Plugins screen in the WordPress Administration interface.
 		$I->amOnPluginsPage();
 
-		// Activate the Gravity Forms Plugin.
-		$I->activatePlugin('gravity-forms');
-
-		// Check that the Plugin activated successfully.
-		$I->seePluginActivated('gravityforms');
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
 		// Activate the Plugin.
-		$I->activatePlugin('convertkit-gravity-forms');
+		$I->activatePlugin($name);
 
-		// Check that the Plugin activated successfully.
-		$I->seePluginActivated('convertkit-gravity-forms');
+		// Some Plugins have a different slug when activated.
+		switch($name) {
+			case 'gravity-forms':
+				$I->seePluginActivated('gravityforms');
+				break;
 
+			default:
+				$I->seePluginActivated($name);
+				break;
+		}
+		
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
 	}
 
 	/**
-	 * Helper method to deactivate the Plugin.
+	 * Helper method to activate a third party Plugin, checking
+	 * it activated and no errors were output.
 	 * 
-	 * @since 	1.2.1
+	 * @since 	1.2.2
 	 * 
-	 * @param 	AcceptanceTester 	$I AcceptanceTester.
+	 * @param 	string 	$name 	Plugin Slug.
 	 */
-	public function deactivateConvertKitPlugin($I)
+	public function deactivateThirdPartyPlugin($I, $name)
 	{
 		// Login as the Administrator
 		$I->loginAsAdmin();
@@ -150,13 +148,29 @@ class Acceptance extends \Codeception\Module
 		$I->amOnPluginsPage();
 
 		// Deactivate the Plugin.
-		$I->deactivatePlugin('convertkit-gravity-forms');
+		$I->deactivatePlugin($name);
 
 		// Check that the Plugin deactivated successfully.
-		$I->seePluginDeactivated('convertkit-gravity-forms');
+		$I->seePluginDeactivated($name);
 
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
+	}
+
+	/**
+	 * Helper method to reset the ConvertKit Plugin settings, as if it's a clean installation.
+	 * 
+	 * @since 	1.2.2
+	 */
+	public function resetConvertKitPlugin($I)
+	{
+		// Plugin Settings.
+		$I->dontHaveOptionInDatabase('gravityformsaddon_ckgf_settings');
+		$I->dontHaveOptionInDatabase('gravityformsaddon_ckgf_version');
+
+		// Review Request.
+		$I->dontHaveOptionInDatabase('convertkit-gravity-forms-review-request');
+		$I->dontHaveOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -450,6 +464,20 @@ class Acceptance extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_entries');
 		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
 		$I->dontSeeElementInDOM('#notes div[data-type="ckgf"]');
+	}
+
+	/**
+	 * Generates a unique email address for use in a test, comprising of a prefix,
+	 * date + time and PHP version number.
+	 * 
+	 * This ensures that if tests are run in parallel, the same email address
+	 * isn't used for two tests across parallel testing runs.
+	 * 
+	 * @since 	1.2.2
+	 */
+	public function generateEmailAddress()
+	{
+		return 'wordpress-gravity-forms-' . date( 'Y-m-d-H-i-s' ) . '-php-' . PHP_VERSION_ID . '@n7studios.com';
 	}
 
 	/**

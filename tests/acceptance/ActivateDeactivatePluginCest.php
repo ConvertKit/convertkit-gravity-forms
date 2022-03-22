@@ -3,17 +3,6 @@
 class ActivateDeactivatePluginCest
 {
 	/**
-	 * Run common actions before running the test functions in this class.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
-	 */
-	public function _before(AcceptanceTester $I)
-	{
-	}
-
-	/**
 	 * Activate the Plugin and confirm a success notification
 	 * is displayed with no errors.
 	 * 
@@ -23,7 +12,8 @@ class ActivateDeactivatePluginCest
 	 */
 	public function testPluginActivation(AcceptanceTester $I)
 	{
-		$I->activateGravityFormsAndConvertKitPlugins($I);
+		$I->activateConvertKitPlugin($I);
+		$I->activateThirdPartyPlugin($I, 'gravity-forms');
 	}
 
 	/**
@@ -50,5 +40,20 @@ class ActivateDeactivatePluginCest
 	public function testPluginDeactivation(AcceptanceTester $I)
 	{
 		$I->deactivateConvertKitPlugin($I);
+	}
+
+	/**
+	 * Deactivate and reset Plugin(s) after each test, if the test passes.
+	 * We don't use _after, as this would provide a screenshot of the Plugin
+	 * deactivation and not the true test error.
+	 * 
+	 * @since 	1.2.2
+	 * 
+	 * @param 	AcceptanceTester 	$I 	Tester
+	 */
+	public function _passed(AcceptanceTester $I)
+	{
+		$I->deactivateConvertKitPlugin($I);
+		$I->resetConvertKitPlugin($I);
 	}
 }
