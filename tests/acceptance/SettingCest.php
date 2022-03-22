@@ -140,6 +140,7 @@ class SettingCest
 	public function _passed(AcceptanceTester $I)
 	{
 		$I->deactivateConvertKitPlugin($I);
+		$I->deactivateThirdPartyPlugin($I, 'gravity-forms');
 		$I->resetConvertKitPlugin($I);
 	}
 }

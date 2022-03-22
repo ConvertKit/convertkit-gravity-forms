@@ -18,20 +18,10 @@ class AnyErrorsOnBlankInstallCest
 
 		// Go to the Plugin's Settings > General Screen.
 		$I->loadConvertKitSettingsScreen($I);
-	}
 
-	/**
-	 * Deactivate and reset Plugin(s) after each test, if the test passes.
-	 * We don't use _after, as this would provide a screenshot of the Plugin
-	 * deactivation and not the true test error.
-	 * 
-	 * @since 	1.2.2
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
-	 */
-	public function _passed(AcceptanceTester $I)
-	{
+		// Deactivate Plugins.
 		$I->deactivateConvertKitPlugin($I);
+		$I->deactivateThirdPartyPlugin($I, 'gravity-forms');
 		$I->resetConvertKitPlugin($I);
 	}
 }

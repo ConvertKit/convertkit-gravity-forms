@@ -147,11 +147,18 @@ class Acceptance extends \Codeception\Module
 		// Go to the Plugins screen in the WordPress Administration interface.
 		$I->amOnPluginsPage();
 
-		// Deactivate the Plugin.
-		$I->deactivatePlugin($name);
+		// Some Plugins have a different slug when activated/deactivated.
+		switch($name) {
+			case 'gravity-forms':
+				$I->deactivatePlugin('gravityforms');
+				$I->seePluginDeactivated('gravity-forms');
+				break;
 
-		// Check that the Plugin deactivated successfully.
-		$I->seePluginDeactivated($name);
+			default:
+				$I->deactivatePlugin($name);
+				$I->seePluginDeactivated($name);
+				break;
+		}
 
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
