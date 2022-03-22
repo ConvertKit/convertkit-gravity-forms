@@ -17,23 +17,23 @@ class CKGF_API {
 	/**
 	 * ConvertKit API Key
 	 *
-	 * @var string
+	 * @var mixed   bool | string
 	 */
-	protected $api_key;
+	protected $api_key = false;
 
 	/**
 	 * ConvertKit API Secret
 	 *
-	 * @var string
+	 * @var mixed   bool | string
 	 */
-	protected $api_secret;
+	protected $api_secret = false;
 
 	/**
 	 * Save debug data to log
 	 *
-	 * @var  string
+	 * @var  bool
 	 */
-	protected $debug;
+	protected $debug = false;
 
 	/**
 	 * Version of ConvertKit API
@@ -59,11 +59,11 @@ class CKGF_API {
 	/**
 	 * Sets up the API with the required credentials.
 	 *
-	 * @since   1.2.1
+	 * @since   1.9.6
 	 *
-	 * @param   string $api_key        ConvertKit API Key.
-	 * @param   string $api_secret     ConvertKit API Secret.
-	 * @param   string $debug          Save data to log.
+	 * @param   bool|string $api_key        ConvertKit API Key.
+	 * @param   bool|string $api_secret     ConvertKit API Secret.
+	 * @param   bool  		$debug          Save data to log.
 	 */
 	public function __construct( $api_key = false, $api_secret = false, $debug = false ) {
 
@@ -155,7 +155,7 @@ class CKGF_API {
 	public function form_subscribe( $form_id, $email, $first_name, $fields = false, $tag_ids = false ) {
 
 		// Backward compat. if $email is an array comprising of email and name keys.
-		if ( is_array( $email ) ) {
+		if ( is_array( $email ) ) { // @phpstan-ignore-line.
 			_deprecated_function( __FUNCTION__, '1.9.6', 'form_subscribe( $form_id, $email, $first_name )' );
 			$first_name = $email['name'];
 			$email      = $email['email'];
@@ -254,11 +254,11 @@ class CKGF_API {
 
 		// If no sequences exist, return WP_Error.
 		if ( ! isset( $response['courses'] ) ) {
-			$this->log( 'API: get_sequences(): Error: No sequences exist in ConvertKit.', 'convertkit' );
+			$this->log( 'API: get_sequences(): Error: No sequences exist in ConvertKit.' );
 			return new WP_Error( 'convertkit_api_error', __( 'No sequences exist in ConvertKit. Visit your ConvertKit account and create your first sequence.', 'convertkit' ) );
 		}
 		if ( ! count( $response['courses'] ) ) {
-			$this->log( 'API: get_sequences(): Error: No sequences exist in ConvertKit.', 'convertkit' );
+			$this->log( 'API: get_sequences(): Error: No sequences exist in ConvertKit.' );
 			return new WP_Error( 'convertkit_api_error', __( 'No sequences exist in ConvertKit. Visit your ConvertKit account and create your first sequence.', 'convertkit' ) );
 		}
 
@@ -346,11 +346,11 @@ class CKGF_API {
 
 		// If no tags exist, return WP_Error.
 		if ( ! isset( $response['tags'] ) ) {
-			$this->log( 'API: get_tags(): Error: No tags exist in ConvertKit.', 'convertkit' );
+			$this->log( 'API: get_tags(): Error: No tags exist in ConvertKit.' );
 			return new WP_Error( 'convertkit_api_error', __( 'No tags exist in ConvertKit. Visit your ConvertKit account and create your first tag.', 'convertkit' ) );
 		}
 		if ( ! count( $response['tags'] ) ) {
-			$this->log( 'API: get_tags(): Error: No tags exist in ConvertKit.', 'convertkit' );
+			$this->log( 'API: get_tags(): Error: No tags exist in ConvertKit.' );
 			return new WP_Error( 'convertkit_api_error', __( 'No tags exist in ConvertKit. Visit your ConvertKit account and create your first tag.', 'convertkit' ) );
 		}
 
@@ -367,10 +367,10 @@ class CKGF_API {
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   string $tag_id     Tag ID.
+	 * @param   int    $tag_id     Tag ID.
 	 * @param   string $email      Email Address.
 	 * @param   mixed  $fields     Custom Fields (false|array).
-	 * @return  mixed               WP_Error | array
+	 * @return  WP_Error|array
 	 */
 	public function tag_subscribe( $tag_id, $email, $fields = false ) {
 
@@ -399,7 +399,7 @@ class CKGF_API {
 		 * @since   1.9.6
 		 *
 		 * @param   array   $response   API Response
-		 * @param   string  $tag_id     Tag ID
+		 * @param   int  	$tag_id     Tag ID
 		 * @param   string  $email      Email Address
 		 * @param   mixed   $fields     Custom Fields (false|array).
 		 */
@@ -638,11 +638,11 @@ class CKGF_API {
 
 		// If no custom fields exist, return WP_Error.
 		if ( ! isset( $response['custom_fields'] ) ) {
-			$this->log( 'API: get_custom_fields(): Error: No custom fields exist in ConvertKit.', 'convertkit' );
+			$this->log( 'API: get_custom_fields(): Error: No custom fields exist in ConvertKit.' );
 			return new WP_Error( 'convertkit_api_error', __( 'No custom fields exist in ConvertKit. Visit your ConvertKit account and create your first custom field.', 'convertkit' ) );
 		}
 		if ( ! count( $response['custom_fields'] ) ) {
-			$this->log( 'API: get_custom_fields(): Error: No custom fields exist in ConvertKit.', 'convertkit' );
+			$this->log( 'API: get_custom_fields(): Error: No custom fields exist in ConvertKit.' );
 			return new WP_Error( 'convertkit_api_error', __( 'No custom fields exist in ConvertKit. Visit your ConvertKit account and create your first custom field.', 'convertkit' ) );
 		}
 
@@ -696,7 +696,7 @@ class CKGF_API {
 		// Inject JS for subscriber forms to work.
 		$scripts = new WP_Scripts();
 		$script  = "<script type='text/javascript' src='" . trailingslashit( $scripts->base_url ) . "wp-includes/js/jquery/jquery.js?ver=1.4.0'></script>"; // phpcs:ignore
-		$script .= "<script type='text/javascript' src='" . CONVERTKIT_PLUGIN_URL . 'resources/frontend/js/convertkit.js?ver=' . CONVERTKIT_PLUGIN_VERSION . "'></script>"; // phpcs:ignore
+		$script .= "<script type='text/javascript' src='" . CKGF_PLUGIN_URL . 'resources/frontend/js/convertkit.js?ver=' . CKGF_PLUGIN_VERSION . "'></script>"; // phpcs:ignore
 		$script .= "<script type='text/javascript'>/* <![CDATA[ */var convertkit = {\"ajaxurl\":\"" . admin_url( 'admin-ajax.php' ) . '"};/* ]]> */</script>'; // phpcs:ignore
 
 		$body = str_replace( '</head>', '</head>' . $script, $body );
@@ -846,9 +846,9 @@ class CKGF_API {
 	 *
 	 * This isn't specifically an API function, but for now it's best suited here.
 	 *
-	 * @param   string $url    URL of Form or Landing Page.
+	 * @param   string $url    		URL of Form or Landing Page.
 	 * @param   bool   $body_only   Return HTML between <body> and </body> tags only.
-	 * @return  string          HTML
+	 * @return  WP_Error|string 	HTML
 	 */
 	private function get_html( $url, $body_only = true ) {
 
@@ -938,11 +938,11 @@ class CKGF_API {
 	 * Converts any relative URls to absolute, fully qualified HTTP(s) URLs for the given
 	 * DOM Elements.
 	 *
-	 * @since   1.2.1
+	 * @since   1.9.6
 	 *
-	 * @param   array  $elements   Elements.
-	 * @param   string $attribute  HTML Attribute.
-	 * @param   string $url        Absolute URL to prepend to relative URLs.
+	 * @param   DOMNodeList<DOMElement> $elements   Elements.
+	 * @param   string                  $attribute  HTML Attribute.
+	 * @param   string                  $url        Absolute URL to prepend to relative URLs.
 	 */
 	private function convert_relative_to_absolute_urls( $elements, $attribute, $url ) {
 
@@ -1117,6 +1117,17 @@ class CKGF_API {
 					)
 				);
 				break;
+
+			default:
+				$result = new WP_Error(
+					'convertkit_api_error',
+					sprintf(
+						/* translators: HTTP method */
+						__( 'API request method %s is not supported in ConvertKit_API class.', 'convertkit' ),
+						$method
+					)
+				);
+				break;
 		}
 
 		// If an error occured, return it now.
@@ -1173,6 +1184,8 @@ class CKGF_API {
 	 * @return string User Agent
 	 */
 	private function get_user_agent() {
+
+		global $wp_version;
 
 		// Include an unmodified $wp_version.
 		require ABSPATH . WPINC . '/version.php';
