@@ -160,6 +160,22 @@ class Acceptance extends \Codeception\Module
 	}
 
 	/**
+	 * Helper method to reset the ConvertKit Plugin settings, as if it's a clean installation.
+	 * 
+	 * @since 	1.2.2
+	 */
+	public function resetConvertKitPlugin($I)
+	{
+		// Plugin Settings.
+		$I->dontHaveOptionInDatabase('gravityformsaddon_ckgf_settings');
+		$I->dontHaveOptionInDatabase('gravityformsaddon_ckgf_version');
+
+		// Review Request.
+		$I->dontHaveOptionInDatabase('convertkit-gravity-forms-review-request');
+		$I->dontHaveOptionInDatabase('convertkit-gravity-forms-review-dismissed');
+	}
+
+	/**
 	 * Helper method to load the Gravity Forms > Settings > ConvertKit screen.
 	 * 
 	 * @since 	1.2.1

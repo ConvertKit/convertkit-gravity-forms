@@ -746,6 +746,13 @@ class GFConvertKit extends GFFeedAddOn {
 			'success'
 		);
 
+		// Request a review for the Plugin, now that the email address was successfully
+		// subscribed to ConvertKit.
+		// This can safely be called multiple times, as the review request
+		// class will ensure once a review request is dismissed by the user,
+		// it is never displayed again.
+		WP_CKGF()->get_class( 'review_request' )->request_review();
+
 	}
 
 	/**

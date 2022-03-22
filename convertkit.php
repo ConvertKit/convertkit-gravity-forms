@@ -29,6 +29,7 @@ define( 'CKGF_SHORT_TITLE', __( 'ConvertKit', 'convertkit' ) );
 require_once CKGF_PLUGIN_PATH . '/includes/functions.php';
 require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-api.php';
 require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-log.php';
+require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-review-request.php';
 require_once CKGF_PLUGIN_PATH . '/includes/class-wp-ckgf.php';
 
 /**
