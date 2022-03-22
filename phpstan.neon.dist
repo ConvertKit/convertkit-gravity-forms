@@ -27,8 +27,5 @@ parameters:
     # Ignore the following errors, as PHPStan and PHPStan for WordPress haven't registered symbols for them yet,
     # so they're false positives.
     ignoreErrors:
-        - '#Access to an undefined property WP_Theme::#'
-        - '#Constant WP_MEMORY_LIMIT not found.#'
-        - '#Constant DB_HOST not found.#'
         - '#Constant WPINC not found.#'
-        - '#Function apply_filters invoked with#' # apply_filters() accepted a variable number of parameters, which PHPStan fails to detect
+        - '#of method GFAddOn::add_note#'
