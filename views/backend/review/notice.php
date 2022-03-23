@@ -14,7 +14,7 @@
 		echo esc_html(
 			sprintf(
 				/* translators: Plugin Name */
-				__( 'We\'d be super grateful if you could spread the word about %s and give it a 5 star rating on WordPress?', 'convertkit' ),
+				__( 'We\'d be super grateful if you could spread the word about %s and give it a 5 star rating on WordPress.', 'convertkit' ),
 				$this->plugin_name
 			)
 		);
