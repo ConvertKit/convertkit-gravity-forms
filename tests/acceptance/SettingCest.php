@@ -15,7 +15,8 @@ class SettingCest
 	 */
 	public function _before(AcceptanceTester $I)
 	{
-		$I->activateGravityFormsAndConvertKitPlugins($I);
+		$I->activateConvertKitPlugin($I);
+		$I->activateThirdPartyPlugin($I, 'gravity-forms');
 	}
 
 	/**
@@ -125,5 +126,21 @@ class SettingCest
 
 		// Check the field remains unticked.
 		$I->dontSeeCheckboxIsChecked('#debug');
+	}
+
+	/**
+	 * Deactivate and reset Plugin(s) after each test, if the test passes.
+	 * We don't use _after, as this would provide a screenshot of the Plugin
+	 * deactivation and not the true test error.
+	 * 
+	 * @since 	1.2.2
+	 * 
+	 * @param 	AcceptanceTester 	$I 	Tester
+	 */
+	public function _passed(AcceptanceTester $I)
+	{
+		$I->deactivateConvertKitPlugin($I);
+		$I->deactivateThirdPartyPlugin($I, 'gravity-forms');
+		$I->resetConvertKitPlugin($I);
 	}
 }
