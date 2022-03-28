@@ -65,7 +65,7 @@ class WP_CKGF {
 	 */
 	public function load_language_files() {
 
-		load_plugin_textdomain( 'convertkit', false, basename( dirname( CKGF_PLUGIN_BASENAME ) ) . '/languages/' );
+		load_plugin_textdomain( 'convertkit', false, basename( dirname( CKGF_PLUGIN_BASENAME ) ) . '/languages/' ); // @phpstan-ignore-line.
 
 	}
 
@@ -78,7 +78,7 @@ class WP_CKGF {
 	 */
 	public static function get_instance() {
 
-		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof self ) ) {
+		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof self ) ) { // @phpstan-ignore-line.
 			self::$instance = new self();
 		}
 
