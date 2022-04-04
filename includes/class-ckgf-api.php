@@ -149,9 +149,10 @@ class CKGF_API {
 	 * @param   string $email      Email Address.
 	 * @param   string $first_name First Name.
 	 * @param   mixed  $fields     Custom Fields (false|array).
+	 * @param   mixed  $tag_ids    Tags (false|array).
 	 * @return  WP_Error|array
 	 */
-	public function form_subscribe( $form_id, $email, $first_name = '', $fields = false ) {
+	public function form_subscribe( $form_id, $email, $first_name = '', $fields = false, $tag_ids = false ) {
 
 		// Backward compat. if $email is an array comprising of email and name keys.
 		if ( is_array( $email ) ) { // @phpstan-ignore-line.
@@ -184,6 +185,9 @@ class CKGF_API {
 		if ( $fields ) {
 			$params['fields'] = $fields;
 		}
+		if ( $tag_ids ) {
+			$params['tags'] = $tag_ids;
+		}
 
 		// Send request.
 		$response = $this->post( 'forms/' . $form_id . '/subscribe', $params );
@@ -204,8 +208,9 @@ class CKGF_API {
 		 * @param   string  $email      Email Address
 		 * @param   string  $first_name First Name
 		 * @param   mixed   $fields     Custom Fields (false|array)
+		 * @param   mixed   $tag_ids    Tags (false|array)
 		 */
-		do_action( 'convertkit_api_form_subscribe_success', $response, $form_id, $email, $first_name, $fields );
+		do_action( 'convertkit_api_form_subscribe_success', $response, $form_id, $email, $first_name, $fields, $tag_ids );
 
 		return $response;
 
