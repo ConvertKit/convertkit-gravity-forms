@@ -184,7 +184,7 @@ class WP_CKGF {
 			// Admin UI.
 			if ( is_admin() ) {
 				wp_die(
-					esc_attr( $error ),
+					esc_attr( $error->get_error_message() ),
 					esc_html__( 'ConvertKit for Gravity Forms Error', 'convertkit' ),
 					array(
 						'back_link' => true,
