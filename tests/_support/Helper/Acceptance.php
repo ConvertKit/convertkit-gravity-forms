@@ -76,84 +76,89 @@ class Acceptance extends \Codeception\Module
 	}
 
 	/**
-	 * Helper method to activate the Plugin.
+	 * Helper method to activate the ConvertKit Plugin, checking
+	 * it activated and no errors were output.
 	 * 
 	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I AcceptanceTester.
 	 */
 	public function activateConvertKitPlugin($I)
 	{
-		// Login as the Administrator
-		$I->loginAsAdmin();
-
-		// Go to the Plugins screen in the WordPress Administration interface.
-		$I->amOnPluginsPage();
-
-		// Activate the Plugin.
-		$I->activatePlugin('convertkit-gravity-forms');
-
-		// Check that the Plugin activated successfully.
-		$I->seePluginActivated('convertkit-gravity-forms');
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
+		$I->activateThirdPartyPlugin($I, 'convertkit-gravity-forms');
 	}
 
 	/**
-	 * Helper method to activate the Gravity Forms Plugin and the ConvertKit for Gravity Forms Plugin.
+	 * Helper method to deactivate the ConvertKit Plugin, checking
+	 * it activated and no errors were output.
 	 * 
 	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I AcceptanceTester.
-	 */
-	public function activateGravityFormsAndConvertKitPlugins($I)
-	{
-		// Login as the Administrator
-		$I->loginAsAdmin();
-
-		// Go to the Plugins screen in the WordPress Administration interface.
-		$I->amOnPluginsPage();
-
-		// Activate the Gravity Forms Plugin.
-		$I->activatePlugin('gravity-forms');
-
-		// Check that the Plugin activated successfully.
-		$I->seePluginActivated('gravityforms');
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
-		// Activate the Plugin.
-		$I->activatePlugin('convertkit-gravity-forms');
-
-		// Check that the Plugin activated successfully.
-		$I->seePluginActivated('convertkit-gravity-forms');
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-	}
-
-	/**
-	 * Helper method to deactivate the Plugin.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I AcceptanceTester.
 	 */
 	public function deactivateConvertKitPlugin($I)
 	{
+		$I->deactivateThirdPartyPlugin($I, 'convertkit-gravity-forms');
+	}
+
+	/**
+	 * Helper method to activate a third party Plugin, checking
+	 * it activated and no errors were output.
+	 * 
+	 * @since 	1.2.2
+	 * 
+	 * @param 	string 	$name 	Plugin Slug.
+	 */
+	public function activateThirdPartyPlugin($I, $name)
+	{
 		// Login as the Administrator
 		$I->loginAsAdmin();
 
 		// Go to the Plugins screen in the WordPress Administration interface.
 		$I->amOnPluginsPage();
 
-		// Deactivate the Plugin.
-		$I->deactivatePlugin('convertkit-gravity-forms');
+		// Activate the Plugin.
+		$I->activatePlugin($name);
 
-		// Check that the Plugin deactivated successfully.
-		$I->seePluginDeactivated('convertkit-gravity-forms');
+		// Some Plugins have a different slug when activated.
+		switch($name) {
+			case 'gravity-forms':
+				$I->seePluginActivated('gravityforms');
+				break;
+
+			default:
+				$I->seePluginActivated($name);
+				break;
+		}
+		
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+	}
+
+	/**
+	 * Helper method to activate a third party Plugin, checking
+	 * it activated and no errors were output.
+	 * 
+	 * @since 	1.2.2
+	 * 
+	 * @param 	string 	$name 	Plugin Slug.
+	 */
+	public function deactivateThirdPartyPlugin($I, $name)
+	{
+		// Login as the Administrator
+		$I->loginAsAdmin();
+
+		// Go to the Plugins screen in the WordPress Administration interface.
+		$I->amOnPluginsPage();
+
+		// Some Plugins have a different slug when activated/deactivated.
+		switch($name) {
+			case 'gravity-forms':
+				$I->deactivatePlugin('gravityforms');
+				$I->seePluginDeactivated('gravity-forms');
+				break;
+
+			default:
+				$I->deactivatePlugin($name);
+				$I->seePluginDeactivated($name);
+				break;
+		}
 
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
@@ -232,7 +237,7 @@ class Acceptance extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_new_form');
 
 		// Define Title.
-		$I->fillField('#new_form_title', 'ConvertKit Form Test');
+		$I->fillField('#new_form_title', 'ConvertKit Form Test: '.date('Y-m-d H:i:s').' on PHP '.PHP_VERSION_ID);
 
 		// Click Create Form button.
 		$I->click('Create Form');
@@ -469,6 +474,20 @@ class Acceptance extends \Codeception\Module
 	}
 
 	/**
+	 * Generates a unique email address for use in a test, comprising of a prefix,
+	 * date + time and PHP version number.
+	 * 
+	 * This ensures that if tests are run in parallel, the same email address
+	 * isn't used for two tests across parallel testing runs.
+	 * 
+	 * @since 	1.2.2
+	 */
+	public function generateEmailAddress()
+	{
+		return 'wordpress-gravity-forms-' . date( 'Y-m-d-H-i-s' ) . '-php-' . PHP_VERSION_ID . '@n7studios.com';
+	}
+
+	/**
 	 * Check the given email address and name exists as a subscriber on ConvertKit.
 	 * 
 	 * @since 	1.2.1
@@ -519,7 +538,7 @@ class Acceptance extends \Codeception\Module
 	{
 		// Get Subscribers.
 		$subscribers = $this->apiGetSubscribersByTagID($tagID);
-			
+
 		$subscriberTagged = false;
 		foreach ($subscribers as $subscriber) {
 			if ($subscriber['subscriber']['email_address'] == $emailAddress) {

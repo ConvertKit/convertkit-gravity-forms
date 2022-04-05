@@ -3,52 +3,33 @@
 class ActivateDeactivatePluginCest
 {
 	/**
-	 * Run common actions before running the test functions in this class.
+	 * Test that activating the Plugin and the Gravity Forms Plugins works
+	 * with no errors.
 	 * 
 	 * @since 	1.2.1
 	 * 
 	 * @param 	AcceptanceTester 	$I 	Tester
 	 */
-	public function _before(AcceptanceTester $I)
-	{
-	}
-
-	/**
-	 * Activate the Plugin and confirm a success notification
-	 * is displayed with no errors.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
-	 */
-	public function testPluginActivation(AcceptanceTester $I)
-	{
-		$I->activateGravityFormsAndConvertKitPlugins($I);
-	}
-
-	/**
-	 * Activate the Plugin without the Gravity Forms Plugin and confirm a success notification
-	 * is displayed with no errors.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
-	 */
-	public function testPluginActivationWithoutGravityForms(AcceptanceTester $I)
+	public function testPluginActivationDeactivation(AcceptanceTester $I)
 	{
 		$I->activateConvertKitPlugin($I);
+		$I->activateThirdPartyPlugin($I, 'gravity-forms');
+		$I->deactivateConvertKitPlugin($I);
+		$I->deactivateThirdPartyPlugin($I, 'gravity-forms');
 	}
 
 	/**
-	 * Deactivate the Plugin and confirm a success notification
-	 * is displayed with no errors.
+	 * Test that activating the Plugin, without activating the Gravity Forms Plugin, works
+	 * with no errors.
 	 * 
 	 * @since 	1.2.1
 	 * 
 	 * @param 	AcceptanceTester 	$I 	Tester
 	 */
-	public function testPluginDeactivation(AcceptanceTester $I)
+	public function testPluginActivationDeactivationWithoutGravityForms(AcceptanceTester $I)
 	{
+		$I->activateConvertKitPlugin($I);
 		$I->deactivateConvertKitPlugin($I);
+
 	}
 }

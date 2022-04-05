@@ -52,6 +52,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
+	// @phpstan-ignore-next-line
 	protected $_path = CKGF_PLUGIN_BASENAME; // phpcs:ignore
 
 	/**
@@ -70,6 +71,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
+	// @phpstan-ignore-next-line
 	protected $_title = CKGF_TITLE; // phpcs:ignore
 
 	/**
@@ -79,10 +81,11 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
+	// @phpstan-ignore-next-line
 	protected $_short_title = CKGF_SHORT_TITLE; // phpcs:ignore
 
 	/**
-	 * Holds a list of capabilities to add to roles for Members plugin (https://wordpress.org/plugins/members/) integration. L
+	 * Holds a list of capabilities to add to roles for Members plugin (https://wordpress.org/plugins/members/) integration.
 	 *
 	 * @since   1.2.1
 	 *
@@ -307,7 +310,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// by Gravity Forms.
 		if ( is_wp_error( $forms ) ) {
 			$this->set_field_error( $field, $forms->get_error_message() );
-			return;
+			return false;
 		}
 
 		return true;
@@ -336,7 +339,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.0.0
 	 *
 	 * @param   array $feed   ConvertKit Feed.
-	 * @return  array
+	 * @return  string
 	 */
 	public function get_column_value_form_id( $feed ) {
 
@@ -633,6 +636,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @param   array $feed   ConvertKit Feed.
 	 * @param   array $entry  Gravity Forms Entry / Submission.
 	 * @param   array $form   Gravity Forms Form.
+	 * @return  array|null    Returns a modified entry object or null.
 	 */
 	public function process_feed( $feed, $entry, $form ) {
 
@@ -658,7 +662,7 @@ class GFConvertKit extends GFFeedAddOn {
 				__( 'Error Subscribing: The field mapped to the email address contains no value.', 'convertkit' ),
 				'error'
 			);
-			return;
+			return null;
 		}
 
 		// If the Email Address isn't actually an email address, bail.
@@ -672,7 +676,7 @@ class GFConvertKit extends GFFeedAddOn {
 				),
 				'error'
 			);
-			return;
+			return null;
 		}
 
 		// Initialize API class.
@@ -736,7 +740,7 @@ class GFConvertKit extends GFFeedAddOn {
 				),
 				'error'
 			);
-			return;
+			return null;
 		}
 
 		// Add success note to Gravity Forms Entry.
@@ -752,6 +756,8 @@ class GFConvertKit extends GFFeedAddOn {
 		// class will ensure once a review request is dismissed by the user,
 		// it is never displayed again.
 		WP_CKGF()->get_class( 'review_request' )->request_review();
+
+		return null;
 
 	}
 
@@ -775,6 +781,7 @@ class GFConvertKit extends GFFeedAddOn {
 			return $custom_fields;
 		}
 
+		$fields = array();
 		foreach ( $custom_fields as $custom_field ) {
 			// If this Custom Field isn't mapped in the Feed, skip it.
 			if ( ! isset( $convertkit_custom_fields[ $custom_field['key'] ] ) ) {
@@ -795,7 +802,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.2.1
 	 *
 	 * @param   string $tag_name    Tag Name.
-	 * @return  int                 Tag ID
+	 * @return  WP_Error|bool|int   Tag ID
 	 */
 	private function process_feed_tag( $tag_name ) {
 

@@ -16,7 +16,8 @@ class FormCest
 	 */
 	public function _before(AcceptanceTester $I)
 	{
-		$I->activateGravityFormsAndConvertKitPlugins($I);
+		$I->activateConvertKitPlugin($I);
+		$I->activateThirdPartyPlugin($I, 'gravity-forms');
 		$I->setupConvertKitPlugin($I);
 	}
 
@@ -44,7 +45,7 @@ class FormCest
 		// Define Name, Email Address and Custom Field Data for this Test.
 		$firstName = 'First';
 		$lastName = 'Last';
-		$emailAddress = 'wordpress-gravityforms-' . date('YmdHis') . '@n7studios.com';
+		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
 		];
@@ -120,7 +121,7 @@ class FormCest
 		// Define Name, Email Address and Custom Field Data for this Test.
 		$firstName = 'First';
 		$lastName = 'Last';
-		$emailAddress = 'wordpress-gravityforms-' . date('YmdHis') . '@n7studios.com';
+		$emailAddress = $I->generateEmailAddress();
 
 		// Logout as the WordPress Administrator.
 		$I->logOut();
@@ -302,7 +303,7 @@ class FormCest
 		// Define Name, Email Address and Custom Field Data for this Test.
 		$firstName = 'First';
 		$lastName = 'Last';
-		$emailAddress = 'wordpress-gravityforms-' . date('YmdHis') . '@n7studios.com';
+		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
 		];
@@ -381,7 +382,7 @@ class FormCest
 		// Define Name, Email Address and Custom Field Data for this Test.
 		$firstName = 'First';
 		$lastName = 'Last';
-		$emailAddress = 'wordpress-gravityforms-' . date('YmdHis') . '@n7studios.com';
+		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
 		];
@@ -460,7 +461,7 @@ class FormCest
 		// Define Name, Email Address and Custom Field Data for this Test.
 		$firstName = 'First';
 		$lastName = 'Last';
-		$emailAddress = 'wordpress-gravityforms-' . date('YmdHis') . '@n7studios.com';
+		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
 		];
@@ -539,7 +540,7 @@ class FormCest
 		// Define Name, Email Address and Custom Field Data for this Test.
 		$firstName = 'First';
 		$lastName = 'Last';
-		$emailAddress = 'wordpress-gravityforms-' . date('YmdHis') . '@n7studios.com';
+		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
 		];
@@ -619,7 +620,7 @@ class FormCest
 		// Define Name, Email Address and Custom Field Data for this Test.
 		$firstName = 'First';
 		$lastName = 'Last';
-		$emailAddress = 'wordpress-gravityforms-' . date('YmdHis') . '@n7studios.com';
+		$emailAddress = $I->generateEmailAddress();
 
 		// Logout as the WordPress Administrator.
 		$I->logOut();
@@ -671,6 +672,7 @@ class FormCest
 	public function _passed(AcceptanceTester $I)
 	{
 		$I->deactivateConvertKitPlugin($I);
+		$I->deactivateThirdPartyPlugin($I, 'gravity-forms');
 		$I->resetConvertKitPlugin($I);
 	}
 }
