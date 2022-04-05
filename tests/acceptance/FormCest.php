@@ -78,6 +78,12 @@ class FormCest
 
 		// Check ConvertKit Notes were added to the Entry.
 		$I->checkGravityFormsSuccessNotesExist($I);
+
+		// Check that the options table does have a review request set.
+		$I->seeOptionInDatabase('convertkit-gravity-forms-review-request');
+
+		// Check that the option table does not yet have a review dismissed set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -145,6 +151,10 @@ class FormCest
 
 		// Check ConvertKit Notes were not added to the Entry.
 		$I->checkGravityFormsNotesDoNotExist($I);
+
+		// Check that the options table doesn't have a review request set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-request');
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -197,6 +207,10 @@ class FormCest
 
 		// Check a ConvertKit Error Note were added to the Entry.
 		$I->checkGravityFormsErrorNotesExist($I);
+
+		// Check that the options table doesn't have a review request set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-request');
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -252,6 +266,10 @@ class FormCest
 
 		// Check a ConvertKit Error Note were added to the Entry.
 		$I->checkGravityFormsErrorNotesExist($I);
+
+		// Check that the options table doesn't have a review request set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-request');
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -325,6 +343,12 @@ class FormCest
 
 		// Check ConvertKit Notes were added to the Entry.
 		$I->checkGravityFormsSuccessNotesExist($I);
+
+		// Check that the options table does have a review request set.
+		$I->seeOptionInDatabase('convertkit-gravity-forms-review-request');
+
+		// Check that the option table does not yet have a review dismissed set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -398,6 +422,12 @@ class FormCest
 
 		// Check ConvertKit Notes were added to the Entry.
 		$I->checkGravityFormsSuccessNotesExist($I);
+
+		// Check that the options table does have a review request set.
+		$I->seeOptionInDatabase('convertkit-gravity-forms-review-request');
+
+		// Check that the option table does not yet have a review dismissed set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -471,6 +501,12 @@ class FormCest
 
 		// Check ConvertKit Notes were added to the Entry.
 		$I->checkGravityFormsSuccessNotesExist($I);
+
+		// Check that the options table does have a review request set.
+		$I->seeOptionInDatabase('convertkit-gravity-forms-review-request');
+
+		// Check that the option table does not yet have a review dismissed set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -543,6 +579,12 @@ class FormCest
 
 		// Check ConvertKit Notes were added to the Entry.
 		$I->checkGravityFormsSuccessNotesExist($I);
+
+		// Check that the options table does have a review request set.
+		$I->seeOptionInDatabase('convertkit-gravity-forms-review-request');
+
+		// Check that the option table does not yet have a review dismissed set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
@@ -612,6 +654,10 @@ class FormCest
 
 		// Check no ConvertKit Notes were added to the Entry.
 		$I->checkGravityFormsNotesDoNotExist($I);
+
+		// Check that the options table doesn't have a review request set.
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-request');
+		$I->dontSeeOptionInDatabase('convertkit-gravity-forms-review-dismissed');
 	}
 
 	/**
