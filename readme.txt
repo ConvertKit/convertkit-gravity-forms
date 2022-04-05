@@ -42,6 +42,9 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 
 == Changelog ==
 
+### 1.2.2 2022-04-05
+* Fix: Updated API Class
+
 ### 1.2.1 2022-03-17
 * Added: PHP 8.x compatibility
 * Added: Developers: Action and filter hooks.  See https://github.com/ConvertKit/convertkit-gravity-forms/blob/master/ACTIONS-FILTERS.md
