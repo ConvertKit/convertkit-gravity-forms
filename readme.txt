@@ -42,6 +42,9 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 
 == Changelog ==
 
+### 1.2.3 2022-04-xx
+* Added: Form: Entries: Show ConvertKit icon next to Form Entries' Notes
+
 ### 1.2.2 2022-04-05
 * Fix: Updated API Class
 

@@ -471,6 +471,19 @@ class GFConvertKit extends GFFeedAddOn {
 	}
 
 	/**
+	 * Defines the image to use for notes added to entries by this addon.
+	 *
+	 * @since   1.2.3
+	 *
+	 * @return  string
+	 */
+	public function note_avatar() {
+
+		return CKGF_PLUGIN_URL . 'resources/backend/images/block-icon-form.png';
+
+	}
+
+	/**
 	 * Adds Custom Fields to the Feed Settings Fields, if Custom Fields exist in the ConvertKit account.
 	 *
 	 * @since   1.0.0
