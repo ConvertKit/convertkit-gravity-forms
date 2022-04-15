@@ -443,6 +443,9 @@ class Acceptance extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_entries');
 		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
 		$I->seeElementInDOM('#notes div[data-type="ckgf"]');
+
+		// Confirm that the ConvertKit logo is displayed beside the note.
+		$I->seeInSource('<img alt="ConvertKit" src="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-content/plugins/convertkit-gravity-forms/resources/backend/images/block-icon-form.png" class="avatar avatar-48" height="48" width="48">');
 	}
 
 	/**
@@ -456,6 +459,9 @@ class Acceptance extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_entries');
 		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
 		$I->seeElementInDOM('#notes div[data-type="ckgf"][data-sub-type="success"]');
+
+		// Confirm that the ConvertKit logo is displayed beside the note.
+		$I->seeInSource('<img alt="ConvertKit" src="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-content/plugins/convertkit-gravity-forms/resources/backend/images/block-icon-form.png" class="avatar avatar-48" height="48" width="48">');
 	}
 
 	/**
@@ -469,6 +475,9 @@ class Acceptance extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_entries');
 		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
 		$I->seeElementInDOM('#notes div[data-type="ckgf"][data-sub-type="error"]');
+
+		// Confirm that the ConvertKit logo is displayed beside the note.
+		$I->seeInSource('<img alt="ConvertKit" src="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-content/plugins/convertkit-gravity-forms/resources/backend/images/block-icon-form.png" class="avatar avatar-48" height="48" width="48">');
 	}
 
 	/**
