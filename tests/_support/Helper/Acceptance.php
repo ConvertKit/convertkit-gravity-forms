@@ -265,16 +265,24 @@ class Acceptance extends \Codeception\Module
 		$I->click('#add_standard_fields button[data-type="textarea"]');
 		$I->wait(2);
 
-		// Add Select Field, with values matching ConvertKit Tags.
+		// Add Select Field.
 		$I->click('#add_standard_fields button[data-type="select"]');
 		$I->wait(2);
 
-		$I->click('#field_5');
+		// Click the Select Field.
+		$I->click('#field_6');
 		$I->wait(2);
 
 		$I->fillField('#field_label', 'Tag');
-		$I->click('label[for=field_choice_values_enabled]');
+
+		// Open Choices flyout.
+		$I->click('button.choices-ui__trigger');
+		$I->wait(2);
+
+		// Show Values.
+		$I->click('#choices-ui-flyout .gform-flyout__body label[for=field_choice_values_enabled]');
 		
+		// Define Tags.
 		$I->fillField('#select_choice_text_0', 'Select Tag');
 		$I->fillField('#select_choice_value_0', '');
 		
@@ -283,6 +291,9 @@ class Acceptance extends \Codeception\Module
 
 		$I->fillField('#select_choice_text_2', 'Tag Label 2');
 		$I->fillField('#select_choice_value_2', 'fakeTagNotInConvertKit');
+
+		// Close Choices flyout.
+		$I->click('#choices-ui-flyout .gform-flyout__close');
 	
 		// Update.
 		$I->click('button.update-form');
