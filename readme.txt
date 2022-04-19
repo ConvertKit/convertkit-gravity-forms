@@ -3,7 +3,7 @@ Contributors: nathanbarry, growdev, travisnorthcutt
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 5.0
-Tested up to: 5.9.2
+Tested up to: 5.9.3
 Requires PHP: 5.6.20
 Stable tag: trunk
 License: GPLv2 or later
@@ -42,7 +42,7 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 
 == Changelog ==
 
-### 1.2.3 2022-04-xx
+### 1.2.3 2022-04-19
 * Added: Form: Entries: Show ConvertKit icon next to Form Entries' Notes
 
 ### 1.2.2 2022-04-05
