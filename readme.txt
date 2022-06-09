@@ -50,7 +50,7 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 
 ### 1.2.1 2022-03-17
 * Added: PHP 8.x compatibility
-* Added: Developers: Action and filter hooks.  See https://github.com/ConvertKit/convertkit-gravity-forms/blob/master/ACTIONS-FILTERS.md
+* Added: Developers: Action and filter hooks.  See https://github.com/ConvertKit/convertkit-gravity-forms/blob/main/ACTIONS-FILTERS.md
 * Added: Developers: Capabilities for Settings Page, Form Settings and Uninstall actions
 * Added: Settings: Debug option
 * Added: Form: Feed Settings: Optionally tag subscriber
