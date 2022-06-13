@@ -2,16 +2,16 @@
 /**
  * ConvertKit Log class.
  *
- * @package CKGF
+ * @package ConvertKit
  * @author ConvertKit
  */
 
 /**
  * Class to read and write to the ConvertKit log file.
  *
- * @since   1.2.1
+ * @since   1.9.6
  */
-class CKGF_Log {
+class ConvertKit_Log {
 
 	/**
 	 * The path and filename of the log file.
@@ -26,11 +26,13 @@ class CKGF_Log {
 	 * Constructor. Defines the log file location.
 	 *
 	 * @since   1.9.6
+	 *
+	 * @param   string $path   Path to where log file should be created/edited/read.
 	 */
-	public function __construct() {
+	public function __construct( $path ) {
 
 		// Define location of log file.
-		$this->log_file = trailingslashit( CKGF_PLUGIN_PATH ) . 'log.txt';
+		$this->log_file = trailingslashit( $path ) . 'log.txt';
 
 		// Initialize WP_Filesystem.
 		require_once ABSPATH . 'wp-admin/includes/file.php';
