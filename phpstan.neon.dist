@@ -16,9 +16,9 @@ parameters:
     bootstrapFiles:
         - convertkit.php
 
-    # Location of WordPress installation
+    # Location of WordPress Plugins for PHPStan to scan, building symbols.
     scanDirectories:
-        - /home/runner/work/convertkit-gravity-forms/convertkit-gravity-forms/wordpress
+        - /home/runner/work/convertkit-gravity-forms/convertkit-gravity-forms/wordpress/wp-content/plugins
 
     # Should not need to edit anything below here
     # Rule Level: https://phpstan.org/user-guide/rule-levels
