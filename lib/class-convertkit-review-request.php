@@ -57,11 +57,11 @@ class ConvertKit_Review_Request {
 	 *
 	 * @since   1.9.6.7
 	 *
-	 * @param   string      $plugin_name    Plugin Name (e.g. ConvertKit).
-	 * @param   string      $plugin_slug    Plugin Slug (e.g. convertkit).
-	 * @param   bool|string $plugin_path    Plugin Path.
+	 * @param   string $plugin_name    Plugin Name (e.g. ConvertKit).
+	 * @param   string $plugin_slug    Plugin Slug (e.g. convertkit).
+	 * @param   string $plugin_path    Plugin Path.
 	 */
-	public function __construct( $plugin_name, $plugin_slug, $plugin_path = false ) {
+	public function __construct( $plugin_name, $plugin_slug, $plugin_path ) {
 
 		// Store the Plugin name, slug and path in the class.
 		$this->plugin_name = $plugin_name;
