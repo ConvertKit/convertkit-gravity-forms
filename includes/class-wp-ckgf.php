@@ -135,7 +135,7 @@ class WP_CKGF {
 	 */
 	private function initialize_global() {
 
-		$this->classes['review_request'] = new CKGF_Review_Request( 'ConvertKit for Gravity Forms', 'convertkit-gravity-forms' );
+		$this->classes['review_request'] = new ConvertKit_Review_Request( 'ConvertKit for Gravity Forms', 'convertkit-gravity-forms', CKGF_PLUGIN_PATH );
 
 		/**
 		 * Initialize integration classes for the frontend web site.
