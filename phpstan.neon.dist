@@ -11,14 +11,20 @@ parameters:
     paths:
         - convertkit.php
         - includes/
+        - lib/
+
+    # Paths to exclude
+    # This should comprise of any third party libraries used in the Plugin
+    excludePaths:
+        - lib/browser.php
 
     # Files that include Plugin-specific PHP constants
     bootstrapFiles:
         - convertkit.php
 
-    # Location of WordPress installation
+    # Location of WordPress Plugins for PHPStan to scan, building symbols.
     scanDirectories:
-        - /home/runner/work/convertkit-gravity-forms/convertkit-gravity-forms/wordpress
+        - /home/runner/work/convertkit-gravity-forms/convertkit-gravity-forms/wordpress/wp-content/plugins
 
     # Should not need to edit anything below here
     # Rule Level: https://phpstan.org/user-guide/rule-levels

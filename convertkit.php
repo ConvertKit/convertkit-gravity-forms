@@ -15,6 +15,7 @@
  */
 
 // Define ConverKit Plugin paths and version number.
+define( 'CKGF_PLUGIN_NAME', 'ConvertKitGravityForms' ); // Used for user-agent in API class.
 define( 'CKGF_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'CKGF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CKGF_PLUGIN_PATH', __DIR__ );
@@ -25,11 +26,20 @@ define( 'CKGF_SLUG', 'ckgf' );
 define( 'CKGF_TITLE', __( 'ConvertKit Gravity Forms Add-On', 'convertkit' ) );
 define( 'CKGF_SHORT_TITLE', __( 'ConvertKit', 'convertkit' ) );
 
+// Load shared classes, if they have not been included by another ConvertKit Plugin.
+if ( ! class_exists( 'ConvertKit_API' ) ) {
+	require_once CKGF_PLUGIN_PATH . '/lib/class-convertkit-api.php';
+}
+if ( ! class_exists( 'ConvertKit_Log' ) ) {
+	require_once CKGF_PLUGIN_PATH . '/lib/class-convertkit-log.php';
+}
+if ( ! class_exists( 'ConvertKit_Review_Request' ) ) {
+	require_once CKGF_PLUGIN_PATH . '/lib/class-convertkit-review-request.php';
+}
+
 // Load files that are always used.
 require_once CKGF_PLUGIN_PATH . '/includes/functions.php';
 require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-api.php';
-require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-log.php';
-require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-review-request.php';
 require_once CKGF_PLUGIN_PATH . '/includes/class-wp-ckgf.php';
 
 /**
