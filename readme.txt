@@ -3,7 +3,7 @@ Contributors: nathanbarry, growdev, travisnorthcutt
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 5.0
-Tested up to: 5.9.3
+Tested up to: 6.0
 Requires PHP: 5.6.20
 Stable tag: trunk
 License: GPLv2 or later
@@ -41,6 +41,9 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 2. Gravity Forms ConvertKit Settings
 
 == Changelog ==
+
+### 1.2.4 2022-06-23
+* Added: Support for WordPress 6.0
 
 ### 1.2.3 2022-04-19
 * Added: Form: Entries: Show ConvertKit icon next to Form Entries' Notes

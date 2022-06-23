@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the ConvertKit for Gravity Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: ConvertKit for Gravity Forms 1.2.3\n"
+"Project-Id-Version: ConvertKit for Gravity Forms 1.2.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/convertkit-gravity-forms\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-15T13:01:18+00:00\n"
+"POT-Creation-Date: 2022-06-23T12:24:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: convertkit\n"
@@ -23,7 +23,7 @@ msgid "Integrates Gravity Forms with ConvertKit allowing form submissions to be 
 msgstr ""
 
 #. Author of the plugin
-#: convertkit.php:26
+#: convertkit.php:27
 msgid "ConvertKit"
 msgstr ""
 
@@ -31,95 +31,99 @@ msgstr ""
 msgid "https://convertkit.com/"
 msgstr ""
 
-#: convertkit.php:25
+#: convertkit.php:26
 msgid "ConvertKit Gravity Forms Add-On"
 msgstr ""
 
-#: includes/class-ckgf-api.php:173
+#: includes/class-ckgf-api.php:46
+#: lib/class-convertkit-api.php:126
 msgid "form_subscribe(): the form_id parameter is empty."
 msgstr ""
 
-#: includes/class-ckgf-api.php:176
+#: includes/class-ckgf-api.php:47
+#: lib/class-convertkit-api.php:127
 msgid "form_subscribe(): the email parameter is empty."
 msgstr ""
 
-#: includes/class-ckgf-api.php:273
-#: includes/class-ckgf-api.php:277
-msgid "No sequences exist in ConvertKit. Visit your ConvertKit account and create your first sequence."
-msgstr ""
-
-#: includes/class-ckgf-api.php:310
+#: includes/class-ckgf-api.php:49
+#: lib/class-convertkit-api.php:130
 msgid "sequence_subscribe(): the sequence_id parameter is empty."
 msgstr ""
 
-#: includes/class-ckgf-api.php:313
+#: includes/class-ckgf-api.php:50
+#: lib/class-convertkit-api.php:131
 msgid "sequence_subscribe(): the email parameter is empty."
 msgstr ""
 
-#: includes/class-ckgf-api.php:381
-#: includes/class-ckgf-api.php:385
-msgid "No tags exist in ConvertKit. Visit your ConvertKit account and create your first tag."
-msgstr ""
-
-#: includes/class-ckgf-api.php:418
+#: includes/class-ckgf-api.php:52
+#: lib/class-convertkit-api.php:134
 msgid "tag_subscribe(): the tag_id parameter is empty."
 msgstr ""
 
-#: includes/class-ckgf-api.php:421
+#: includes/class-ckgf-api.php:53
+#: lib/class-convertkit-api.php:135
 msgid "tag_subscribe(): the email parameter is empty."
 msgstr ""
 
-#: includes/class-ckgf-api.php:476
+#: includes/class-ckgf-api.php:55
+#: lib/class-convertkit-api.php:138
 msgid "get_subscriber_by_email(): the email parameter is empty."
 msgstr ""
 
 #. translators: Email Address
-#: includes/class-ckgf-api.php:500
+#: includes/class-ckgf-api.php:57
+#: lib/class-convertkit-api.php:140
 msgid "No subscriber(s) exist in ConvertKit matching the email address %s."
 msgstr ""
 
-#: includes/class-ckgf-api.php:531
+#: includes/class-ckgf-api.php:59
+#: lib/class-convertkit-api.php:143
 msgid "get_subscriber_by_id(): the subscriber_id parameter is empty."
 msgstr ""
 
-#. translators: Subscriber ID
-#: includes/class-ckgf-api.php:554
-msgid "No subscriber exist in ConvertKit matching the subscriber ID %s."
-msgstr ""
-
-#: includes/class-ckgf-api.php:585
+#: includes/class-ckgf-api.php:61
+#: lib/class-convertkit-api.php:146
 msgid "get_subscriber_tags(): the subscriber_id parameter is empty."
 msgstr ""
 
-#. translators: Subscriber ID
-#: includes/class-ckgf-api.php:608
-msgid "No tags exist in ConvertKit for the subscriber ID %s."
-msgstr ""
-
-#: includes/class-ckgf-api.php:662
+#: includes/class-ckgf-api.php:63
+#: lib/class-convertkit-api.php:149
 msgid "unsubscribe(): the email parameter is empty."
 msgstr ""
 
-#: includes/class-ckgf-api.php:724
-#: includes/class-ckgf-api.php:728
-msgid "No custom fields exist in ConvertKit. Visit your ConvertKit account and create your first custom field."
+#: includes/class-ckgf-api.php:65
+#: lib/class-convertkit-api.php:152
+msgid "get_all_posts(): the posts_per_request parameter must be equal to or greater than 1."
 msgstr ""
 
-#. translators: API Error Message
-#: includes/class-ckgf-api.php:939
-msgid "ConvertKit: %s"
+#: includes/class-ckgf-api.php:66
+#: lib/class-convertkit-api.php:153
+msgid "get_all_posts(): the posts_per_request parameter must be equal to or less than 50."
 msgstr ""
 
-#: includes/class-ckgf-api.php:1077
-msgid "No forms exist in ConvertKit. Visit your ConvertKit account and create your first form."
+#: includes/class-ckgf-api.php:68
+#: lib/class-convertkit-api.php:156
+msgid "get_posts(): the page parameter must be equal to or greater than 1."
+msgstr ""
+
+#: includes/class-ckgf-api.php:69
+#: lib/class-convertkit-api.php:157
+msgid "get_posts(): the per_page parameter must be equal to or greater than 1."
+msgstr ""
+
+#: includes/class-ckgf-api.php:70
+#: lib/class-convertkit-api.php:158
+msgid "get_posts(): the per_page parameter must be equal to or less than 50."
 msgstr ""
 
 #. translators: HTTP method
-#: includes/class-ckgf-api.php:1184
+#: includes/class-ckgf-api.php:73
+#: lib/class-convertkit-api.php:162
 msgid "API request method %s is not supported in ConvertKit_API class."
 msgstr ""
 
-#: includes/class-ckgf-api.php:1206
+#: includes/class-ckgf-api.php:74
+#: lib/class-convertkit-api.php:163
 msgid "Rate limit hit."
 msgstr ""
 
