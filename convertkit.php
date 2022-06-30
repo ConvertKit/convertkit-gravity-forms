@@ -47,7 +47,7 @@ require_once CKGF_PLUGIN_PATH . '/includes/class-wp-ckgf.php';
  *
  * @since   1.2.1
  */
-function WP_CKGF() { // phpcs:ignore
+function WP_CKGF() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName
 
 	return WP_CKGF::get_instance();
 
@@ -58,7 +58,7 @@ function WP_CKGF() { // phpcs:ignore
  *
  * @since   1.2.1
  */
-function WP_CKGF_Integration() { // phpcs:ignore
+function WP_CKGF_Integration() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName
 
 	return GFConvertKit::get_instance();
 
