@@ -86,5 +86,8 @@ class Plugin extends \Codeception\Module
 		// Review Request.
 		$I->dontHaveOptionInDatabase('convertkit-gravity-forms-review-request');
 		$I->dontHaveOptionInDatabase('convertkit-gravity-forms-review-dismissed');
+
+		// Users.
+		$I->dontHaveUserInDatabase('gravity_forms_user');
 	}
 }
