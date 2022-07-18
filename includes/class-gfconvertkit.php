@@ -23,7 +23,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_version = CKGF_PLUGIN_VERSION; // phpcs:ignore
+	protected $_version = CKGF_PLUGIN_VERSION; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds the minimum required Gravity Forms version for this integration
@@ -33,7 +33,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_min_gravityforms_version = CKGF_MIN_GF_VERSION; // phpcs:ignore
+	protected $_min_gravityforms_version = CKGF_MIN_GF_VERSION; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds the slug that stores settings and is used for referencing
@@ -43,7 +43,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_slug = CKGF_SLUG; // phpcs:ignore
+	protected $_slug = CKGF_SLUG; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds the path and filename to the Plugin.
@@ -51,9 +51,9 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.0.0
 	 *
 	 * @var     string
+	 * @phpstan-ignore-next-line
 	 */
-	// @phpstan-ignore-next-line
-	protected $_path = CKGF_PLUGIN_BASENAME; // phpcs:ignore
+	protected $_path = CKGF_PLUGIN_BASENAME; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds the full path to this Plugin.
@@ -62,7 +62,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_full_path = CKGF_PLUGIN_FILEPATH; // phpcs:ignore
+	protected $_full_path = CKGF_PLUGIN_FILEPATH; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds the full title of this Plugin.
@@ -70,9 +70,9 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.0.0
 	 *
 	 * @var     string
+	 * @phpstan-ignore-next-line
 	 */
-	// @phpstan-ignore-next-line
-	protected $_title = CKGF_TITLE; // phpcs:ignore
+	protected $_title = CKGF_TITLE; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds the short title of this Plugin.
@@ -80,9 +80,9 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.0.0
 	 *
 	 * @var     string
+	 * @phpstan-ignore-next-line
 	 */
-	// @phpstan-ignore-next-line
-	protected $_short_title = CKGF_SHORT_TITLE; // phpcs:ignore
+	protected $_short_title = CKGF_SHORT_TITLE; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds a list of capabilities to add to roles for Members plugin (https://wordpress.org/plugins/members/) integration.
@@ -91,7 +91,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     array
 	 */
-	protected $_capabilities = array( 'ckgf_convertkit_settings_page', 'ckgf_convertkit_form_page', 'ckgf_convertkit_uninstall' ); // phpcs:ignore
+	protected $_capabilities = array( 'ckgf_convertkit_settings_page', 'ckgf_convertkit_form_page', 'ckgf_convertkit_uninstall' ); // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds capabilities or roles that have access to this Plugin's Settings page.
@@ -100,7 +100,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_capabilities_settings_page = 'ckgf_convertkit_settings_page'; // phpcs:ignore
+	protected $_capabilities_settings_page = 'ckgf_convertkit_settings_page'; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds capabilities or roles that have access to this Plugin's Form Settings page.
@@ -109,7 +109,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_capabilities_form_settings = 'ckgf_convertkit_form_page'; // phpcs:ignore
+	protected $_capabilities_form_settings = 'ckgf_convertkit_form_page'; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds capabilities or roles that can install this Plugin.
@@ -118,7 +118,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     string
 	 */
-	protected $_capabilities_uninstall = 'ckgf_convertkit_uninstall'; // phpcs:ignore
+	protected $_capabilities_uninstall = 'ckgf_convertkit_uninstall'; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds the class object.
@@ -127,7 +127,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     object
 	 */
-	private static $_instance = null; // phpcs:ignore
+	private static $_instance = null; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds the API instance.
