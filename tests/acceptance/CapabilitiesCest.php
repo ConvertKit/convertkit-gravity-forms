@@ -232,6 +232,9 @@ class CapabilitiesCest
 	 */
 	public function _passed(AcceptanceTester $I)
 	{
+		// Log back in as an Administrator to perform Plugin deactivation.
+		$I->logOut();
+		$I->loginAsAdmin();
 		$I->deactivateConvertKitPlugin($I);
 		$I->deactivateThirdPartyPlugin($I, 'gravity-forms');
 		$I->resetConvertKitPlugin($I);
