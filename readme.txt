@@ -42,6 +42,9 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 
 == Changelog ==
 
+### 1.2.5 2022-07-xx
+* Fix: Capabilities: Correctly define capabilities for add-on settings, form settings and uninstall action
+
 ### 1.2.4 2022-06-23
 * Added: Support for WordPress 6.0
 

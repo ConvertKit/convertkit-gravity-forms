@@ -276,4 +276,51 @@ class GravityForms extends \Codeception\Module
 		$I->click('table.gf_entries tbody tr.entry_row:first-child a[aria-label="View this entry"]');
 		$I->dontSeeElementInDOM('#notes div[data-type="ckgf"]');
 	}
+
+	/**
+	 * Creates a role called 'gravity_forms'.
+	 * 
+	 * If the role exists, deletes it before creating.
+	 * 
+	 * @since 	1.2.5
+	 * 
+	 * @param 	AcceptanceTester 	$I 			Tester
+	 * @param 	bool 				$settings 	Role has access to Plugin's Settings
+	 * @param 	bool 				$form 		Role has access to Plugin's Form Settings
+	 * @param 	bool 				$uninstall 	Role has access to Plugin's Uninstallation action
+	 */
+	public function createGravityFormsRole($I, $settings = true, $form = true, $uninstall = true)
+	{
+		$I->deleteRole($I, 'gravity_forms');
+		$I->addRole($I, 'gravity_forms', [
+			// General.
+			'edit_dashboard' => true,
+			'read' => true,
+
+			// Gravity Forms.
+			'gravityforms_api_settings' => true,
+			'gravityforms_create_form' => true,
+			'gravityforms_delete_entries' => true,
+			'gravityforms_delete_forms' => true,
+			'gravityforms_edit_entries' => true,
+			'gravityforms_edit_entry_notes' => true,
+			'gravityforms_edit_forms' => true,
+			'gravityforms_edit_settings' => true,
+			'gravityforms_export_entries' => true,
+			'gravityforms_logging' => true,
+			'gravityforms_preview_forms' => true,
+			'gravityforms_system_status' => true,
+			'gravityforms_uninstall' => true,
+			'gravityforms_view_addons' => true,
+			'gravityforms_view_entries' => true,
+			'gravityforms_view_entry_notes' => true,
+			'gravityforms_view_settings' => true,
+			'gravityforms_view_updates' => true,
+
+			// Plugin.
+			'ckgf_convertkit_settings_page' => $settings,
+			'ckgf_convertkit_form_page' => $form,
+			'ckgf_convertkit_uninstall' => $uninstall,
+		]);
+	}
 }

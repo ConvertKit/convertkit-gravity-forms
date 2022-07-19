@@ -91,7 +91,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @var     array
 	 */
-	protected $_capabilities = array( 'ckgf_convertkit', 'ckgf_convertkit_uninstall' ); // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
+	protected $_capabilities = array( 'ckgf_convertkit_settings_page', 'ckgf_convertkit_form_page', 'ckgf_convertkit_uninstall' ); // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds capabilities or roles that have access to this Plugin's Settings page.
@@ -105,11 +105,11 @@ class GFConvertKit extends GFFeedAddOn {
 	/**
 	 * Holds capabilities or roles that have access to this Plugin's Form Settings page.
 	 *
-	 * @since   1.2.1
+	 * @since   1.2.5
 	 *
 	 * @var     string
 	 */
-	protected $_capabilities_form_page = 'ckgf_convertkit_form_page'; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
+	protected $_capabilities_form_settings = 'ckgf_convertkit_form_page'; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
 	 * Holds capabilities or roles that can install this Plugin.
