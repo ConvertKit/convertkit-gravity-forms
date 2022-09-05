@@ -176,6 +176,14 @@ jobs:
         working-directory: ${{ env.PLUGIN_DIR }}
         run: composer dump-autoload
 
+      # Confirm that expected files exist, to prevent deployment to wordpress.org
+      # if e.g. composer install fails.
+      - name: Check ConvertKit Library Exists
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "${{ env.PLUGIN_DIR }}/vendor/convertkit/convertkit-wordpress-libraries/src/class-convertkit-api.php, ${{ env.PLUGIN_DIR }}/vendor/convertkit/convertkit-wordpress-libraries/src/class-convertkit-log.php, ${{ env.PLUGIN_DIR }}/vendor/convertkit/convertkit-wordpress-libraries/src/class-convertkit-resource.php, ${{ env.PLUGIN_DIR }}/vendor/convertkit/convertkit-wordpress-libraries/src/class-convertkit-review-request.php"
+
       # This ensures the Plugin's log file can be written to.
       # We don't recursively do this, as it'll prevent Codeception from writing to the /tests/_output directory.
       - name: Set Permissions for Plugin Directory
