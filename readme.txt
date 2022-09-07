@@ -42,7 +42,7 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 
 == Changelog ==
 
-### 1.2.6 2022-09-05
+### 1.2.6 2022-09-07
 * Development: Moved /lib folder to managed repository
 
 ### 1.2.5 2022-07-20
