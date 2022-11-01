@@ -71,6 +71,91 @@ class ConvertKitAPI extends \Codeception\Module
 	}
 
 	/**
+	 * Checks if the given email address has the given tag.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I              AcceptanceTester.
+	 * @param   string           $emailAddress   Email Address.
+	 * @param   int              $tagID          Tag ID.
+	 */
+	public function apiCheckSubscriberHasTag($I, $emailAddress, $tagID)
+	{
+		// Get Subscribers.
+		$subscribers = $this->apiGetSubscribersByTagID($tagID);
+
+		$subscriberTagged = false;
+		foreach ($subscribers as $subscriber) {
+			if ($subscriber['subscriber']['email_address'] === $emailAddress) {
+				$subscriberTagged = true;
+				break;
+			}
+		}
+
+		// Check that the Subscriber is tagged.
+		$I->assertTrue($subscriberTagged);
+	}
+
+	/**
+	 * Checks if the given email address does not have the given tag.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I              AcceptanceTester.
+	 * @param   string           $emailAddress   Email Address.
+	 * @param   int              $tagID          Tag ID.
+	 */
+	public function apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $tagID)
+	{
+		// Get Subscribers.
+		$subscribers = $this->apiGetSubscribersByTagID($tagID);
+
+		$subscriberTagged = false;
+		foreach ($subscribers as $subscriber) {
+			if ($subscriber['subscriber']['email_address'] === $emailAddress) {
+				$subscriberTagged = true;
+				break;
+			}
+		}
+
+		// Check that the Subscriber is not tagged.
+		$I->assertFalse($subscriberTagged);
+	}
+
+	/**
+	 * Returns all subscribers to the given Tag ID from the API.
+	 *
+	 * @param   int $tagID  Tag ID.
+	 * @return  array
+	 */
+	public function apiGetSubscribersByTagID($tagID)
+	{
+		// Get first page of subscribers.
+		$subscribers = $this->apiRequest('tags/' . $tagID . '/subscriptions', 'GET');
+		$data        = $subscribers['subscriptions'];
+		$totalPages  = $subscribers['total_pages'];
+
+		if ($totalPages === 1) {
+			return $data;
+		}
+
+		// Get additional pages of purchases.
+		for ($page = 2; $page <= $totalPages; $page++) {
+			$subscribers = $this->apiRequest(
+				'tags/' . $tagID . '/subscriptions',
+				'GET',
+				[
+					'page' => $page,
+				]
+			);
+
+			$data = array_merge($data, $subscribers['subscriptions']);
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Sends a request to the ConvertKit API, typically used to read an endpoint to confirm
 	 * that data in an Acceptance Test was added/edited/deleted successfully.
 	 *

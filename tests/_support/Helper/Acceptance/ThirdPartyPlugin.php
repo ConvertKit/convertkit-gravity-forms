@@ -33,8 +33,16 @@ class ThirdPartyPlugin extends \Codeception\Module
 		// causing seePluginActivated() to fail.
 		$I->amOnPluginsPage();
 
-		// Check that the Plugin activated successfully.
-		$I->seePluginActivated($name);
+		// Some Plugins have a different slug when activated.
+		switch ($name) {
+			case 'gravity-forms':
+				$I->seePluginActivated('gravityforms');
+				break;
+
+			default:
+				$I->seePluginActivated($name);
+				break;
+		}
 
 		// Check that no PHP warnings or notices were output.
 		$I->checkNoWarningsAndNoticesOnScreen($I);
@@ -58,7 +66,16 @@ class ThirdPartyPlugin extends \Codeception\Module
 		$I->amOnPluginsPage();
 
 		// Deactivate the Plugin.
-		$I->deactivatePlugin($name);
+		// Some Plugins have a different slug when activated.
+		switch ($name) {
+			case 'gravity-forms':
+				$I->deactivatePlugin('gravityforms');
+				break;
+
+			default:
+				$I->deactivatePlugin($name);
+				break;
+		}
 
 		// Check that the Plugin deactivated successfully.
 		$I->seePluginDeactivated($name);
