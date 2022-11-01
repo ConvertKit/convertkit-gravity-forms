@@ -2,17 +2,17 @@
 /**
  * Tests that Feeds work with a Gravity Form and that subscriber data
  * is correctly sent to the API.
- * 
- * @since 	1.2.1
+ *
+ * @since   1.2.1
  */
 class FormCest
 {
 	/**
 	 * Run common actions before running the test functions in this class.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function _before(AcceptanceTester $I)
 	{
@@ -26,10 +26,10 @@ class FormCest
 	 * - Creating a Gravity Form's Form, and
 	 * - Adding a Feed to send entries to ConvertKit, and
 	 * - Submitting the Form on the frontend web site results in the email address subscribing to the ConvertKit Form.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeed(AcceptanceTester $I)
 	{
@@ -43,8 +43,8 @@ class FormCest
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
 		// Define Name, Email Address and Custom Field Data for this Test.
-		$firstName = 'First';
-		$lastName = 'Last';
+		$firstName    = 'First';
+		$lastName     = 'Last';
 		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
@@ -90,10 +90,10 @@ class FormCest
 	 * Test that the Plugin shows an error when:
 	 * - Creating a Gravity Form's Form, and
 	 * - Adding a Feed to send entries to ConvertKit, with no ConvertKit Form selected.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeedWithNoConvertKitFormSelected(AcceptanceTester $I)
 	{
@@ -119,8 +119,8 @@ class FormCest
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
 		// Define Name, Email Address and Custom Field Data for this Test.
-		$firstName = 'First';
-		$lastName = 'Last';
+		$firstName    = 'First';
+		$lastName     = 'Last';
 		$emailAddress = $I->generateEmailAddress();
 
 		// Logout as the WordPress Administrator.
@@ -162,10 +162,10 @@ class FormCest
 	 * - Creating a Gravity Form's Form, and
 	 * - Adding a Feed to send entries to ConvertKit,
 	 * - Submitting the Form on the frontend web site, without an email address, results in no attempt to send data to ConvertKit.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeedWithNoEmailAddressSpecified(AcceptanceTester $I)
 	{
@@ -184,7 +184,7 @@ class FormCest
 
 		// Define Name.
 		$firstName = 'First';
-		$lastName = 'Last';
+		$lastName  = 'Last';
 
 		// Logout as the WordPress Administrator.
 		$I->logOut();
@@ -216,12 +216,12 @@ class FormCest
 	/**
 	 * Test that the Plugin works when:
 	 * - Creating a Gravity Form's Form, and
-	 * - Adding a Feed to send entries to ConvertKit, with the Email mapped to a non-Email field 
+	 * - Adding a Feed to send entries to ConvertKit, with the Email mapped to a non-Email field
 	 * - Submitting the Form on the frontend web site, with an invalid formatted email address, results in no attempt to send data to ConvertKit.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeedWithInvalidEmailAddressSpecified(AcceptanceTester $I)
 	{
@@ -243,7 +243,7 @@ class FormCest
 
 		// Define Name.
 		$firstName = 'First';
-		$lastName = 'Last';
+		$lastName  = 'Last';
 
 		// Logout as the WordPress Administrator.
 		$I->logOut();
@@ -278,10 +278,10 @@ class FormCest
 	 * - Adding a Feed to send entries to ConvertKit, with a Tag selected, and
 	 * - Submitting the Form on the frontend web site, with a Tag selected from the <select> field, results in the email address subscribing to the ConvertKit Form, and
 	 * - The subscribed email address has the expected ConvertKit Tag assigned to it.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeedWithTagAndFieldTagSelected(AcceptanceTester $I)
 	{
@@ -301,8 +301,8 @@ class FormCest
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
 		// Define Name, Email Address and Custom Field Data for this Test.
-		$firstName = 'First';
-		$lastName = 'Last';
+		$firstName    = 'First';
+		$lastName     = 'Last';
 		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
@@ -357,10 +357,10 @@ class FormCest
 	 * - Adding a Feed to send entries to ConvertKit, and
 	 * - Submitting the Form on the frontend web site, with a Tag selected from the <select> field, results in the email address subscribing to the ConvertKit Form, and
 	 * - The subscribed email address has the expected ConvertKit Tag assigned to it.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeedWithFieldTagSelected(AcceptanceTester $I)
 	{
@@ -380,8 +380,8 @@ class FormCest
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
 		// Define Name, Email Address and Custom Field Data for this Test.
-		$firstName = 'First';
-		$lastName = 'Last';
+		$firstName    = 'First';
+		$lastName     = 'Last';
 		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
@@ -436,10 +436,10 @@ class FormCest
 	 * - Adding a Feed to send entries to ConvertKit, and
 	 * - Submitting the Form on the frontend web site, with an Invalid Tag selected from the <select> field, results in the email address subscribing to the ConvertKit Form, and
 	 * - The subscribed email address has no ConvertKit Tag assigned to it, as the Tag selected does not exist.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeedWithInvalidFieldTagSelected(AcceptanceTester $I)
 	{
@@ -459,8 +459,8 @@ class FormCest
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
 		// Define Name, Email Address and Custom Field Data for this Test.
-		$firstName = 'First';
-		$lastName = 'Last';
+		$firstName    = 'First';
+		$lastName     = 'Last';
 		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
@@ -515,10 +515,10 @@ class FormCest
 	 * - Adding a Feed to send entries to ConvertKit, with a Tag selected, and
 	 * - Submitting the Form on the frontend web site results in the email address subscribing to the ConvertKit Form, and
 	 * - The subscribed email address has the expected ConvertKit Tag assigned to it.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeedWithTagSelected(AcceptanceTester $I)
 	{
@@ -538,8 +538,8 @@ class FormCest
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
 		// Define Name, Email Address and Custom Field Data for this Test.
-		$firstName = 'First';
-		$lastName = 'Last';
+		$firstName    = 'First';
+		$lastName     = 'Last';
 		$emailAddress = $I->generateEmailAddress();
 		$customFields = [
 			'last_name' => $lastName,
@@ -593,10 +593,10 @@ class FormCest
 	 * - Adding a Feed to send entries to ConvertKit, and
 	 * - Disabling the Feed (meaning no entries should be sent to ConvertKit), and
 	 * - Submitting the Form on the frontend web site results in the email address not being subscribed to the ConvertKit Form.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testCreateFormAndFeedDisabled(AcceptanceTester $I)
 	{
@@ -618,8 +618,8 @@ class FormCest
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
 		// Define Name, Email Address and Custom Field Data for this Test.
-		$firstName = 'First';
-		$lastName = 'Last';
+		$firstName    = 'First';
+		$lastName     = 'Last';
 		$emailAddress = $I->generateEmailAddress();
 
 		// Logout as the WordPress Administrator.
@@ -664,10 +664,10 @@ class FormCest
 	 * Deactivate and reset Plugin(s) after each test, if the test passes.
 	 * We don't use _after, as this would provide a screenshot of the Plugin
 	 * deactivation and not the true test error.
-	 * 
-	 * @since 	1.2.2
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.2
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function _passed(AcceptanceTester $I)
 	{

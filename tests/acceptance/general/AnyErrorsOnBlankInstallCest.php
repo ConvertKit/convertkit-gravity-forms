@@ -5,10 +5,10 @@ class AnyErrorsOnBlankInstallCest
 	/**
 	 * Check that no PHP errors or notices are displayed at Gravity Forms > Settings > ConvertKit, when the Plugin is activated
 	 * and not configured.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testSettingsScreen(AcceptanceTester $I)
 	{

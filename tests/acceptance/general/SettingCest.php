@@ -1,17 +1,17 @@
 <?php
 /**
  * Tests the Settings at Forms > Settings > ConvertKit.
- * 
- * @since 	1.2.1
+ *
+ * @since   1.2.1
  */
 class SettingCest
 {
 	/**
 	 * Run common actions before running the test functions in this class.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function _before(AcceptanceTester $I)
 	{
@@ -22,10 +22,10 @@ class SettingCest
 	/**
 	 * Test that no PHP errors or notices are displayed on the Plugin's Setting screen when the Update Settings
 	 * button is pressed and no settings are specified at Gravity Forms > Settings > ConvertKit.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testSaveBlankSettings(AcceptanceTester $I)
 	{
@@ -46,10 +46,10 @@ class SettingCest
 	 * Test that no PHP errors or notices are displayed on the Plugin's Setting screen,
 	 * and no warning is displayed that the supplied API credentials are invalid, when
 	 * saving valid API credentials at WooCommerce > Settings > Integration > ConvertKit.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testSaveValidAPICredentials(AcceptanceTester $I)
 	{
@@ -61,10 +61,10 @@ class SettingCest
 	 * Test that no PHP errors or notices are displayed on the Plugin's Setting screen,
 	 * and a warning is displayed that the supplied API credentials are invalid, when
 	 * saving invalid API credentials at WooCommerce > Settings > Integration > ConvertKit.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testSaveInvalidAPICredentials(AcceptanceTester $I)
 	{
@@ -73,7 +73,7 @@ class SettingCest
 
 		// Complete API Fields.
 		$I->fillField('_gform_setting_api_key', 'invalidApiKey');
-		
+
 		// Click the Save Settings button.
 		$I->click('#gform-settings-save');
 
@@ -93,10 +93,10 @@ class SettingCest
 	/**
 	 * Test that no PHP errors or notices are displayed on the Plugin's Setting screen when the Debug option
 	 * is enabled and disabled, and that the setting is honored.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function testEnableAndDisableDebug(AcceptanceTester $I)
 	{
@@ -132,10 +132,10 @@ class SettingCest
 	 * Deactivate and reset Plugin(s) after each test, if the test passes.
 	 * We don't use _after, as this would provide a screenshot of the Plugin
 	 * deactivation and not the true test error.
-	 * 
-	 * @since 	1.2.2
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.2
+	 *
+	 * @param   AcceptanceTester $I  Tester
 	 */
 	public function _passed(AcceptanceTester $I)
 	{

@@ -10,10 +10,10 @@ class ThirdPartyPlugin extends \Codeception\Module
 	/**
 	 * Helper method to activate a third party Plugin, checking
 	 * it activated and no errors were output.
-	 * 
-	 * @since 	1.9.6.7
-	 * 
-	 * @param 	string 	$name 	Plugin Slug.
+	 *
+	 * @since   1.9.6.7
+	 *
+	 * @param   string $name   Plugin Slug.
 	 */
 	public function activateThirdPartyPlugin($I, $name)
 	{
@@ -27,7 +27,7 @@ class ThirdPartyPlugin extends \Codeception\Module
 		$I->activatePlugin($name);
 
 		// Some Plugins have a different slug when activated.
-		switch($name) {
+		switch ($name) {
 			case 'gravity-forms':
 				$I->seePluginActivated('gravityforms');
 				break;
@@ -44,10 +44,10 @@ class ThirdPartyPlugin extends \Codeception\Module
 	/**
 	 * Helper method to activate a third party Plugin, checking
 	 * it activated and no errors were output.
-	 * 
-	 * @since 	1.9.6.7
-	 * 
-	 * @param 	string 	$name 	Plugin Slug.
+	 *
+	 * @since   1.9.6.7
+	 *
+	 * @param   string $name   Plugin Slug.
 	 */
 	public function deactivateThirdPartyPlugin($I, $name)
 	{
@@ -58,7 +58,7 @@ class ThirdPartyPlugin extends \Codeception\Module
 		$I->amOnPluginsPage();
 
 		// Some Plugins have a different slug when activated/deactivated.
-		switch($name) {
+		switch ($name) {
 			case 'gravity-forms':
 				$I->deactivatePlugin('gravityforms');
 				$I->seePluginDeactivated('gravity-forms');

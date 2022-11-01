@@ -9,11 +9,11 @@ class GravityForms extends \Codeception\Module
 {
 	/**
 	 * Creates a Gravity Forms Form.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I  				AcceptanceTester.
-	 * @return 	int 					Form ID.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I                  AcceptanceTester.
+	 * @return  int                     Form ID.
 	 */
 	public function createGravityFormsForm($I)
 	{
@@ -21,7 +21,7 @@ class GravityForms extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_new_form');
 
 		// Define Title.
-		$I->fillField('#new_form_title', 'ConvertKit Form Test: '.date('Y-m-d H:i:s').' on PHP '.PHP_VERSION_ID);
+		$I->fillField('#new_form_title', 'ConvertKit Form Test: ' . date('Y-m-d H:i:s') . ' on PHP ' . PHP_VERSION_ID);
 
 		// Click Create Form button.
 		$I->click('Create Form');
@@ -65,11 +65,11 @@ class GravityForms extends \Codeception\Module
 
 		// Show Values.
 		$I->click('#choices-ui-flyout .gform-flyout__body label[for=field_choice_values_enabled]');
-		
+
 		// Define Tags.
 		$I->fillField('#select_choice_text_0', 'Select Tag');
 		$I->fillField('#select_choice_value_0', '');
-		
+
 		$I->fillField('#select_choice_text_1', 'Tag Label 1');
 		$I->fillField('#select_choice_value_1', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME']);
 
@@ -78,7 +78,7 @@ class GravityForms extends \Codeception\Module
 
 		// Close Choices flyout.
 		$I->click('#choices-ui-flyout .gform-flyout__close');
-	
+
 		// Update.
 		$I->click('button.update-form');
 
@@ -88,15 +88,15 @@ class GravityForms extends \Codeception\Module
 
 	/**
 	 * Creates a Gravity Forms ConvertKit Feed (a feed sends form entries to ConvertKit) for the given Gravity Form.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 				AcceptanceTester.
-	 * @param 	int 				$gravityFormID 	Gravity Forms Form ID.
-	 * @param 	string 				$formName 		ConvertKit Form Name.
-	 * @param 	mixed 				$tagName 		ConvertKit Tag Name.
-	 * @param 	bool				$mapTagField 	Whether to map the Tag field.
-	 * @param 	mixed 				$emailFieldName Gravity Forms Field Name to map to ConvertKit Email Address.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I              AcceptanceTester.
+	 * @param   int              $gravityFormID  Gravity Forms Form ID.
+	 * @param   string           $formName       ConvertKit Form Name.
+	 * @param   mixed            $tagName        ConvertKit Tag Name.
+	 * @param   bool             $mapTagField    Whether to map the Tag field.
+	 * @param   mixed            $emailFieldName Gravity Forms Field Name to map to ConvertKit Email Address.
 	 */
 	public function createGravityFormsFeed($I, $gravityFormID, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email')
 	{
@@ -134,14 +134,14 @@ class GravityForms extends \Codeception\Module
 
 	/**
 	 * Completes form fields for a Gravity Forms ConvertKit Feed Settings.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 				AcceptanceTester.
-	 * @param 	string 				$formName 		ConvertKit Form Name.
-	 * @param 	mixed 				$tagName 		ConvertKit Tag Name.
-	 * @param 	bool				$mapTagField 	Whether to map the Tag field.
-	 * @param 	mixed 				$emailFieldName Gravity Forms Field Name to map to ConvertKit Email Address.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I              AcceptanceTester.
+	 * @param   string           $formName       ConvertKit Form Name.
+	 * @param   mixed            $tagName        ConvertKit Tag Name.
+	 * @param   bool             $mapTagField    Whether to map the Tag field.
+	 * @param   mixed            $emailFieldName Gravity Forms Field Name to map to ConvertKit Email Address.
 	 */
 	public function completeGravityFormsFeedFields($I, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email')
 	{
@@ -179,12 +179,12 @@ class GravityForms extends \Codeception\Module
 
 	/**
 	 * Disables the given feed for the given Gravity Form ID.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 					AcceptanceTester.
-	 * @param 	int 				$gravityFormID 		Gravity Forms Form ID.
-	 * @param 	int 				$gravityFormFeedID 	Gravity Forms Feed ID.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I                  AcceptanceTester.
+	 * @param   int              $gravityFormID      Gravity Forms Form ID.
+	 * @param   int              $gravityFormFeedID  Gravity Forms Feed ID.
 	 */
 	public function disableGravityFormsFeed($I, $gravityFormID, $gravityFormFeedID = 1)
 	{
@@ -198,28 +198,30 @@ class GravityForms extends \Codeception\Module
 	/**
 	 * Creates a WordPress Page with the Gravity Form shortcode as the content
 	 * to render the Gravity Form.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 				AcceptanceTester.
-	 * @param 	int 				$gravityFormID 	Gravity Forms Form ID.
-	 * @return 	int 								Page ID
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I              AcceptanceTester.
+	 * @param   int              $gravityFormID  Gravity Forms Form ID.
+	 * @return  int                                 Page ID
 	 */
 	public function createPageWithGravityFormShortcode($I, $gravityFormID)
 	{
-		return $I->havePostInDatabase([
-			'post_type'		=> 'page',
-			'post_status'	=> 'publish',
-			'post_name' 	=> 'gravity-form-' . $gravityFormID,
-			'post_title'	=> 'Gravity Form #' . $gravityFormID,
-			'post_content'	=> '[gravityform id="' . $gravityFormID . '" title="false" description="false"]',
-		]);
+		return $I->havePostInDatabase(
+			[
+				'post_type'    => 'page',
+				'post_status'  => 'publish',
+				'post_name'    => 'gravity-form-' . $gravityFormID,
+				'post_title'   => 'Gravity Form #' . $gravityFormID,
+				'post_content' => '[gravityform id="' . $gravityFormID . '" title="false" description="false"]',
+			]
+		);
 	}
 
 	/**
 	 * Checks that a success or error note was added by the Plugin to the most recent Gravity Forms Entry.
-	 * 
-	 * @since 	1.2.1
+	 *
+	 * @since   1.2.1
 	 */
 	public function checkGravityFormsNotesExist($I)
 	{
@@ -234,8 +236,8 @@ class GravityForms extends \Codeception\Module
 
 	/**
 	 * Checks that a success note was added by the Plugin to the most recent Gravity Forms Entry.
-	 * 
-	 * @since 	1.2.1
+	 *
+	 * @since   1.2.1
 	 */
 	public function checkGravityFormsSuccessNotesExist($I)
 	{
@@ -250,8 +252,8 @@ class GravityForms extends \Codeception\Module
 
 	/**
 	 * Checks that an error note was added by the Plugin to the most recent Gravity Forms Entry.
-	 * 
-	 * @since 	1.2.1
+	 *
+	 * @since   1.2.1
 	 */
 	public function checkGravityFormsErrorNotesExist($I)
 	{
@@ -266,8 +268,8 @@ class GravityForms extends \Codeception\Module
 
 	/**
 	 * Checks that no Notes were added by the Plugin to the most recent Gravity Forms Entry.
-	 * 
-	 * @since 	1.2.1
+	 *
+	 * @since   1.2.1
 	 */
 	public function checkGravityFormsNotesDoNotExist($I)
 	{
@@ -279,48 +281,52 @@ class GravityForms extends \Codeception\Module
 
 	/**
 	 * Creates a role called 'gravity_forms'.
-	 * 
+	 *
 	 * If the role exists, deletes it before creating.
-	 * 
-	 * @since 	1.2.5
-	 * 
-	 * @param 	AcceptanceTester 	$I 			Tester
-	 * @param 	bool 				$settings 	Role has access to Plugin's Settings
-	 * @param 	bool 				$form 		Role has access to Plugin's Form Settings
-	 * @param 	bool 				$uninstall 	Role has access to Plugin's Uninstallation action
+	 *
+	 * @since   1.2.5
+	 *
+	 * @param   AcceptanceTester $I          Tester
+	 * @param   bool             $settings   Role has access to Plugin's Settings
+	 * @param   bool             $form       Role has access to Plugin's Form Settings
+	 * @param   bool             $uninstall  Role has access to Plugin's Uninstallation action
 	 */
 	public function createGravityFormsRole($I, $settings = true, $form = true, $uninstall = true)
 	{
 		$I->deleteRole($I, 'gravity_forms');
-		$I->addRole($I, 'gravity_forms', [
-			// General.
-			'edit_dashboard' => true,
-			'read' => true,
+		$I->addRole(
+			$I,
+			'gravity_forms',
+			[
+				// General.
+				'edit_dashboard'                => true,
+				'read'                          => true,
 
-			// Gravity Forms.
-			'gravityforms_api_settings' => true,
-			'gravityforms_create_form' => true,
-			'gravityforms_delete_entries' => true,
-			'gravityforms_delete_forms' => true,
-			'gravityforms_edit_entries' => true,
-			'gravityforms_edit_entry_notes' => true,
-			'gravityforms_edit_forms' => true,
-			'gravityforms_edit_settings' => true,
-			'gravityforms_export_entries' => true,
-			'gravityforms_logging' => true,
-			'gravityforms_preview_forms' => true,
-			'gravityforms_system_status' => true,
-			'gravityforms_uninstall' => true,
-			'gravityforms_view_addons' => true,
-			'gravityforms_view_entries' => true,
-			'gravityforms_view_entry_notes' => true,
-			'gravityforms_view_settings' => true,
-			'gravityforms_view_updates' => true,
+				// Gravity Forms.
+				'gravityforms_api_settings'     => true,
+				'gravityforms_create_form'      => true,
+				'gravityforms_delete_entries'   => true,
+				'gravityforms_delete_forms'     => true,
+				'gravityforms_edit_entries'     => true,
+				'gravityforms_edit_entry_notes' => true,
+				'gravityforms_edit_forms'       => true,
+				'gravityforms_edit_settings'    => true,
+				'gravityforms_export_entries'   => true,
+				'gravityforms_logging'          => true,
+				'gravityforms_preview_forms'    => true,
+				'gravityforms_system_status'    => true,
+				'gravityforms_uninstall'        => true,
+				'gravityforms_view_addons'      => true,
+				'gravityforms_view_entries'     => true,
+				'gravityforms_view_entry_notes' => true,
+				'gravityforms_view_settings'    => true,
+				'gravityforms_view_updates'     => true,
 
-			// Plugin.
-			'ckgf_convertkit_settings_page' => $settings,
-			'ckgf_convertkit_form_page' => $form,
-			'ckgf_convertkit_uninstall' => $uninstall,
-		]);
+				// Plugin.
+				'ckgf_convertkit_settings_page' => $settings,
+				'ckgf_convertkit_form_page'     => $form,
+				'ckgf_convertkit_uninstall'     => $uninstall,
+			]
+		);
 	}
 }
