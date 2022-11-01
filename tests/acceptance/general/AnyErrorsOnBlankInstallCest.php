@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Tests that no errors are output when activating the Plugin on
+ * a blank installation
+ *
+ * @since   1.2.2
+ */
 class AnyErrorsOnBlankInstallCest
 {
 	/**
@@ -8,7 +13,7 @@ class AnyErrorsOnBlankInstallCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testSettingsScreen(AcceptanceTester $I)
 	{

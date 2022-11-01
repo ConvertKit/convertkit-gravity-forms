@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Tests Plugin activation and deactivation works without errors
+ *
+ * @since   1.2.2
+ */
 class ActivateDeactivatePluginCest
 {
 	/**
@@ -8,7 +12,7 @@ class ActivateDeactivatePluginCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testPluginActivationDeactivation(AcceptanceTester $I)
 	{
@@ -24,7 +28,7 @@ class ActivateDeactivatePluginCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testPluginActivationDeactivationWithoutGravityForms(AcceptanceTester $I)
 	{
