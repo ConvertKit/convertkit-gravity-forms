@@ -1,17 +1,17 @@
 <?php
 /**
  * Tests the ConvertKit Review Notification.
- * 
- * @since 	1.2.2
+ *
+ * @since   1.2.2
  */
 class ReviewRequestCest
 {
 	/**
 	 * Run common actions before running the test functions in this class.
-	 * 
-	 * @since 	1.2.2
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.2
+	 *
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function _before(AcceptanceTester $I)
 	{
@@ -21,10 +21,10 @@ class ReviewRequestCest
 	/**
 	 * Test that the review request is displayed when the options table entries
 	 * have the required values to display the review request notification.
-	 * 
-	 * @since 	1.2.2
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.2
+	 *
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testReviewRequestNotificationDisplayed(AcceptanceTester $I)
 	{
@@ -46,10 +46,10 @@ class ReviewRequestCest
 	/**
 	 * Test that the review request is dismissed and does not reappear
 	 * on a subsequent page load.
-	 * 
-	 * @since 	1.2.2
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.2
+	 *
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testReviewRequestNotificationDismissed(AcceptanceTester $I)
 	{
@@ -77,10 +77,10 @@ class ReviewRequestCest
 	 * Deactivate and reset Plugin(s) after each test, if the test passes.
 	 * We don't use _after, as this would provide a screenshot of the Plugin
 	 * deactivation and not the true test error.
-	 * 
-	 * @since 	1.2.2
-	 * 
-	 * @param 	AcceptanceTester 	$I 	Tester
+	 *
+	 * @since   1.2.2
+	 *
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function _passed(AcceptanceTester $I)
 	{

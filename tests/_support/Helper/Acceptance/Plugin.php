@@ -1,17 +1,21 @@
 <?php
 namespace Helper\Acceptance;
 
-// Define any custom actions related to the ConvertKit Plugin that
-// would be used across multiple tests.
-// These are then available in $I->{yourFunctionName}
-
+/**
+ * Helper methods and actions related to the ConvertKit Plugin,
+ * which are then available using $I->{yourFunctionName}.
+ *
+ * @since   1.2.1
+ */
 class Plugin extends \Codeception\Module
 {
 	/**
 	 * Helper method to activate the ConvertKit Plugin, checking
 	 * it activated and no errors were output.
-	 * 
-	 * @since 	1.9.6
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I AcceptanceTester.
 	 */
 	public function activateConvertKitPlugin($I)
 	{
@@ -21,8 +25,10 @@ class Plugin extends \Codeception\Module
 	/**
 	 * Helper method to deactivate the ConvertKit Plugin, checking
 	 * it activated and no errors were output.
-	 * 
-	 * @since 	1.9.6
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I AcceptanceTester.
 	 */
 	public function deactivateConvertKitPlugin($I)
 	{
@@ -31,10 +37,10 @@ class Plugin extends \Codeception\Module
 
 	/**
 	 * Helper method to setup the Plugin's API Key and Secret, and enable the integration.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	AcceptanceTester.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  AcceptanceTester.
 	 */
 	public function setupConvertKitPlugin($I)
 	{
@@ -43,7 +49,7 @@ class Plugin extends \Codeception\Module
 
 		// Complete API Fields.
 		$I->fillField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
-		
+
 		// Click the Save Settings button.
 		$I->click('#gform-settings-save');
 
@@ -59,10 +65,10 @@ class Plugin extends \Codeception\Module
 
 	/**
 	 * Helper method to load the Gravity Forms > Settings > ConvertKit screen.
-	 * 
-	 * @since 	1.2.1
-	 * 
-	 * @param 	AcceptanceTester 	$I 	AcceptanceTester.
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I  AcceptanceTester.
 	 */
 	public function loadConvertKitSettingsScreen($I)
 	{
@@ -74,8 +80,10 @@ class Plugin extends \Codeception\Module
 
 	/**
 	 * Helper method to reset the ConvertKit Plugin settings, as if it's a clean installation.
-	 * 
-	 * @since 	1.2.2
+	 *
+	 * @since   1.2.2
+	 *
+	 * @param   AcceptanceTester $I AcceptanceTester.
 	 */
 	public function resetConvertKitPlugin($I)
 	{
