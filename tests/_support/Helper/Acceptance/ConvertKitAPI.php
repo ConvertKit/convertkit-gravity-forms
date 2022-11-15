@@ -1,17 +1,19 @@
 <?php
 namespace Helper\Acceptance;
 
-// Define any custom actions related to the ConvertKit API that
-// would be used across multiple tests.
-// These are then available in $I->{yourFunctionName}
-
+/**
+ * Helper methods and actions related to the ConvertKit API,
+ * which are then available using $I->{yourFunctionName}.
+ *
+ * @since   1.9.6
+ */
 class ConvertKitAPI extends \Codeception\Module
 {
 	/**
 	 * Check the given email address exists as a subscriber.
 	 *
-	 * @param   AcceptanceTester $I             AcceptanceTester
-	 * @param   string           $emailAddress   Email Address
+	 * @param   AcceptanceTester $I             AcceptanceTester.
+	 * @param   string           $emailAddress   Email Address.
 	 */
 	public function apiCheckSubscriberExists($I, $emailAddress)
 	{
@@ -32,8 +34,8 @@ class ConvertKitAPI extends \Codeception\Module
 	/**
 	 * Check the given email address does not exists as a subscriber.
 	 *
-	 * @param   AcceptanceTester $I             AcceptanceTester
-	 * @param   string           $emailAddress   Email Address
+	 * @param   AcceptanceTester $I             AcceptanceTester.
+	 * @param   string           $emailAddress   Email Address.
 	 */
 	public function apiCheckSubscriberDoesNotExist($I, $emailAddress)
 	{
@@ -54,7 +56,7 @@ class ConvertKitAPI extends \Codeception\Module
 	 * Unsubscribes the given email address. Useful for clearing the API
 	 * between tests.
 	 *
-	 * @param   string $emailAddress   Email Address
+	 * @param   string $emailAddress   Email Address.
 	 */
 	public function apiUnsubscribe($emailAddress)
 	{
@@ -73,9 +75,9 @@ class ConvertKitAPI extends \Codeception\Module
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   $I
-	 * @param   $emailAddress   Email Address.
-	 * @param   $tagID          Tag ID.
+	 * @param   AcceptanceTester $I              AcceptanceTester.
+	 * @param   string           $emailAddress   Email Address.
+	 * @param   int              $tagID          Tag ID.
 	 */
 	public function apiCheckSubscriberHasTag($I, $emailAddress, $tagID)
 	{
@@ -84,7 +86,7 @@ class ConvertKitAPI extends \Codeception\Module
 
 		$subscriberTagged = false;
 		foreach ($subscribers as $subscriber) {
-			if ($subscriber['subscriber']['email_address'] == $emailAddress) {
+			if ($subscriber['subscriber']['email_address'] === $emailAddress) {
 				$subscriberTagged = true;
 				break;
 			}
@@ -99,9 +101,9 @@ class ConvertKitAPI extends \Codeception\Module
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   $I
-	 * @param   $emailAddress   Email Address.
-	 * @param   $tagID          Tag ID.
+	 * @param   AcceptanceTester $I              AcceptanceTester.
+	 * @param   string           $emailAddress   Email Address.
+	 * @param   int              $tagID          Tag ID.
 	 */
 	public function apiCheckSubscriberDoesNotHaveTag($I, $emailAddress, $tagID)
 	{
@@ -110,7 +112,7 @@ class ConvertKitAPI extends \Codeception\Module
 
 		$subscriberTagged = false;
 		foreach ($subscribers as $subscriber) {
-			if ($subscriber['subscriber']['email_address'] == $emailAddress) {
+			if ($subscriber['subscriber']['email_address'] === $emailAddress) {
 				$subscriberTagged = true;
 				break;
 			}
@@ -133,7 +135,7 @@ class ConvertKitAPI extends \Codeception\Module
 		$data        = $subscribers['subscriptions'];
 		$totalPages  = $subscribers['total_pages'];
 
-		if ($totalPages == 1) {
+		if ($totalPages === 1) {
 			return $data;
 		}
 
@@ -157,9 +159,9 @@ class ConvertKitAPI extends \Codeception\Module
 	 * Sends a request to the ConvertKit API, typically used to read an endpoint to confirm
 	 * that data in an Acceptance Test was added/edited/deleted successfully.
 	 *
-	 * @param   string $endpoint   Endpoint
-	 * @param   string $method     Method (GET|POST|PUT)
-	 * @param   array  $params     Endpoint Parameters
+	 * @param   string $endpoint   Endpoint.
+	 * @param   string $method     Method (GET|POST|PUT).
+	 * @param   array  $params     Endpoint Parameters.
 	 */
 	public function apiRequest($endpoint, $method = 'GET', $params = array())
 	{

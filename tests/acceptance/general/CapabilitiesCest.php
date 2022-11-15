@@ -14,7 +14,7 @@ class CapabilitiesCest
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function _before(AcceptanceTester $I)
 	{
@@ -29,7 +29,7 @@ class CapabilitiesCest
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testAddOnSettingsWhenCapabilityEnabledForRole(AcceptanceTester $I)
 	{
@@ -65,7 +65,7 @@ class CapabilitiesCest
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testAddOnSettingsWhenCapabilityDisabledForRole(AcceptanceTester $I)
 	{
@@ -101,7 +101,7 @@ class CapabilitiesCest
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testFormSettingsWhenCapabilityEnabledForRole(AcceptanceTester $I)
 	{
@@ -140,7 +140,7 @@ class CapabilitiesCest
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testFormSettingsWhenCapabilityDisabledForRole(AcceptanceTester $I)
 	{
@@ -179,7 +179,7 @@ class CapabilitiesCest
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testUninstallWhenCapabilityEnabledForRole(AcceptanceTester $I)
 	{
@@ -215,7 +215,7 @@ class CapabilitiesCest
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testUninstallWhenCapabilityDisabledForRole(AcceptanceTester $I)
 	{
@@ -252,7 +252,7 @@ class CapabilitiesCest
 	 *
 	 * @since   1.2.2
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function _passed(AcceptanceTester $I)
 	{

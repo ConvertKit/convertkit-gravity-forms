@@ -1,10 +1,12 @@
 <?php
 namespace Helper\Acceptance;
 
-// Define any custom actions related to the Gravity Forms Plugin that
-// would be used across multiple tests.
-// These are then available in $I->{yourFunctionName}
-
+/**
+ * Helper methods and actions related to the Gravity Forms Plugin,
+ * which are then available using $I->{yourFunctionName}.
+ *
+ * @since   1.2.1
+ */
 class GravityForms extends \Codeception\Module
 {
 	/**
@@ -12,7 +14,7 @@ class GravityForms extends \Codeception\Module
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I                  AcceptanceTester.
+	 * @param   AcceptanceTester $I     AcceptanceTester.
 	 * @return  int                     Form ID.
 	 */
 	public function createGravityFormsForm($I)
@@ -191,7 +193,7 @@ class GravityForms extends \Codeception\Module
 		// Load Form's ConvertKit Feed Settings.
 		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
 
-		// Deactivate the Feed
+		// Deactivate the Feed.
 		$I->click('table.feeds tbody tr:nth-child(' . $gravityFormFeedID . ') th.manage-column button.gform-status--active');
 	}
 
@@ -222,6 +224,8 @@ class GravityForms extends \Codeception\Module
 	 * Checks that a success or error note was added by the Plugin to the most recent Gravity Forms Entry.
 	 *
 	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I AcceptanceTester.
 	 */
 	public function checkGravityFormsNotesExist($I)
 	{
@@ -238,6 +242,8 @@ class GravityForms extends \Codeception\Module
 	 * Checks that a success note was added by the Plugin to the most recent Gravity Forms Entry.
 	 *
 	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I AcceptanceTester.
 	 */
 	public function checkGravityFormsSuccessNotesExist($I)
 	{
@@ -254,6 +260,8 @@ class GravityForms extends \Codeception\Module
 	 * Checks that an error note was added by the Plugin to the most recent Gravity Forms Entry.
 	 *
 	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I AcceptanceTester.
 	 */
 	public function checkGravityFormsErrorNotesExist($I)
 	{
@@ -270,6 +278,8 @@ class GravityForms extends \Codeception\Module
 	 * Checks that no Notes were added by the Plugin to the most recent Gravity Forms Entry.
 	 *
 	 * @since   1.2.1
+	 *
+	 * @param   AcceptanceTester $I AcceptanceTester.
 	 */
 	public function checkGravityFormsNotesDoNotExist($I)
 	{
@@ -286,10 +296,10 @@ class GravityForms extends \Codeception\Module
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I          Tester
-	 * @param   bool             $settings   Role has access to Plugin's Settings
-	 * @param   bool             $form       Role has access to Plugin's Form Settings
-	 * @param   bool             $uninstall  Role has access to Plugin's Uninstallation action
+	 * @param   AcceptanceTester $I          Tester.
+	 * @param   bool             $settings   Role has access to Plugin's Settings.
+	 * @param   bool             $form       Role has access to Plugin's Form Settings.
+	 * @param   bool             $uninstall  Role has access to Plugin's Uninstallation action.
 	 */
 	public function createGravityFormsRole($I, $settings = true, $form = true, $uninstall = true)
 	{

@@ -1,10 +1,12 @@
 <?php
 namespace Helper\Acceptance;
 
-// Define any custom actions related to the ConvertKit Plugin that
-// would be used across multiple tests.
-// These are then available in $I->{yourFunctionName}
-
+/**
+ * Helper methods and actions related to WordPress Roles,
+ * which are then available using $I->{yourFunctionName}.
+ *
+ * @since   1.2.1
+ */
 class Roles extends \Codeception\Module
 {
 	/**
@@ -12,9 +14,9 @@ class Roles extends \Codeception\Module
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I              Tester
-	 * @param   string           $name           Programmatic name of Role
-	 * @param   array            $capabilities   Array of capabilites for the Role
+	 * @param   AcceptanceTester $I              Tester.
+	 * @param   string           $name           Programmatic name of Role.
+	 * @param   array            $capabilities   Array of capabilites for the Role.
 	 */
 	public function addRole($I, $name, $capabilities)
 	{
@@ -31,8 +33,8 @@ class Roles extends \Codeception\Module
 	 *
 	 * @since   1.2.5
 	 *
-	 * @param   AcceptanceTester $I              Tester
-	 * @param   string           $name           Programmatic name of Role
+	 * @param   AcceptanceTester $I              Tester.
+	 * @param   string           $name           Programmatic name of Role.
 	 */
 	public function deleteRole($I, $name)
 	{

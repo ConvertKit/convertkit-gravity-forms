@@ -11,7 +11,7 @@ class SettingCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function _before(AcceptanceTester $I)
 	{
@@ -25,7 +25,7 @@ class SettingCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testSaveBlankSettings(AcceptanceTester $I)
 	{
@@ -49,7 +49,7 @@ class SettingCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testSaveValidAPICredentials(AcceptanceTester $I)
 	{
@@ -64,7 +64,7 @@ class SettingCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testSaveInvalidAPICredentials(AcceptanceTester $I)
 	{
@@ -96,7 +96,7 @@ class SettingCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testEnableAndDisableDebug(AcceptanceTester $I)
 	{
@@ -135,7 +135,7 @@ class SettingCest
 	 *
 	 * @since   1.2.2
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function _passed(AcceptanceTester $I)
 	{

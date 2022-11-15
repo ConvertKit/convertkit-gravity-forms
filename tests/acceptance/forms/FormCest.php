@@ -12,7 +12,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function _before(AcceptanceTester $I)
 	{
@@ -29,7 +29,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeed(AcceptanceTester $I)
 	{
@@ -93,7 +93,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeedWithNoConvertKitFormSelected(AcceptanceTester $I)
 	{
@@ -165,7 +165,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeedWithNoEmailAddressSpecified(AcceptanceTester $I)
 	{
@@ -221,7 +221,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeedWithInvalidEmailAddressSpecified(AcceptanceTester $I)
 	{
@@ -281,7 +281,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeedWithTagAndFieldTagSelected(AcceptanceTester $I)
 	{
@@ -360,7 +360,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeedWithFieldTagSelected(AcceptanceTester $I)
 	{
@@ -439,7 +439,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeedWithInvalidFieldTagSelected(AcceptanceTester $I)
 	{
@@ -518,7 +518,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeedWithTagSelected(AcceptanceTester $I)
 	{
@@ -596,7 +596,7 @@ class FormCest
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function testCreateFormAndFeedDisabled(AcceptanceTester $I)
 	{
@@ -667,7 +667,7 @@ class FormCest
 	 *
 	 * @since   1.2.2
 	 *
-	 * @param   AcceptanceTester $I  Tester
+	 * @param   AcceptanceTester $I  Tester.
 	 */
 	public function _passed(AcceptanceTester $I)
 	{
