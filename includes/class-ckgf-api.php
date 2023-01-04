@@ -71,7 +71,10 @@ class CKGF_API extends ConvertKit_API {
 
 			/* translators: HTTP method */
 			'request_method_unsupported'                  => __( 'API request method %s is not supported in ConvertKit_API class.', 'convertkit' ),
-			'request_rate_limit_exceeded'                 => __( 'Rate limit hit.', 'convertkit' ),
+			'request_rate_limit_exceeded'                 => __( 'ConvertKit API Error: Rate limit hit.', 'convertkit' ),
+			'request_internal_server_error'               => __( 'ConvertKit API Error: Internal server error.', 'convertkit' ),
+			'request_bad_gateway'                         => __( 'ConvertKit API Error: Bad gateway.', 'convertkit' ),
+			'response_type_unexpected'                    => __( 'ConvertKit API Error: The response is not of the expected type array.', 'convertkit' ),
 		);
 
 	}
