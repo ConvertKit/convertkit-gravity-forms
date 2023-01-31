@@ -652,11 +652,11 @@ class GFConvertKit extends GFFeedAddOn {
 	/**
 	 * Returns the given array of fields (Forms, Tags or Custom Fields)
 	 * in alphabetical ascending order by label.
-	 * 
-	 * @since 	1.3.1
-	 * 
-	 * @param 	array 	$resources 	Resources.
-	 * @return 	array 				Sorted Resources by label
+	 *
+	 * @since   1.3.1
+	 *
+	 * @param   array $resources  Resources.
+	 * @return  array               Sorted Resources by label
 	 */
 	private function sort_fields( $resources ) {
 
