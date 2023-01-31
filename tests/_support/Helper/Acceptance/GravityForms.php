@@ -160,9 +160,13 @@ class GravityForms extends \Codeception\Module
 		$I->selectOption('_gform_setting_form_id', $formName);
 
 		// Check Tags are displayed in alphabetical order.
-		$I->checkSelectTagOptionOrder($I, '#tag_id', [
-			'(No Tag)',
-		]);
+		$I->checkSelectTagOptionOrder(
+			$I,
+			'#tag_id',
+			[
+				'(No Tag)',
+			]
+		);
 
 		// Define ConvertKit Tag to apply to subscribers.
 		if ($tagName) {
@@ -183,9 +187,13 @@ class GravityForms extends \Codeception\Module
 		}
 
 		// Check Custom Fields are displayed in alphabetical order.
-		$I->checkSelectCustomFieldOptionOrder($I, '#_gform_setting_convertkit_custom_fields_custom_key_0', [
-			'Select a Field',
-		]);
+		$I->checkSelectCustomFieldOptionOrder(
+			$I,
+			'#_gform_setting_convertkit_custom_fields_custom_key_0',
+			[
+				'Select a Field',
+			]
+		);
 
 		// Map ConvertKit Account Custom Field 'Last Name'.
 		$I->selectOption('#_gform_setting_convertkit_custom_fields_custom_key_0', 'Last Name');
