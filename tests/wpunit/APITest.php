@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the Integrate_ConvertKit_WPForms_API class.
+ * Tests for the CKGF_API class.
  *
  * @since   1.3.1
  */
