@@ -153,8 +153,20 @@ class GravityForms extends \Codeception\Module
 		// Define Feed Name.
 		$I->fillField('_gform_setting_feed_name', 'ConvertKit Feed');
 
+		// Check Forms are displayed in alphabetical order.
+		$I->checkSelectFormOptionOrder($I, '#form_id');
+
 		// Define ConvertKit Form to send entries to.
 		$I->selectOption('_gform_setting_form_id', $formName);
+
+		// Check Tags are displayed in alphabetical order.
+		$I->checkSelectTagOptionOrder(
+			$I,
+			'#tag_id',
+			[
+				'(No Tag)',
+			]
+		);
 
 		// Define ConvertKit Tag to apply to subscribers.
 		if ($tagName) {
@@ -173,6 +185,15 @@ class GravityForms extends \Codeception\Module
 		} else {
 			$I->selectOption('#_gform_setting_field_map_tag', 'Select a Field');
 		}
+
+		// Check Custom Fields are displayed in alphabetical order.
+		$I->checkSelectCustomFieldOptionOrder(
+			$I,
+			'#_gform_setting_convertkit_custom_fields_custom_key_0',
+			[
+				'Select a Field',
+			]
+		);
 
 		// Map ConvertKit Account Custom Field 'Last Name'.
 		$I->selectOption('#_gform_setting_convertkit_custom_fields_custom_key_0', 'Last Name');

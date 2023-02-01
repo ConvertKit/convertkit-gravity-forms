@@ -559,6 +559,9 @@ class GFConvertKit extends GFFeedAddOn {
 			);
 		}
 
+		// Sort Forms in ascending order by label.
+		$fields = $this->sort_fields( $fields );
+
 		return $fields;
 
 	}
@@ -595,6 +598,9 @@ class GFConvertKit extends GFFeedAddOn {
 			);
 		}
 
+		// Sort Custom Fields in ascending order by label.
+		$fields = $this->sort_fields( $fields );
+
 		return $fields;
 
 	}
@@ -609,7 +615,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 */
 	private function get_tags() {
 
-		// Get Custom Fields.
+		// Get Tags.
 		$api  = new CKGF_API(
 			$this->api_key(),
 			'',
@@ -636,7 +642,33 @@ class GFConvertKit extends GFFeedAddOn {
 			);
 		}
 
+		// Sort Tags in ascending order by label.
+		$fields = $this->sort_fields( $fields );
+
 		return $fields;
+
+	}
+
+	/**
+	 * Returns the given array of fields (Forms, Tags or Custom Fields)
+	 * in alphabetical ascending order by label.
+	 *
+	 * @since   1.3.1
+	 *
+	 * @param   array $resources  Resources.
+	 * @return  array               Sorted Resources by label
+	 */
+	private function sort_fields( $resources ) {
+
+		// Sort resources ascending by the label property.
+		uasort(
+			$resources,
+			function( $a, $b ) {
+				return strcmp( $a['label'], $b['label'] );
+			}
+		);
+
+		return $resources;
 
 	}
 
