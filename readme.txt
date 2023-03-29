@@ -3,7 +3,7 @@ Contributors: nathanbarry, growdev, travisnorthcutt
 Donate link: https://convertkit.com
 Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 5.0
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 5.6.20
 Stable tag: 1.3.3
 License: GPLv2 or later
