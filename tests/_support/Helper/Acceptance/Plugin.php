@@ -120,7 +120,7 @@ class Plugin extends \Codeception\Module
 		// Define options.
 		$options = [
 			'gravityforms-tag-1', // First item.
-			'wordpress', // Last item.
+			'wpforms', // Last item.
 		];
 
 		// Prepend options, such as 'Default' and 'None' to the options, if required.
