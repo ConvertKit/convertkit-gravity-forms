@@ -98,13 +98,13 @@ class GravityForms extends \Codeception\Module
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I              	AcceptanceTester.
-	 * @param   int              $gravityFormID  	Gravity Forms Form ID.
-	 * @param   string           $formName       	ConvertKit Form Name.
-	 * @param   mixed            $tagName        	ConvertKit Tag Name.
-	 * @param   bool             $mapTagField    	Whether to map the Tag field.
-	 * @param   mixed            $emailFieldName 	Gravity Forms Field Name to map to ConvertKit Email Address.
-	 * @param 	mixed 			 $conditionalLogic 	Whether to configure conditional logic on the feed.
+	 * @param   AcceptanceTester $I                 AcceptanceTester.
+	 * @param   int              $gravityFormID     Gravity Forms Form ID.
+	 * @param   string           $formName          ConvertKit Form Name.
+	 * @param   mixed            $tagName           ConvertKit Tag Name.
+	 * @param   bool             $mapTagField       Whether to map the Tag field.
+	 * @param   mixed            $emailFieldName    Gravity Forms Field Name to map to ConvertKit Email Address.
+	 * @param   mixed            $conditionalLogic  Whether to configure conditional logic on the feed.
 	 */
 	public function createGravityFormsFeed($I, $gravityFormID, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email', $conditionalLogic = false)
 	{
@@ -145,12 +145,12 @@ class GravityForms extends \Codeception\Module
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I              	AcceptanceTester.
-	 * @param   string           $formName       	ConvertKit Form Name.
-	 * @param   mixed            $tagName        	ConvertKit Tag Name.
-	 * @param   bool             $mapTagField    	Whether to map the Tag field.
-	 * @param   mixed            $emailFieldName 	Gravity Forms Field Name to map to ConvertKit Email Address.
-	 * @param 	mixed 			 $conditionalLogic 	Whether to configure conditional logic on the feed.
+	 * @param   AcceptanceTester $I                 AcceptanceTester.
+	 * @param   string           $formName          ConvertKit Form Name.
+	 * @param   mixed            $tagName           ConvertKit Tag Name.
+	 * @param   bool             $mapTagField       Whether to map the Tag field.
+	 * @param   mixed            $emailFieldName    Gravity Forms Field Name to map to ConvertKit Email Address.
+	 * @param   mixed            $conditionalLogic  Whether to configure conditional logic on the feed.
 	 */
 	public function completeGravityFormsFeedFields($I, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email', $conditionalLogic)
 	{
