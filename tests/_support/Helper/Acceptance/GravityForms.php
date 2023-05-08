@@ -22,11 +22,16 @@ class GravityForms extends \Codeception\Module
 		// Navigate to Forms > New Form.
 		$I->amOnAdminPage('admin.php?page=gf_new_form');
 
-		// Define Title.
-		$I->fillField('#new_form_title', 'ConvertKit Form Test: ' . date('Y-m-d H:i:s') . ' on PHP ' . PHP_VERSION_ID);
+		// Select Blank Form.
+		$I->waitForElementVisible('.gform-dialog__content');
+		$I->click('Blank Form');
 
-		// Click Create Form button.
-		$I->click('Create Form');
+		// Define Title.
+		$I->waitForElementVisible('#template-library-form-title-input');
+		$I->fillField('#template-library-form-title-input', 'ConvertKit Form Test: ' . date('Y-m-d H:i:s') . ' on PHP ' . PHP_VERSION_ID);
+
+		// Press enter key to create the form.
+		$I->pressKey('#template-library-form-title-input', \Facebook\WebDriver\WebDriverKeys::ENTER);
 
 		// Wait for the Form Edit screen to load.
 		$I->waitForElementVisible('#no-fields');
