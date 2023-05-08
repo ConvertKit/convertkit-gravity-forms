@@ -220,7 +220,7 @@ class GravityForms extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
 
 		// Deactivate the Feed.
-		$I->click('table.feeds tbody tr:nth-child(' . $gravityFormFeedID . ') th.manage-column button.gform-status--active');
+		$I->click('table.feeds tbody tr:nth-child(' . $gravityFormFeedID . ') td.manage-column button.gform-status--active');
 	}
 
 	/**
