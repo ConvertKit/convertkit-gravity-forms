@@ -152,7 +152,7 @@ class GravityForms extends \Codeception\Module
 	 * @param   mixed            $emailFieldName    Gravity Forms Field Name to map to ConvertKit Email Address.
 	 * @param   mixed            $conditionalLogic  Whether to configure conditional logic on the feed.
 	 */
-	public function completeGravityFormsFeedFields($I, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email', $conditionalLogic)
+	public function completeGravityFormsFeedFields($I, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email', $conditionalLogic = false)
 	{
 		// Check ConvertKit Form option exists and is populated.
 		$I->seeElementInDOM('select[name="_gform_setting_form_id"]');
