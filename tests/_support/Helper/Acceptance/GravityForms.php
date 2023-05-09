@@ -22,11 +22,16 @@ class GravityForms extends \Codeception\Module
 		// Navigate to Forms > New Form.
 		$I->amOnAdminPage('admin.php?page=gf_new_form');
 
-		// Define Title.
-		$I->fillField('#new_form_title', 'ConvertKit Form Test: ' . date('Y-m-d H:i:s') . ' on PHP ' . PHP_VERSION_ID);
+		// Select Blank Form.
+		$I->waitForElementVisible('.gform-dialog__content');
+		$I->click('Blank Form');
 
-		// Click Create Form button.
-		$I->click('Create Form');
+		// Define Title.
+		$I->waitForElementVisible('#template-library-form-title-input');
+		$I->fillField('#template-library-form-title-input', 'ConvertKit Form Test: ' . date('Y-m-d H:i:s') . ' on PHP ' . PHP_VERSION_ID);
+
+		// Press enter key to create the form.
+		$I->pressKey('#template-library-form-title-input', \Facebook\WebDriver\WebDriverKeys::ENTER);
 
 		// Wait for the Form Edit screen to load.
 		$I->waitForElementVisible('#no-fields');
@@ -93,14 +98,15 @@ class GravityForms extends \Codeception\Module
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I              AcceptanceTester.
-	 * @param   int              $gravityFormID  Gravity Forms Form ID.
-	 * @param   string           $formName       ConvertKit Form Name.
-	 * @param   mixed            $tagName        ConvertKit Tag Name.
-	 * @param   bool             $mapTagField    Whether to map the Tag field.
-	 * @param   mixed            $emailFieldName Gravity Forms Field Name to map to ConvertKit Email Address.
+	 * @param   AcceptanceTester $I                 AcceptanceTester.
+	 * @param   int              $gravityFormID     Gravity Forms Form ID.
+	 * @param   string           $formName          ConvertKit Form Name.
+	 * @param   mixed            $tagName           ConvertKit Tag Name.
+	 * @param   bool             $mapTagField       Whether to map the Tag field.
+	 * @param   mixed            $emailFieldName    Gravity Forms Field Name to map to ConvertKit Email Address.
+	 * @param   mixed            $conditionalLogic  Whether to configure conditional logic on the feed.
 	 */
-	public function createGravityFormsFeed($I, $gravityFormID, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email')
+	public function createGravityFormsFeed($I, $gravityFormID, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email', $conditionalLogic = false)
 	{
 		// Navigate to Form's Settings > ConvertKit.
 		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
@@ -109,7 +115,7 @@ class GravityForms extends \Codeception\Module
 		$I->click('#gform-settings div.tablenav.top div.alignright a.button');
 
 		// Complete Feed's Form Fields.
-		$I->completeGravityFormsFeedFields($I, $formName, $tagName, $mapTagField, $emailFieldName);
+		$I->completeGravityFormsFeedFields($I, $formName, $tagName, $mapTagField, $emailFieldName, $conditionalLogic);
 
 		// Click Save Settings.
 		$I->click('#gform-settings-save');
@@ -139,13 +145,14 @@ class GravityForms extends \Codeception\Module
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I              AcceptanceTester.
-	 * @param   string           $formName       ConvertKit Form Name.
-	 * @param   mixed            $tagName        ConvertKit Tag Name.
-	 * @param   bool             $mapTagField    Whether to map the Tag field.
-	 * @param   mixed            $emailFieldName Gravity Forms Field Name to map to ConvertKit Email Address.
+	 * @param   AcceptanceTester $I                 AcceptanceTester.
+	 * @param   string           $formName          ConvertKit Form Name.
+	 * @param   mixed            $tagName           ConvertKit Tag Name.
+	 * @param   bool             $mapTagField       Whether to map the Tag field.
+	 * @param   mixed            $emailFieldName    Gravity Forms Field Name to map to ConvertKit Email Address.
+	 * @param   mixed            $conditionalLogic  Whether to configure conditional logic on the feed.
 	 */
-	public function completeGravityFormsFeedFields($I, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email')
+	public function completeGravityFormsFeedFields($I, $formName, $tagName = false, $mapTagField = false, $emailFieldName = 'Email', $conditionalLogic = false)
 	{
 		// Check ConvertKit Form option exists and is populated.
 		$I->seeElementInDOM('select[name="_gform_setting_form_id"]');
@@ -198,6 +205,13 @@ class GravityForms extends \Codeception\Module
 		// Map ConvertKit Account Custom Field 'Last Name'.
 		$I->selectOption('#_gform_setting_convertkit_custom_fields_custom_key_0', 'Last Name');
 		$I->selectOption('#_gform_setting_convertkit_custom_fields_custom_value_0', 'Name (Last)');
+
+		// Configure conditional logic if enabled.
+		if ($conditionalLogic) {
+			$I->checkOption('#feed_condition_conditional_logic');
+			$I->selectOption('#feed_condition_rule_field_0', $conditionalLogic['field']);
+			$I->fillField('#feed_condition_rule_value_0', $conditionalLogic['value']);
+		}
 	}
 
 	/**
@@ -215,7 +229,7 @@ class GravityForms extends \Codeception\Module
 		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=ckgf&id=' . $gravityFormID);
 
 		// Deactivate the Feed.
-		$I->click('table.feeds tbody tr:nth-child(' . $gravityFormFeedID . ') th.manage-column button.gform-status--active');
+		$I->click('table.feeds tbody tr:nth-child(' . $gravityFormFeedID . ') td.manage-column button.gform-status--active');
 	}
 
 	/**
