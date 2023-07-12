@@ -350,7 +350,7 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		// Get Account to test that the API Secret is valid.
-		$api   = new CKGF_API(
+		$api     = new CKGF_API(
 			$this->api_key(),
 			$api_secret,
 			$this->debug_enabled()
@@ -371,7 +371,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @since   1.3.7
 	 *
-	 * @param   array  $field      	Settings Field.
+	 * @param   array  $field       Settings Field.
 	 * @param   string $api_secret  API Secret.
 	 * @return  bool                API Secret valid
 	 */

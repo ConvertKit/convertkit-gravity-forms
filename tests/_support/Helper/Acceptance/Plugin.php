@@ -62,7 +62,7 @@ class Plugin extends \Codeception\Module
 
 		// Check the value of the fields match the inputs provided.
 		$I->seeInField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
-		$I->seeInField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_SECRET']);
+		$I->seeInField('_gform_setting_api_secret', $_ENV['CONVERTKIT_API_SECRET']);
 	}
 
 	/**
