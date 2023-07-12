@@ -156,6 +156,135 @@ class GFConvertKit extends GFFeedAddOn {
 			)
 		);
 
+		// Register fields on the Form Settings screen.
+		add_filter( 'gform_form_settings_fields', array( $this, 'add_form_settings_fields' ), 10, 2 );
+
+	}
+
+	/**
+	 * Registers a section in each Gravity Forms' "Form Settings" screen, displaying
+	 * an option to enable the recommendations script if available on the ConvertKit account.
+	 * 
+	 * @since 	1.3.7
+	 * 
+	 * @param 	array 	$fields 	Settings Fields.
+	 * @param 	array 	$form 		Form.
+	 * @return 	array 				Settings Fields
+	 */
+	public function add_form_settings_fields( $fields, $form ) {
+
+		// If no API Key and Secret is specified, don't show an option.
+		if ( ! $this->has_api_key_and_secret() ) {
+			return array_merge(
+				$fields,
+				$this->get_creator_network_form_setting_field(
+					false,
+					sprintf(
+						'%s <a href="%s">%s</a>',
+						esc_html__( 'Please enter your API Key and Secret on the', 'convertkit' ),
+						esc_url( ckgf_get_settings_link() ),
+						esc_html__( 'settings screen', 'convertkit' )
+					)
+				)
+			);
+		}
+
+		// Query API to determine if the ConvertKit account has the Creator Network enabled.
+		$api = new CKGF_API(
+			$this->api_key(),
+			$this->api_secret(),
+			$this->debug_enabled()
+		);
+		$result = $api->recommendations_script();
+
+		// If an error occured, don't show an option.
+		if ( is_wp_error( $result ) ) {
+			return array_merge(
+				$fields,
+				$this->get_creator_network_form_setting_field(
+					false,
+					sprintf(
+						'%s. <a href="%s">%s</a>',
+						$result->get_error_message(),
+						esc_url( ckgf_get_settings_link() ),
+						esc_html__( 'Fix settings', 'convertkit' )
+					)
+				)
+			);
+		}
+
+		// If the Creator Network is disabled, don't show an option.
+		//$result['enabled'] = false;
+		if ( ! $result['enabled'] ) {
+			return array_merge(
+				$fields,
+				$this->get_creator_network_form_setting_field(
+					false,
+					sprintf(
+						'%s <a href="%s">%s</a>',
+						esc_html__( 'Creator Network Recommendations requires a', 'convertkit' ),
+						esc_url( ckgf_get_settings_billing_url() ),
+						esc_html__( 'paid ConvertKit Plan', 'convertkit' )
+					)
+				)
+			);
+		}
+
+		// Creator Network is enabled.
+		return array_merge(
+			$fields,
+			$this->get_creator_network_form_setting_field(
+				true,
+				__( 'If enabled, displays the Creator Network Recommendations modal when this form is submitted.', 'convertkit' )
+			)
+		);
+
+	}
+
+	/**
+	 * Returns a section and settings field for a Gravity Form when editing its Form Settings,
+	 * to enable/disable the Creator Network Recommendations modal.
+	 * 
+	 * @since 	1.3.7
+	 * 
+	 * @param 	bool 	$enabled_on_account 	Creator Network is available. If false, only the description is returned.
+	 * @param 	string 	$description 			Description.
+	 * @return 	array 							Settings Fields
+	 */
+	private function get_creator_network_form_setting_field( $enabled_on_account, $description ) {
+
+		// If the Creator Network feature isn't enabled on the ConvertKit account,
+		// just show the description.
+		if ( ! $enabled_on_account ) {
+			return array(
+				'ckgf' => array(
+					'title' => CKGF_TITLE,
+					'fields' => array(
+						array(
+							'name' => 'ckgf_enable_recommendations',
+							'type' => 'html',
+							'html' => $description,
+						),
+					),
+				),
+			); 
+		}
+
+		// Return field to toggle the setting.
+		return array(
+			'ckgf' => array(
+				'title' => CKGF_TITLE,
+				'fields' => array(
+					array(
+						'name' => 'ckgf_enable_recommendations',
+						'type' => 'toggle',
+						'label' => esc_html__( 'Enable Creator Network Recommendations', 'convertkit' ),
+						'tooltip' => $description, // @TODO.
+					),
+				),
+			),
+		);
+
 	}
 
 	/**
@@ -1014,6 +1143,45 @@ class GFConvertKit extends GFFeedAddOn {
 	private function api_secret() {
 
 		return $this->get_plugin_setting( 'api_secret' );
+
+	}
+
+	/**
+	 * Returns whether the API Key has been set in the integration's settings.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @return  bool
+	 */
+	private function has_api_key() {
+
+		return ( ! empty( $this->api_key() ) ? true : false );
+
+	}
+
+	/**
+	 * Returns whether the API Secret has been set in the integration's settings.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @return  bool
+	 */
+	private function has_api_secret() {
+
+		return ( ! empty( $this->api_secret() ) ? true : false );
+
+	}
+
+	/**
+	 * Returns whether the API Key and Secret have been set in the integration's settings.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @return  bool
+	 */
+	private function has_api_key_and_secret() {
+
+		return $this->has_api_key() && $this->has_api_secret();
 
 	}
 
