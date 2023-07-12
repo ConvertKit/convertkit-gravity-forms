@@ -130,6 +130,15 @@ class GFConvertKit extends GFFeedAddOn {
 	private static $_instance = null; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
+	 * Holds the key to store the recommendations JS URL in.
+	 * 
+	 * @since 	1.3.7
+	 * 
+	 * @var 	string
+	 */
+	private $recommendations_script_key = 'ckgf_recommendations_script';
+
+	/**
 	 * Holds the API instance.
 	 *
 	 * @since   1.2.1
@@ -158,6 +167,9 @@ class GFConvertKit extends GFFeedAddOn {
 
 		// Register fields on the Form Settings screen.
 		add_filter( 'gform_form_settings_fields', array( $this, 'add_form_settings_fields' ), 10, 2 );
+
+		// Output Creator Network Recommendations script, if enabled on the Form.
+		add_filter( 'gform_enqueue_scripts', array( $this, 'maybe_enqueue_recommendations_script' ), 10, 2 );
 
 	}
 
@@ -189,13 +201,8 @@ class GFConvertKit extends GFFeedAddOn {
 			);
 		}
 
-		// Query API to determine if the ConvertKit account has the Creator Network enabled.
-		$api = new CKGF_API(
-			$this->api_key(),
-			$this->api_secret(),
-			$this->debug_enabled()
-		);
-		$result = $api->recommendations_script();
+		// Query API to fetch recommendations script.
+		$result = $this->get_recommendations_script();
 
 		// If an error occured, don't show an option.
 		if ( is_wp_error( $result ) ) {
@@ -213,9 +220,8 @@ class GFConvertKit extends GFFeedAddOn {
 			);
 		}
 
-		// If the Creator Network is disabled, don't show an option.
-		//$result['enabled'] = false;
-		if ( ! $result['enabled'] ) {
+		// If the result is false, the Creator Network is disabled - don't show an option.
+		if ( ! $result ) {
 			return array_merge(
 				$fields,
 				$this->get_creator_network_form_setting_field(
@@ -251,7 +257,7 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @param 	string 	$description 			Description.
 	 * @return 	array 							Settings Fields
 	 */
-	private function get_creator_network_form_setting_field( $enabled_on_account, $description ) {
+	public function get_creator_network_form_setting_field( $enabled_on_account, $description ) {
 
 		// If the Creator Network feature isn't enabled on the ConvertKit account,
 		// just show the description.
@@ -261,9 +267,16 @@ class GFConvertKit extends GFFeedAddOn {
 					'title' => CKGF_TITLE,
 					'fields' => array(
 						array(
-							'name' => 'ckgf_enable_recommendations',
+							'name' => 'ckgf_enable_recommendations_description',
 							'type' => 'html',
 							'html' => $description,
+						),
+
+						// Ensure that the setting is set to disabled if the form settings are saved.
+						array(
+							'name' => 'ckgf_enable_recommendations',
+							'type' => 'hidden',
+							'value' => false,
 						),
 					),
 				),
@@ -284,6 +297,41 @@ class GFConvertKit extends GFFeedAddOn {
 				),
 			),
 		);
+
+	}
+
+	/**
+	 * Enqueues the Creator Network Recommendations script, if the Gravity Forms form
+	 * has the 'Enable Creator Network Recommendations' setting enabled.
+	 * 
+	 * @since 	1.3.7
+	 * 
+	 * @param 	array 	$form 		Gravity Forms Form.
+	 * @param 	bool 	$is_ajax 	If AJAX is enabled for form submission.
+	 */
+	public function maybe_enqueue_recommendations_script( $form, $is_ajax ) {
+
+		// Bail if disabled.
+		if ( ! array_key_exists( 'ckgf_enable_recommendations', $form ) ) {
+			return;
+		}
+		if ( ! $form['ckgf_enable_recommendations'] ) {
+			return;
+		}
+
+		// Fetch recommendations script URL.
+		$recommendations_script_url = $this->get_recommendations_script();
+
+		// Bail if no script or an error occured.
+		if ( is_wp_error( $recommendations_script_url ) ) {
+			return;
+		}
+		if ( ! $recommendations_script_url ) {
+			return;
+		}
+
+		// Enqueue.
+		wp_enqueue_script( 'ckgf-recommendations', $recommendations_script_url, false, CKGF_PLUGIN_VERSION, true );
 
 	}
 
@@ -1195,6 +1243,48 @@ class GFConvertKit extends GFFeedAddOn {
 	private function debug_enabled() {
 
 		return (bool) $this->get_plugin_setting( 'debug' );
+
+	}
+
+	/**
+	 * Fetches the Creator Network Recommendations script from the database, falling
+	 * back to an API query if the database doesn't have a copy of it stored.
+	 * 
+	 * @since 	1.3.7
+	 * 
+	 * @return 	WP_Error|bool|string
+	 */
+	private function get_recommendations_script() {
+
+		// Get recommendations script URL.
+		$recommendations_script_url = get_option( $this->recommendations_script_key );
+		if ( $recommendations_script_url ) {
+			return $recommendations_script_url;
+		}
+
+		// No cached script; fetch from the API.
+		$api = new CKGF_API(
+			$this->api_key(),
+			$this->api_secret(),
+			$this->debug_enabled()
+		);
+		$result = $api->recommendations_script();
+
+		// Bail if an error occured
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		// Bail if not enabled.
+		if ( ! $result['enabled'] ) {
+			return false;
+		}
+
+		// Store script URL.
+		update_option( $this->recommendations_script_key, $result['embed_js'] );
+
+		// Return.
+		return $result['embed_js'];
 
 	}
 
