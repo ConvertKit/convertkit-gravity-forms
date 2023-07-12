@@ -49,6 +49,7 @@ class Plugin extends \Codeception\Module
 
 		// Complete API Fields.
 		$I->fillField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
+		$I->fillField('_gform_setting_api_secret', $_ENV['CONVERTKIT_API_SECRET']);
 
 		// Click the Save Settings button.
 		$I->click('#gform-settings-save');
@@ -61,6 +62,7 @@ class Plugin extends \Codeception\Module
 
 		// Check the value of the fields match the inputs provided.
 		$I->seeInField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
+		$I->seeInField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_SECRET']);
 	}
 
 	/**
