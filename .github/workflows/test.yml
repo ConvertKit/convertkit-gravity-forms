@@ -50,6 +50,7 @@ jobs:
         test-groups: [
           'acceptance/forms',
           'acceptance/general',
+          'acceptance/recommendations',
           'wpunit'
         ]
 
