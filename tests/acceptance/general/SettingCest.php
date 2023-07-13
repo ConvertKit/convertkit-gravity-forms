@@ -45,16 +45,33 @@ class SettingCest
 	/**
 	 * Test that no PHP errors or notices are displayed on the Plugin's Setting screen,
 	 * and no warning is displayed that the supplied API credentials are invalid, when
-	 * saving valid API credentials at WooCommerce > Settings > Integration > ConvertKit.
+	 * saving valid API credentials at Forms > Settings > ConvertKit.
 	 *
 	 * @since   1.2.1
 	 *
 	 * @param   AcceptanceTester $I  Tester.
 	 */
-	public function testSaveValidAPICredentials(AcceptanceTester $I)
+	public function testSaveValidAPIKeyAndSecret(AcceptanceTester $I)
 	{
-		// Enable Integration and define its API Keys.
-		$I->setupConvertKitPlugin($I);
+		// Go to the Plugin's Settings Screen.
+		$I->loadConvertKitSettingsScreen($I);
+
+		// Complete API Fields.
+		$I->fillField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
+		$I->fillField('_gform_setting_api_secret', $_ENV['CONVERTKIT_API_SECRET']);
+
+		// Click the Save Settings button.
+		$I->click('#gform-settings-save');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Confirm that a message is displayed confirming settings saved.
+		$I->seeInSource('Settings updated.');
+
+		// Check the value of the fields match the inputs provided.
+		$I->seeInField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
+		$I->seeInField('_gform_setting_api_secret', $_ENV['CONVERTKIT_API_SECRET']);
 	}
 
 	/**
