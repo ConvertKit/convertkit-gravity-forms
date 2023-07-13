@@ -281,7 +281,7 @@ class GFConvertKit extends GFFeedAddOn {
 		if ( ! $enabled_on_account ) {
 			return array(
 				'ckgf' => array(
-					'title'  => CKGF_TITLE,
+					'title'  => CKGF_SHORT_TITLE,
 					'fields' => array(
 						array(
 							'name' => 'ckgf_enable_creator_network_recommendations_description',
@@ -303,7 +303,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Return field to toggle the setting.
 		return array(
 			'ckgf' => array(
-				'title'  => CKGF_TITLE,
+				'title'  => CKGF_SHORT_TITLE,
 				'fields' => array(
 					array(
 						'name'    => 'ckgf_enable_creator_network_recommendations',
@@ -356,7 +356,7 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		// Enqueue script.
-		wp_enqueue_script( 'ckgf-creator-network-recommendations', $script_url, false, CKGF_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'ckgf-creator-network-recommendations', $script_url, array(), CKGF_PLUGIN_VERSION, true );
 
 	}
 
@@ -1288,14 +1288,23 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		// No cached script; fetch from the API.
-		$api    = new CKGF_API(
+		$api = new CKGF_API(
 			$this->api_key(),
 			$this->api_secret(),
 			$this->debug_enabled()
 		);
+
+		// Sanity check that we're using the ConvertKit WordPress Libraries 1.3.7 or higher.
+		// If another ConvertKit Plugin is active and out of date, its libraries might
+		// be loaded that don't have this method.
+		if ( ! method_exists( $api, 'recommendations_script' ) ) {
+			return false;
+		}
+
+		// Get script from API.
 		$result = $api->recommendations_script();
 
-		// Bail if an error occured
+		// Bail if an error occured.
 		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
