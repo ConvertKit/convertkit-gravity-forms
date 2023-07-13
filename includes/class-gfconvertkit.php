@@ -237,6 +237,22 @@ class GFConvertKit extends GFFeedAddOn {
 						'validation_callback' => array( $this, 'plugin_settings_fields_validation_callback_api_key' ),
 					),
 					array(
+						'name'                => 'api_secret',
+						'label'               => esc_html__( 'API Secret', 'convertkit' ),
+						'type'                => 'text',
+						'class'               => 'medium',
+						'required'            => true,
+						'description'         => sprintf(
+							/* translators: %1$s: Link to ConvertKit Account, %2$s: <br>, %3$s Link to ConvertKit Signup */
+							esc_html__( '%1$s Required for proper plugin function. %2$s Don\'t have a ConvertKit account? %3$s', 'convertkit' ),
+							'<p><a href="' . esc_url( ckgf_get_api_key_url() ) . '" target="_blank">' . esc_html__( 'Get your ConvertKit API Secret.', 'convertkit' ) . '</a>',
+							'<br />',
+							'<a href="' . esc_url( ckgf_get_signup_url() ) . '" target="_blank">' . esc_html__( 'Sign up here.', 'convertkit' ) . '</a></p>'
+						),
+						'feedback_callback'   => array( $this, 'plugin_settings_fields_feedback_callback_api_secret' ),
+						'validation_callback' => array( $this, 'plugin_settings_fields_validation_callback_api_secret' ),
+					),
+					array(
 						'name'    => 'debug',
 						'label'   => esc_html__( 'Debug', 'convertkit' ),
 						'type'    => 'checkbox',
@@ -273,7 +289,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Get Forms to test that the API Key is valid.
 		$api   = new CKGF_API(
 			$api_key,
-			'',
+			$this->api_secret(),
 			$this->debug_enabled()
 		);
 		$forms = $api->get_forms();
@@ -301,12 +317,75 @@ class GFConvertKit extends GFFeedAddOn {
 		// Get Forms to test that the API Key is valid.
 		$api   = new CKGF_API(
 			$api_key,
-			'',
+			$this->api_secret(),
 			$this->debug_enabled()
 		);
 		$forms = $api->get_forms();
 
-		// If an error occured, set the field's error so that an excalamation point with a tooltip is displayed
+		// If an error occured, set the field's error so that an exclamation point with a tooltip is displayed
+		// by Gravity Forms.
+		if ( is_wp_error( $forms ) ) {
+			$this->set_field_error( $field, $forms->get_error_message() );
+			return false;
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * Validate that the API Secret is valid when loading the settings screen, showing a
+	 * tick or a cross.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   string $api_secret    API Secret.
+	 * @return  bool                  API Secret valid
+	 */
+	public function plugin_settings_fields_feedback_callback_api_secret( $api_secret ) {
+
+		// Validation fails if the API Secret is empty.
+		if ( empty( $api_secret ) ) {
+			return false;
+		}
+
+		// Get Account to test that the API Secret is valid.
+		$api     = new CKGF_API(
+			$this->api_key(),
+			$api_secret,
+			$this->debug_enabled()
+		);
+		$account = $api->account();
+
+		if ( is_wp_error( $account ) ) {
+			return false;
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * Validate that the API Secret is valid when saving settings, showing a tooltip
+	 * with a contextual message containing the error if the API Secret is invalid.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   array  $field       Settings Field.
+	 * @param   string $api_secret  API Secret.
+	 * @return  bool                API Secret valid
+	 */
+	public function plugin_settings_fields_validation_callback_api_secret( $field, $api_secret ) {
+
+		// Get Account to test that the API Key is valid.
+		$api   = new CKGF_API(
+			$this->api_key(),
+			$api_secret,
+			$this->debug_enabled()
+		);
+		$forms = $api->account();
+
+		// If an error occured, set the field's error so that an exclamation point with a tooltip is displayed
 		// by Gravity Forms.
 		if ( is_wp_error( $forms ) ) {
 			$this->set_field_error( $field, $forms->get_error_message() );
@@ -349,7 +428,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Get Forms to test that the API Key is valid.
 		$api   = new CKGF_API(
 			$this->api_key(),
-			'',
+			$this->api_secret(),
 			$this->debug_enabled()
 		);
 		$forms = $api->get_forms();
@@ -535,7 +614,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Get Custom Fields.
 		$api   = new CKGF_API(
 			$this->api_key(),
-			'',
+			$this->api_secret(),
 			$this->debug_enabled()
 		);
 		$forms = $api->get_forms();
@@ -579,7 +658,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Get Custom Fields.
 		$api           = new CKGF_API(
 			$this->api_key(),
-			'',
+			$this->api_secret(),
 			$this->debug_enabled()
 		);
 		$custom_fields = $api->get_custom_fields();
@@ -618,7 +697,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Get Tags.
 		$api  = new CKGF_API(
 			$this->api_key(),
-			'',
+			$this->api_secret(),
 			$this->debug_enabled()
 		);
 		$tags = $api->get_tags();
@@ -727,7 +806,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Initialize API class.
 		$this->api = new CKGF_API(
 			$this->api_key(),
-			'',
+			$this->api_secret(),
 			$this->debug_enabled()
 		);
 
@@ -922,6 +1001,19 @@ class GFConvertKit extends GFFeedAddOn {
 	private function api_key() {
 
 		return $this->get_plugin_setting( 'api_key' );
+
+	}
+
+	/**
+	 * Returns the API Secret defined in the integration's settings.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @return  string
+	 */
+	private function api_secret() {
+
+		return $this->get_plugin_setting( 'api_secret' );
 
 	}
 

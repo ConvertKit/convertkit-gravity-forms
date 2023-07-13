@@ -59,14 +59,14 @@ class SettingCest
 
 	/**
 	 * Test that no PHP errors or notices are displayed on the Plugin's Setting screen,
-	 * and a warning is displayed that the supplied API credentials are invalid, when
-	 * saving invalid API credentials at WooCommerce > Settings > Integration > ConvertKit.
+	 * and a warning is displayed that the supplied API Key is invalid, when
+	 * saving an invalid API Key at Forms > Settings > ConvertKit.
 	 *
-	 * @since   1.2.1
+	 * @since   1.3.7
 	 *
 	 * @param   AcceptanceTester $I  Tester.
 	 */
-	public function testSaveInvalidAPICredentials(AcceptanceTester $I)
+	public function testSaveInvalidAPIKey(AcceptanceTester $I)
 	{
 		// Go to the Plugin's Settings Screen.
 		$I->loadConvertKitSettingsScreen($I);
@@ -82,6 +82,39 @@ class SettingCest
 
 		// Check the value of the fields match the inputs provided.
 		$I->seeInField('_gform_setting_api_key', 'invalidApiKey');
+
+		// Confirm that a message is displayed telling the user that an error occured whilst saving.
+		$I->seeInSource('There was an error while saving your settings.');
+
+		// Confirm that a tooltip notification exists with the precise API error.
+		$I->seeInSource('Authorization Failed: API Key not valid');
+	}
+
+	/**
+	 * Test that no PHP errors or notices are displayed on the Plugin's Setting screen,
+	 * and a warning is displayed that the supplied API Secret is invalid, when
+	 * saving an invalid API Secret at Forms > Settings > ConvertKit.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   AcceptanceTester $I  Tester.
+	 */
+	public function testSaveInvalidAPISecret(AcceptanceTester $I)
+	{
+		// Go to the Plugin's Settings Screen.
+		$I->loadConvertKitSettingsScreen($I);
+
+		// Complete API Fields.
+		$I->fillField('_gform_setting_api_secret', 'invalidApiSecret');
+
+		// Click the Save Settings button.
+		$I->click('#gform-settings-save');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Check the value of the fields match the inputs provided.
+		$I->seeInField('_gform_setting_api_secret', 'invalidApiSecret');
 
 		// Confirm that a message is displayed telling the user that an error occured whilst saving.
 		$I->seeInSource('There was an error while saving your settings.');
