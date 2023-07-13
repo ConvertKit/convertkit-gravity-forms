@@ -130,13 +130,13 @@ class GFConvertKit extends GFFeedAddOn {
 	private static $_instance = null; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
-	 * Holds the key to store the recommendations JS URL in.
+	 * Holds the key to store the Creator Network Recommendations JS URL in.
 	 * 
 	 * @since 	1.3.7
 	 * 
 	 * @var 	string
 	 */
-	private $recommendations_script_key = 'ckgf_recommendations_script';
+	private $creator_network_recommendations_script_key = 'ckgf_creator_network_recommendations_script';
 
 	/**
 	 * Holds the API instance.
@@ -169,13 +169,13 @@ class GFConvertKit extends GFFeedAddOn {
 		add_filter( 'gform_form_settings_fields', array( $this, 'add_form_settings_fields' ), 10, 2 );
 
 		// Output Creator Network Recommendations script, if enabled on the Form.
-		add_filter( 'gform_enqueue_scripts', array( $this, 'maybe_enqueue_recommendations_script' ), 10, 2 );
+		add_filter( 'gform_enqueue_scripts', array( $this, 'maybe_enqueue_creator_network_recommendations_script' ), 10, 2 );
 
 	}
 
 	/**
 	 * Registers a section in each Gravity Forms' "Form Settings" screen, displaying
-	 * an option to enable the recommendations script if available on the ConvertKit account.
+	 * an option to enable the Creator Network recommendations script if available on the ConvertKit account.
 	 * 
 	 * @since 	1.3.7
 	 * 
@@ -184,6 +184,24 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @return 	array 				Settings Fields
 	 */
 	public function add_form_settings_fields( $fields, $form ) {
+
+		// If "Output HTML5" is disabled at Forms > Settings, don't show an option.
+		// This would render an email field as input[type=text], which the Creator
+		// Network Recommendations script does not recognize.
+		if ( ! (bool) get_option( 'rg_gforms_enable_html5' ) ) {
+			return array_merge(
+				$fields,
+				$this->get_creator_network_form_setting_field(
+					false,
+					sprintf(
+						'%s <a href="%s">%s</a>',
+						esc_html__( 'HTML5 output is required for proper function. Please enable this in ', 'convertkit' ),
+						esc_url( admin_url( 'admin.php?page=gf_settings' ) ),
+						esc_html__( 'Gravity Forms settings.', 'convertkit' )
+					)
+				)
+			);
+		}
 
 		// If no API Key and Secret is specified, don't show an option.
 		if ( ! $this->has_api_key_and_secret() ) {
@@ -201,8 +219,8 @@ class GFConvertKit extends GFFeedAddOn {
 			);
 		}
 
-		// Query API to fetch recommendations script.
-		$result = $this->get_recommendations_script();
+		// Query API to fetch Creator Network Recommendations script.
+		$result = $this->get_creator_network_recommendations_script();
 
 		// If an error occured, don't show an option.
 		if ( is_wp_error( $result ) ) {
@@ -267,14 +285,14 @@ class GFConvertKit extends GFFeedAddOn {
 					'title' => CKGF_TITLE,
 					'fields' => array(
 						array(
-							'name' => 'ckgf_enable_recommendations_description',
+							'name' => 'ckgf_enable_creator_network_recommendations_description',
 							'type' => 'html',
 							'html' => $description,
 						),
 
 						// Ensure that the setting is set to disabled if the form settings are saved.
 						array(
-							'name' => 'ckgf_enable_recommendations',
+							'name' => 'ckgf_enable_creator_network_recommendations',
 							'type' => 'hidden',
 							'value' => false,
 						),
@@ -289,10 +307,10 @@ class GFConvertKit extends GFFeedAddOn {
 				'title' => CKGF_TITLE,
 				'fields' => array(
 					array(
-						'name' => 'ckgf_enable_recommendations',
+						'name' => 'ckgf_enable_creator_network_recommendations',
 						'type' => 'toggle',
 						'label' => esc_html__( 'Enable Creator Network Recommendations', 'convertkit' ),
-						'tooltip' => $description, // @TODO.
+						'tooltip' => $description,
 					),
 				),
 			),
@@ -309,29 +327,29 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @param 	array 	$form 		Gravity Forms Form.
 	 * @param 	bool 	$is_ajax 	If AJAX is enabled for form submission.
 	 */
-	public function maybe_enqueue_recommendations_script( $form, $is_ajax ) {
+	public function maybe_enqueue_creator_network_recommendations_script( $form, $is_ajax ) {
 
 		// Bail if disabled.
-		if ( ! array_key_exists( 'ckgf_enable_recommendations', $form ) ) {
+		if ( ! array_key_exists( 'ckgf_enable_creator_network_recommendations', $form ) ) {
 			return;
 		}
-		if ( ! $form['ckgf_enable_recommendations'] ) {
+		if ( ! $form['ckgf_enable_creator_network_recommendations'] ) {
 			return;
 		}
 
-		// Fetch recommendations script URL.
-		$recommendations_script_url = $this->get_recommendations_script();
+		// Fetch Creator Network Recommendations script URL.
+		$script_url = $this->get_creator_network_recommendations_script();
 
 		// Bail if no script or an error occured.
-		if ( is_wp_error( $recommendations_script_url ) ) {
+		if ( is_wp_error( $script_url ) ) {
 			return;
 		}
-		if ( ! $recommendations_script_url ) {
+		if ( ! $script_url ) {
 			return;
 		}
 
 		// Enqueue.
-		wp_enqueue_script( 'ckgf-recommendations', $recommendations_script_url, false, CKGF_PLUGIN_VERSION, true );
+		wp_enqueue_script( 'ckgf-creator-network-recommendations', $script_url, false, CKGF_PLUGIN_VERSION, true );
 
 	}
 
@@ -1254,12 +1272,12 @@ class GFConvertKit extends GFFeedAddOn {
 	 * 
 	 * @return 	WP_Error|bool|string
 	 */
-	private function get_recommendations_script() {
+	private function get_creator_network_recommendations_script() {
 
-		// Get recommendations script URL.
-		$recommendations_script_url = get_option( $this->recommendations_script_key );
-		if ( $recommendations_script_url ) {
-			return $recommendations_script_url;
+		// Get Creator Network Recommendations script URL.
+		$script_url = get_option( $this->creator_network_recommendations_script_key );
+		if ( $script_url ) {
+			return $script_url;
 		}
 
 		// No cached script; fetch from the API.
@@ -1281,7 +1299,7 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		// Store script URL.
-		update_option( $this->recommendations_script_key, $result['embed_js'] );
+		update_option( $this->creator_network_recommendations_script_key, $result['embed_js'] );
 
 		// Return.
 		return $result['embed_js'];
