@@ -76,6 +76,6 @@ function ckgf_get_api_key_url() {
  */
 function ckgf_get_settings_billing_url() {
 
-    return 'https://app.convertkit.com/account_settings/billing/?utm_source=wordpress&utm_content=convertkit-gravity-forms';
+	return 'https://app.convertkit.com/account_settings/billing/?utm_source=wordpress&utm_content=convertkit-gravity-forms';
 
 }

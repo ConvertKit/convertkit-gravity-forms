@@ -131,10 +131,10 @@ class GFConvertKit extends GFFeedAddOn {
 
 	/**
 	 * Holds the key to store the Creator Network Recommendations JS URL in.
-	 * 
-	 * @since 	1.3.7
-	 * 
-	 * @var 	string
+	 *
+	 * @since   1.3.7
+	 *
+	 * @var     string
 	 */
 	private $creator_network_recommendations_script_key = 'ckgf_creator_network_recommendations_script';
 
@@ -166,7 +166,7 @@ class GFConvertKit extends GFFeedAddOn {
 		);
 
 		// Register fields on the Form Settings screen.
-		add_filter( 'gform_form_settings_fields', array( $this, 'add_form_settings_fields' ), 10, 2 );
+		add_filter( 'gform_form_settings_fields', array( $this, 'add_form_settings_fields' ), 10, 1 );
 
 		// Output Creator Network Recommendations script, if enabled on the Form.
 		add_filter( 'gform_enqueue_scripts', array( $this, 'maybe_enqueue_creator_network_recommendations_script' ), 10, 2 );
@@ -176,14 +176,13 @@ class GFConvertKit extends GFFeedAddOn {
 	/**
 	 * Registers a section in each Gravity Forms' "Form Settings" screen, displaying
 	 * an option to enable the Creator Network recommendations script if available on the ConvertKit account.
-	 * 
-	 * @since 	1.3.7
-	 * 
-	 * @param 	array 	$fields 	Settings Fields.
-	 * @param 	array 	$form 		Form.
-	 * @return 	array 				Settings Fields
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   array $fields     Settings Fields.
+	 * @return  array               Settings Fields
 	 */
-	public function add_form_settings_fields( $fields, $form ) {
+	public function add_form_settings_fields( $fields ) {
 
 		// If "Output HTML5" is disabled at Forms > Settings, don't show an option.
 		// This would render an email field as input[type=text], which the Creator
@@ -268,12 +267,12 @@ class GFConvertKit extends GFFeedAddOn {
 	/**
 	 * Returns a section and settings field for a Gravity Form when editing its Form Settings,
 	 * to enable/disable the Creator Network Recommendations modal.
-	 * 
-	 * @since 	1.3.7
-	 * 
-	 * @param 	bool 	$enabled_on_account 	Creator Network is available. If false, only the description is returned.
-	 * @param 	string 	$description 			Description.
-	 * @return 	array 							Settings Fields
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   bool   $enabled_on_account     Creator Network is available. If false, only the description is returned.
+	 * @param   string $description            Description.
+	 * @return  array                           Settings Fields
 	 */
 	public function get_creator_network_form_setting_field( $enabled_on_account, $description ) {
 
@@ -282,7 +281,7 @@ class GFConvertKit extends GFFeedAddOn {
 		if ( ! $enabled_on_account ) {
 			return array(
 				'ckgf' => array(
-					'title' => CKGF_TITLE,
+					'title'  => CKGF_TITLE,
 					'fields' => array(
 						array(
 							'name' => 'ckgf_enable_creator_network_recommendations_description',
@@ -292,24 +291,24 @@ class GFConvertKit extends GFFeedAddOn {
 
 						// Ensure that the setting is set to disabled if the form settings are saved.
 						array(
-							'name' => 'ckgf_enable_creator_network_recommendations',
-							'type' => 'hidden',
+							'name'  => 'ckgf_enable_creator_network_recommendations',
+							'type'  => 'hidden',
 							'value' => false,
 						),
 					),
 				),
-			); 
+			);
 		}
 
 		// Return field to toggle the setting.
 		return array(
 			'ckgf' => array(
-				'title' => CKGF_TITLE,
+				'title'  => CKGF_TITLE,
 				'fields' => array(
 					array(
-						'name' => 'ckgf_enable_creator_network_recommendations',
-						'type' => 'toggle',
-						'label' => esc_html__( 'Enable Creator Network Recommendations', 'convertkit' ),
+						'name'    => 'ckgf_enable_creator_network_recommendations',
+						'type'    => 'toggle',
+						'label'   => esc_html__( 'Enable Creator Network Recommendations', 'convertkit' ),
 						'tooltip' => $description,
 					),
 				),
@@ -321,15 +320,21 @@ class GFConvertKit extends GFFeedAddOn {
 	/**
 	 * Enqueues the Creator Network Recommendations script, if the Gravity Forms form
 	 * has the 'Enable Creator Network Recommendations' setting enabled.
-	 * 
-	 * @since 	1.3.7
-	 * 
-	 * @param 	array 	$form 		Gravity Forms Form.
-	 * @param 	bool 	$is_ajax 	If AJAX is enabled for form submission.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   array $form       Gravity Forms Form.
+	 * @param   bool  $is_ajax    If AJAX is enabled for form submission.
 	 */
 	public function maybe_enqueue_creator_network_recommendations_script( $form, $is_ajax ) {
 
-		// Bail if disabled.
+		// Bail if AJAX submission is disabled; we can't show the Creator Network Recommendations
+		// if the page reloads on form submission.
+		if ( ! $is_ajax ) {
+			return;
+		}
+
+		// Bail if Creator Network Recommendations are disabled.
 		if ( ! array_key_exists( 'ckgf_enable_creator_network_recommendations', $form ) ) {
 			return;
 		}
@@ -340,7 +345,9 @@ class GFConvertKit extends GFFeedAddOn {
 		// Fetch Creator Network Recommendations script URL.
 		$script_url = $this->get_creator_network_recommendations_script();
 
-		// Bail if no script or an error occured.
+		// Bail if an error occured fetching the script, or no script exists,
+		// because Creator Network Recommendations are not enabled on the
+		// ConvertKit account.
 		if ( is_wp_error( $script_url ) ) {
 			return;
 		}
@@ -348,7 +355,7 @@ class GFConvertKit extends GFFeedAddOn {
 			return;
 		}
 
-		// Enqueue.
+		// Enqueue script.
 		wp_enqueue_script( 'ckgf-creator-network-recommendations', $script_url, false, CKGF_PLUGIN_VERSION, true );
 
 	}
@@ -1267,10 +1274,10 @@ class GFConvertKit extends GFFeedAddOn {
 	/**
 	 * Fetches the Creator Network Recommendations script from the database, falling
 	 * back to an API query if the database doesn't have a copy of it stored.
-	 * 
-	 * @since 	1.3.7
-	 * 
-	 * @return 	WP_Error|bool|string
+	 *
+	 * @since   1.3.7
+	 *
+	 * @return  WP_Error|bool|string
 	 */
 	private function get_creator_network_recommendations_script() {
 
@@ -1281,7 +1288,7 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		// No cached script; fetch from the API.
-		$api = new CKGF_API(
+		$api    = new CKGF_API(
 			$this->api_key(),
 			$this->api_secret(),
 			$this->debug_enabled()
