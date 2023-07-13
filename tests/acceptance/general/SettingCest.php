@@ -153,6 +153,9 @@ class SettingCest
 		// Enable Integration and define its API Keys.
 		$I->setupConvertKitPlugin($I);
 
+		// Go to the Plugin's Settings Screen.
+		$I->loadConvertKitSettingsScreen($I);
+
 		// Check Debug option.
 		$I->checkOption('#debug');
 
