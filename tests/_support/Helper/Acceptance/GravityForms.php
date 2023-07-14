@@ -10,6 +10,82 @@ namespace Helper\Acceptance;
 class GravityForms extends \Codeception\Module
 {
 	/**
+	 * Enables HTML5 Output in Gravity Forms.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   AcceptanceTester $I     AcceptanceTester.
+	 */
+	public function enableGravityFormsHTML5Output($I)
+	{
+		$I->haveOptionInDatabase('rg_gforms_enable_html5', '1');
+	}
+
+	/**
+	 * Disables HTML5 Output in Gravity Forms.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   AcceptanceTester $I     AcceptanceTester.
+	 */
+	public function disableGravityFormsHTML5Output($I)
+	{
+		$I->haveOptionInDatabase('rg_gforms_enable_html5', '0');
+	}
+
+	/**
+	 * Check that the Form Settings screen for the given Gravity Form has a ConvertKit
+	 * section registered, displaying the given message.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   AcceptanceTester $I                 AcceptanceTester.
+	 * @param   int              $gravityFormID     Gravity Forms Form ID.
+	 * @param   string           $message           Message.
+	 */
+	public function seeGravityFormsSettingMessage($I, $gravityFormID, $message)
+	{
+		// Navigate to Form's settings.
+		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
+
+		// Confirm the ConvertKit settings section exists.
+		$I->seeElementInDOM('#gform-settings-section-convertkit');
+
+		// Confirm a message is displayed telling the user HTML5 output is required.
+		$I->seeInSource($message);
+	}
+
+	/**
+	 * Check that enabling the Creator Network Recommendations on the Form Settings screen
+	 * for the given Gravity Form works.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   AcceptanceTester $I                 AcceptanceTester.
+	 * @param   int              $gravityFormID     Gravity Forms Form ID.
+	 */
+	public function enableGravityFormsSettingCreatorNetworkRecommendations($I, $gravityFormID)
+	{
+		// Navigate to Form's settings.
+		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
+
+		// Confirm the ConvertKit settings section exists.
+		$I->seeElementInDOM('#gform-settings-section-convertkit');
+
+		// Enable Creator Network Recommendations.
+		$I->click('label[for="_gform_setting_ckgf_enable_creator_network_recommendations"]');
+
+		// Save settings.
+		$I->click('#gform-settings-save');
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Confirm settings saved.
+		$I->seeCheckboxIsChecked('#_gform_setting_ckgf_enable_creator_network_recommendations');
+	}
+
+	/**
 	 * Creates a Gravity Forms Form.
 	 *
 	 * @since   1.2.1
@@ -240,9 +316,10 @@ class GravityForms extends \Codeception\Module
 	 *
 	 * @param   AcceptanceTester $I              AcceptanceTester.
 	 * @param   int              $gravityFormID  Gravity Forms Form ID.
+	 * @param   bool             $ajax           Enable AJAX on Form Submission.
 	 * @return  int                                 Page ID
 	 */
-	public function createPageWithGravityFormShortcode($I, $gravityFormID)
+	public function createPageWithGravityFormShortcode($I, $gravityFormID, $ajax = false)
 	{
 		return $I->havePostInDatabase(
 			[
@@ -250,7 +327,7 @@ class GravityForms extends \Codeception\Module
 				'post_status'  => 'publish',
 				'post_name'    => 'gravity-form-' . $gravityFormID,
 				'post_title'   => 'Gravity Form #' . $gravityFormID,
-				'post_content' => '[gravityform id="' . $gravityFormID . '" title="false" description="false"]',
+				'post_content' => '[gravityform id="' . $gravityFormID . '" title="false" description="false" ajax="' . ( $ajax ? 'true' : 'false' ) . '"]',
 			]
 		);
 	}

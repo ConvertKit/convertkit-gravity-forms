@@ -130,6 +130,15 @@ class GFConvertKit extends GFFeedAddOn {
 	private static $_instance = null; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
 	/**
+	 * Holds the key to store the Creator Network Recommendations JS URL in.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @var     string
+	 */
+	private $creator_network_recommendations_script_key = 'ckgf_creator_network_recommendations_script';
+
+	/**
 	 * Holds the API instance.
 	 *
 	 * @since   1.2.1
@@ -155,6 +164,199 @@ class GFConvertKit extends GFFeedAddOn {
 				'option_label' => esc_html__( 'Send to ConvertKit only when payment is received.', 'convertkit' ),
 			)
 		);
+
+		// Register fields on the Form Settings screen.
+		add_filter( 'gform_form_settings_fields', array( $this, 'add_form_settings_fields' ), 10, 1 );
+
+		// Output Creator Network Recommendations script, if enabled on the Form.
+		add_filter( 'gform_enqueue_scripts', array( $this, 'maybe_enqueue_creator_network_recommendations_script' ), 10, 2 );
+
+	}
+
+	/**
+	 * Registers a section in each Gravity Forms' "Form Settings" screen, displaying
+	 * an option to enable the Creator Network recommendations script if available on the ConvertKit account.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   array $fields     Settings Fields.
+	 * @return  array               Settings Fields
+	 */
+	public function add_form_settings_fields( $fields ) {
+
+		// If "Output HTML5" is disabled at Forms > Settings, don't show an option.
+		// This would render an email field as input[type=text], which the Creator
+		// Network Recommendations script does not recognize.
+		if ( ! (bool) get_option( 'rg_gforms_enable_html5' ) ) {
+			return array_merge(
+				$fields,
+				$this->get_creator_network_form_setting_field(
+					false,
+					sprintf(
+						'%s <a href="%s">%s</a>',
+						esc_html__( 'HTML5 output is required for proper function. Please enable this in ', 'convertkit' ),
+						esc_url( admin_url( 'admin.php?page=gf_settings' ) ),
+						esc_html__( 'Gravity Forms settings.', 'convertkit' )
+					)
+				)
+			);
+		}
+
+		// If no API Key and Secret is specified, don't show an option.
+		if ( ! $this->has_api_key_and_secret() ) {
+			return array_merge(
+				$fields,
+				$this->get_creator_network_form_setting_field(
+					false,
+					sprintf(
+						'%s <a href="%s">%s</a>',
+						esc_html__( 'Please enter your API Key and Secret on the', 'convertkit' ),
+						esc_url( ckgf_get_settings_link() ),
+						esc_html__( 'settings screen', 'convertkit' )
+					)
+				)
+			);
+		}
+
+		// Query API to fetch Creator Network Recommendations script.
+		$result = $this->get_creator_network_recommendations_script( true );
+
+		// If an error occured, don't show an option.
+		if ( is_wp_error( $result ) ) {
+			return array_merge(
+				$fields,
+				$this->get_creator_network_form_setting_field(
+					false,
+					sprintf(
+						'%s. <a href="%s">%s</a>',
+						$result->get_error_message(),
+						esc_url( ckgf_get_settings_link() ),
+						esc_html__( 'Fix settings', 'convertkit' )
+					)
+				)
+			);
+		}
+
+		// If the result is false, the Creator Network is disabled - don't show an option.
+		if ( ! $result ) {
+			return array_merge(
+				$fields,
+				$this->get_creator_network_form_setting_field(
+					false,
+					sprintf(
+						'%s <a href="%s">%s</a>',
+						esc_html__( 'Creator Network Recommendations requires a', 'convertkit' ),
+						esc_url( ckgf_get_settings_billing_url() ),
+						esc_html__( 'paid ConvertKit Plan', 'convertkit' )
+					)
+				)
+			);
+		}
+
+		// Creator Network is enabled.
+		return array_merge(
+			$fields,
+			$this->get_creator_network_form_setting_field(
+				true,
+				__( 'If enabled, displays the Creator Network Recommendations modal when this form is submitted.', 'convertkit' )
+			)
+		);
+
+	}
+
+	/**
+	 * Returns a section and settings field for a Gravity Form when editing its Form Settings,
+	 * to enable/disable the Creator Network Recommendations modal.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   bool   $enabled_on_account     Creator Network is available. If false, only the description is returned.
+	 * @param   string $description            Description.
+	 * @return  array                           Settings Fields
+	 */
+	public function get_creator_network_form_setting_field( $enabled_on_account, $description ) {
+
+		// If the Creator Network feature isn't enabled on the ConvertKit account,
+		// just show the description.
+		if ( ! $enabled_on_account ) {
+			return array(
+				'ckgf' => array(
+					'title'  => CKGF_SHORT_TITLE,
+					'fields' => array(
+						array(
+							'name' => 'ckgf_enable_creator_network_recommendations_description',
+							'type' => 'html',
+							'html' => $description,
+						),
+
+						// Ensure that the setting is set to disabled if the form settings are saved.
+						array(
+							'name'  => 'ckgf_enable_creator_network_recommendations',
+							'type'  => 'hidden',
+							'value' => false,
+						),
+					),
+				),
+			);
+		}
+
+		// Return field to toggle the setting.
+		return array(
+			'ckgf' => array(
+				'title'  => CKGF_SHORT_TITLE,
+				'fields' => array(
+					array(
+						'name'    => 'ckgf_enable_creator_network_recommendations',
+						'type'    => 'toggle',
+						'label'   => esc_html__( 'Enable Creator Network Recommendations', 'convertkit' ),
+						'tooltip' => $description,
+					),
+				),
+			),
+		);
+
+	}
+
+	/**
+	 * Enqueues the Creator Network Recommendations script, if the Gravity Forms form
+	 * has the 'Enable Creator Network Recommendations' setting enabled.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   array $form       Gravity Forms Form.
+	 * @param   bool  $is_ajax    If AJAX is enabled for form submission.
+	 */
+	public function maybe_enqueue_creator_network_recommendations_script( $form, $is_ajax ) {
+
+		// Bail if AJAX submission is disabled; we can't show the Creator Network Recommendations
+		// if the page reloads on form submission.
+		if ( ! $is_ajax ) {
+			return;
+		}
+
+		// Bail if Creator Network Recommendations are disabled.
+		if ( ! array_key_exists( 'ckgf_enable_creator_network_recommendations', $form ) ) {
+			return;
+		}
+		if ( ! $form['ckgf_enable_creator_network_recommendations'] ) {
+			return;
+		}
+
+		// Fetch Creator Network Recommendations script URL.
+		$script_url = $this->get_creator_network_recommendations_script();
+
+		// Bail if an error occured fetching the script, or no script exists,
+		// because Creator Network Recommendations are not enabled on the
+		// ConvertKit account.
+		if ( is_wp_error( $script_url ) ) {
+			return;
+		}
+		if ( ! $script_url ) {
+			return;
+		}
+
+		// Enqueue script.
+		wp_enqueue_script( 'ckgf-creator-network-recommendations', $script_url, array(), CKGF_PLUGIN_VERSION, true );
 
 	}
 
@@ -1018,6 +1220,45 @@ class GFConvertKit extends GFFeedAddOn {
 	}
 
 	/**
+	 * Returns whether the API Key has been set in the integration's settings.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @return  bool
+	 */
+	private function has_api_key() {
+
+		return ( ! empty( $this->api_key() ) ? true : false );
+
+	}
+
+	/**
+	 * Returns whether the API Secret has been set in the integration's settings.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @return  bool
+	 */
+	private function has_api_secret() {
+
+		return ( ! empty( $this->api_secret() ) ? true : false );
+
+	}
+
+	/**
+	 * Returns whether the API Key and Secret have been set in the integration's settings.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @return  bool
+	 */
+	private function has_api_key_and_secret() {
+
+		return $this->has_api_key() && $this->has_api_secret();
+
+	}
+
+	/**
 	 * Returns whether debug logging is enabled in the integration's settings.
 	 *
 	 * @since   1.2.1
@@ -1027,6 +1268,64 @@ class GFConvertKit extends GFFeedAddOn {
 	private function debug_enabled() {
 
 		return (bool) $this->get_plugin_setting( 'debug' );
+
+	}
+
+	/**
+	 * Fetches the Creator Network Recommendations script from the database, falling
+	 * back to an API query if the database doesn't have a copy of it stored.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   bool $force  If enabled, queries the API instead of checking the cached data.
+	 *
+	 * @return  WP_Error|bool|string
+	 */
+	private function get_creator_network_recommendations_script( $force = true ) {
+
+		// Get Creator Network Recommendations script URL.
+		if ( ! $force ) {
+			$script_url = get_option( $this->creator_network_recommendations_script_key );
+			if ( $script_url ) {
+				return $script_url;
+			}
+		}
+
+		// No cached script, or we're forcing an API query; fetch from the API.
+		$api = new CKGF_API(
+			$this->api_key(),
+			$this->api_secret(),
+			$this->debug_enabled()
+		);
+
+		// Sanity check that we're using the ConvertKit WordPress Libraries 1.3.7 or higher.
+		// If another ConvertKit Plugin is active and out of date, its libraries might
+		// be loaded that don't have this method.
+		if ( ! method_exists( $api, 'recommendations_script' ) ) {
+			delete_option( $this->creator_network_recommendations_script_key );
+			return false;
+		}
+
+		// Get script from API.
+		$result = $api->recommendations_script();
+
+		// Bail if an error occured.
+		if ( is_wp_error( $result ) ) {
+			delete_option( $this->creator_network_recommendations_script_key );
+			return $result;
+		}
+
+		// Bail if not enabled.
+		if ( ! $result['enabled'] ) {
+			delete_option( $this->creator_network_recommendations_script_key );
+			return false;
+		}
+
+		// Store script URL, as Creator Network Recommendations are available on this account.
+		update_option( $this->creator_network_recommendations_script_key, $result['embed_js'] );
+
+		// Return.
+		return $result['embed_js'];
 
 	}
 
