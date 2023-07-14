@@ -240,9 +240,10 @@ class GravityForms extends \Codeception\Module
 	 *
 	 * @param   AcceptanceTester $I              AcceptanceTester.
 	 * @param   int              $gravityFormID  Gravity Forms Form ID.
+	 * @param 	bool 			 $ajax 			 Enable AJAX on Form Submission.
 	 * @return  int                                 Page ID
 	 */
-	public function createPageWithGravityFormShortcode($I, $gravityFormID)
+	public function createPageWithGravityFormShortcode($I, $gravityFormID, $ajax = false)
 	{
 		return $I->havePostInDatabase(
 			[
@@ -250,7 +251,7 @@ class GravityForms extends \Codeception\Module
 				'post_status'  => 'publish',
 				'post_name'    => 'gravity-form-' . $gravityFormID,
 				'post_title'   => 'Gravity Form #' . $gravityFormID,
-				'post_content' => '[gravityform id="' . $gravityFormID . '" title="false" description="false"]',
+				'post_content' => '[gravityform id="' . $gravityFormID . '" title="false" description="false" ajax="' . ( $ajax ? 'true' : 'false' ) . '"]',
 			]
 		);
 	}
