@@ -30,31 +30,23 @@ class RecommendationsCest
 	public function testCreatorNetworkRecommendationsOptionWhenOutputHTML5Disabled(AcceptanceTester $I)
 	{
 		// Disable Output HTML5 option.
-		$I->haveOptionInDatabase('rg_gforms_enable_html5', '0');
+		$I->disableGravityFormsHTML5Output($I);
 
 		// Create Form.
 		$gravityFormID = $I->createGravityFormsForm($I);
 
-		// Navigate to Form's settings.
-		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
-
-		// Confirm the ConvertKit settings section exists.
-		$I->seeElementInDOM('#gform-settings-section-convertkit');
-
-		// Confirm a message is displayed telling the user HTML5 output is required.
-		$I->seeInSource('HTML5 output is required for proper function. Please enable this in  <a href="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-admin/admin.php?page=gf_settings">Gravity Forms settings.</a>');
+		// Confirm that the Form Settings display the expected error message.
+		$I->seeGravityFormsSettingMessage(
+			$I,
+			$gravityFormID,
+			'HTML5 output is required for proper function. Please enable this in  <a href="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-admin/admin.php?page=gf_settings">Gravity Forms settings.</a>'
+		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
-		// Load the Page on the frontend site.
-		$I->amOnPage('/?p=' . $pageID);
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
 		// Confirm the recommendations script was not loaded.
-		$I->dontSeeInSource('recommendations.js');
+		$I->dontSeeCreatorNetworkRecommendationsScript($I, $pageID);
 	}
 
 	/**
@@ -68,37 +60,29 @@ class RecommendationsCest
 	public function testCreatorNetworkRecommendationsOptionWhenNoAPIKeyOrSecret(AcceptanceTester $I)
 	{
 		// Enable Output HTML5 option.
-		$I->haveOptionInDatabase('rg_gforms_enable_html5', '1');
+		$I->enableGravityFormsHTML5Output($I);
 
 		// Create Form.
 		$gravityFormID = $I->createGravityFormsForm($I);
 
-		// Navigate to Form's settings.
-		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
-
-		// Confirm the ConvertKit settings section exists.
-		$I->seeElementInDOM('#gform-settings-section-convertkit');
-
-		// Confirm a message is displayed telling the user to enter their API Key and Secret.
-		$I->seeInSource('Please enter your API Key and Secret on the <a href="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-admin/admin.php?page=gf_settings&amp;subview=ckgf">settings screen</a>');
+		// Confirm that the Form Settings display the expected error message.
+		$I->seeGravityFormsSettingMessage(
+			$I,
+			$gravityFormID,
+			'Please enter your API Key and Secret on the <a href="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-admin/admin.php?page=gf_settings&amp;subview=ckgf">settings screen</a>'
+		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
-		// Load the Page on the frontend site.
-		$I->amOnPage('/?p=' . $pageID);
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
 		// Confirm the recommendations script was not loaded.
-		$I->dontSeeInSource('recommendations.js');
+		$I->dontSeeCreatorNetworkRecommendationsScript($I, $pageID);
 	}
 
 	/**
 	 * Tests that the 'Enable Creator Network Recommendations' option on a Form's settings
 	 * is not displayed when no API Secret is specified at Forms > Settings > ConvertKit.
-	 * 
+	 *
 	 * This handles users upgrading from < 1.3.7, where no API Secret setting was provided.
 	 *
 	 * @since   1.3.7
@@ -111,31 +95,23 @@ class RecommendationsCest
 		$I->setupConvertKitPlugin($I, $_ENV['CONVERTKIT_API_KEY'], '', false);
 
 		// Enable Output HTML5 option.
-		$I->haveOptionInDatabase('rg_gforms_enable_html5', '1');
+		$I->enableGravityFormsHTML5Output($I);
 
 		// Create Form.
 		$gravityFormID = $I->createGravityFormsForm($I);
 
-		// Navigate to Form's settings.
-		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
-
-		// Confirm the ConvertKit settings section exists.
-		$I->seeElementInDOM('#gform-settings-section-convertkit');
-
-		// Confirm a message is displayed telling the user to enter their API Key and Secret.
-		$I->seeInSource('Please enter your API Key and Secret on the <a href="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-admin/admin.php?page=gf_settings&amp;subview=ckgf">settings screen</a>');
+		// Confirm that the Form Settings display the expected error message.
+		$I->seeGravityFormsSettingMessage(
+			$I,
+			$gravityFormID,
+			'Please enter your API Key and Secret on the <a href="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-admin/admin.php?page=gf_settings&amp;subview=ckgf">settings screen</a>'
+		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
-		// Load the Page on the frontend site.
-		$I->amOnPage('/?p=' . $pageID);
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
 		// Confirm the recommendations script was not loaded.
-		$I->dontSeeInSource('recommendations.js');
+		$I->dontSeeCreatorNetworkRecommendationsScript($I, $pageID);
 	}
 
 	/**
@@ -152,31 +128,23 @@ class RecommendationsCest
 		$I->setupConvertKitPlugin($I, 'fakeApiKey', 'fakeApiSecret');
 
 		// Enable Output HTML5 option.
-		$I->haveOptionInDatabase('rg_gforms_enable_html5', '1');
+		$I->enableGravityFormsHTML5Output($I);
 
 		// Create Form.
 		$gravityFormID = $I->createGravityFormsForm($I);
 
-		// Navigate to Form's settings.
-		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
-
-		// Confirm the ConvertKit settings section exists.
-		$I->seeElementInDOM('#gform-settings-section-convertkit');
-
-		// Confirm a message is displayed telling the user that their API Secret is not valid.
-		$I->seeInSource('Authorization Failed: API Secret not valid. <a href="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-admin/admin.php?page=gf_settings&amp;subview=ckgf">Fix settings</a>');
+		// Confirm that the Form Settings display the expected error message.
+		$I->seeGravityFormsSettingMessage(
+			$I,
+			$gravityFormID,
+			'Authorization Failed: API Secret not valid. <a href="' . $_ENV['TEST_SITE_WP_URL'] . '/wp-admin/admin.php?page=gf_settings&amp;subview=ckgf">Fix settings</a>'
+		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
-		// Load the Page on the frontend site.
-		$I->amOnPage('/?p=' . $pageID);
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
 		// Confirm the recommendations script was not loaded.
-		$I->dontSeeInSource('recommendations.js');
+		$I->dontSeeCreatorNetworkRecommendationsScript($I, $pageID);
 	}
 
 	/**
@@ -194,31 +162,23 @@ class RecommendationsCest
 		$I->setupConvertKitPlugin($I, $_ENV['CONVERTKIT_API_KEY_NO_DATA'], $_ENV['CONVERTKIT_API_SECRET_NO_DATA']);
 
 		// Enable Output HTML5 option.
-		$I->haveOptionInDatabase('rg_gforms_enable_html5', '1');
+		$I->enableGravityFormsHTML5Output($I);
 
 		// Create Form.
 		$gravityFormID = $I->createGravityFormsForm($I);
 
-		// Navigate to Form's settings.
-		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
-
-		// Confirm the ConvertKit settings section exists.
-		$I->seeElementInDOM('#gform-settings-section-convertkit');
-
-		// Confirm a message is displayed telling the user that their API Secret is not valid.
-		$I->seeInSource('Creator Network Recommendations requires a <a href="https://app.convertkit.com/account_settings/billing/?utm_source=wordpress&amp;utm_content=convertkit-gravity-forms">paid ConvertKit Plan</a>');
+		// Confirm that the Form Settings display the expected error message.
+		$I->seeGravityFormsSettingMessage(
+			$I,
+			$gravityFormID,
+			'Creator Network Recommendations requires a <a href="https://app.convertkit.com/account_settings/billing/?utm_source=wordpress&amp;utm_content=convertkit-gravity-forms">paid ConvertKit Plan</a>'
+		);
 
 		// Create a Page with the Gravity Forms shortcode as its content.
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
-		// Load the Page on the frontend site.
-		$I->amOnPage('/?p=' . $pageID);
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
 		// Confirm the recommendations script was not loaded.
-		$I->dontSeeInSource('recommendations.js');
+		$I->dontSeeCreatorNetworkRecommendationsScript($I, $pageID);
 	}
 
 	/**
@@ -238,41 +198,19 @@ class RecommendationsCest
 		$I->setupConvertKitPlugin($I);
 
 		// Enable Output HTML5 option.
-		$I->haveOptionInDatabase('rg_gforms_enable_html5', '1');
+		$I->enableGravityFormsHTML5Output($I);
 
 		// Create Form.
 		$gravityFormID = $I->createGravityFormsForm($I);
 
-		// Navigate to Form's settings.
-		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
+		// Enable Creator Network Recommendations on the form's settings.
+		$I->enableGravityFormsSettingCreatorNetworkRecommendations($I, $gravityFormID);
 
-		// Confirm the ConvertKit settings section exists.
-		$I->seeElementInDOM('#gform-settings-section-convertkit');
-
-		// Enable Creator Network Recommendations.
-		$I->click('label[for="_gform_setting_ckgf_enable_creator_network_recommendations"]');
-
-		// Save settings.
-		$I->click('#gform-settings-save');
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
-		// Confirm settings saved.
-		$I->seeCheckboxIsChecked('#_gform_setting_ckgf_enable_creator_network_recommendations');
-		
 		// Create a Page with the Gravity Forms shortcode as its content.
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID);
 
-		// Load the Page on the frontend site.
-		$I->amOnPage('/?p=' . $pageID);
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
-		// Confirm the recommendations script was not loaded, because the form's AJAX submission
-		// option is disabled.
-		$I->dontSeeInSource('recommendations.js');
+		// Confirm the recommendations script was not loaded, because AJAX was disabled on the form.
+		$I->dontSeeCreatorNetworkRecommendationsScript($I, $pageID);
 	}
 
 	/**
@@ -291,40 +229,19 @@ class RecommendationsCest
 		$I->setupConvertKitPlugin($I);
 
 		// Enable Output HTML5 option.
-		$I->haveOptionInDatabase('rg_gforms_enable_html5', '1');
+		$I->enableGravityFormsHTML5Output($I);
 
 		// Create Form.
 		$gravityFormID = $I->createGravityFormsForm($I);
 
-		// Navigate to Form's settings.
-		$I->amOnAdminPage('admin.php?page=gf_edit_forms&view=settings&subview=settings&id=' . $gravityFormID);
+		// Enable Creator Network Recommendations on the form's settings.
+		$I->enableGravityFormsSettingCreatorNetworkRecommendations($I, $gravityFormID);
 
-		// Confirm the ConvertKit settings section exists.
-		$I->seeElementInDOM('#gform-settings-section-convertkit');
-
-		// Enable Creator Network Recommendations.
-		$I->click('label[for="_gform_setting_ckgf_enable_creator_network_recommendations"]');
-
-		// Save settings.
-		$I->click('#gform-settings-save');
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
-		// Confirm settings saved.
-		$I->seeCheckboxIsChecked('#_gform_setting_ckgf_enable_creator_network_recommendations');
-		
 		// Create a Page with the Gravity Forms shortcode as its content.
 		$pageID = $I->createPageWithGravityFormShortcode($I, $gravityFormID, true);
 
-		// Load the Page on the frontend site.
-		$I->amOnPage('/?p=' . $pageID);
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
 		// Confirm the recommendations script was loaded.
-		$I->seeInSource('recommendations.js');
+		$I->seeCreatorNetworkRecommendationsScript($I, $pageID);
 
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', 'First');
