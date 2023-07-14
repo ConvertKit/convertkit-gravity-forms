@@ -36,33 +36,26 @@ class Plugin extends \Codeception\Module
 	}
 
 	/**
-	 * Helper method to setup the Plugin's API Key and Secret, and enable the integration.
+	 * Helper method to programmatically setup the Plugin's API Key and Secret,
+	 * enabling debug logging.
 	 *
 	 * @since   1.2.1
 	 *
-	 * @param   AcceptanceTester $I  AcceptanceTester.
+	 * @param   AcceptanceTester $I              AcceptanceTester.
+	 * @param   bool|string      $apiKey         API Key (if specified, used instead of CONVERTKIT_API_KEY).
+	 * @param   bool|string      $apiSecret      API Secret (if specified, used instead of CONVERTKIT_API_SECRET).
+	 * @param   bool|string      $debug          Debug log enabled.
 	 */
-	public function setupConvertKitPlugin($I)
+	public function setupConvertKitPlugin($I, $apiKey = false, $apiSecret = false, $debug = false)
 	{
-		// Go to the Plugin's Settings Screen.
-		$I->loadConvertKitSettingsScreen($I);
-
-		// Complete API Fields.
-		$I->fillField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
-		$I->fillField('_gform_setting_api_secret', $_ENV['CONVERTKIT_API_SECRET']);
-
-		// Click the Save Settings button.
-		$I->click('#gform-settings-save');
-
-		// Check that no PHP warnings or notices were output.
-		$I->checkNoWarningsAndNoticesOnScreen($I);
-
-		// Confirm that a message is displayed confirming settings saved.
-		$I->seeInSource('Settings updated.');
-
-		// Check the value of the fields match the inputs provided.
-		$I->seeInField('_gform_setting_api_key', $_ENV['CONVERTKIT_API_KEY']);
-		$I->seeInField('_gform_setting_api_secret', $_ENV['CONVERTKIT_API_SECRET']);
+		$I->haveOptionInDatabase(
+			'gravityformsaddon_ckgf_settings',
+			[
+				'api_key'    => ( $apiKey !== false ? $apiKey : $_ENV['CONVERTKIT_API_KEY'] ),
+				'api_secret' => ( $apiSecret !== false ? $apiSecret : $_ENV['CONVERTKIT_API_SECRET'] ),
+				'debug'      => ( $debug !== false ? '1' : '0' ),
+			]
+		);
 	}
 
 	/**
@@ -189,6 +182,48 @@ class Plugin extends \Codeception\Module
 				$value
 			);
 		}
+	}
+
+	/**
+	 * Check that the given Page does output the Creator Network Recommendations
+	 * script.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   AcceptanceTester $I             AcceptanceTester.
+	 * @param   int              $pageID        Page ID.
+	 */
+	public function seeCreatorNetworkRecommendationsScript($I, $pageID)
+	{
+		// Load the Page on the frontend site.
+		$I->amOnPage('/?p=' . $pageID);
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Confirm the recommendations script was not loaded.
+		$I->seeInSource('recommendations.js');
+	}
+
+	/**
+	 * Check that the given Page does not output the Creator Network Recommendations
+	 * script.
+	 *
+	 * @since   1.3.7
+	 *
+	 * @param   AcceptanceTester $I             AcceptanceTester.
+	 * @param   int              $pageID        Page ID.
+	 */
+	public function dontSeeCreatorNetworkRecommendationsScript($I, $pageID)
+	{
+		// Load the Page on the frontend site.
+		$I->amOnPage('/?p=' . $pageID);
+
+		// Check that no PHP warnings or notices were output.
+		$I->checkNoWarningsAndNoticesOnScreen($I);
+
+		// Confirm the recommendations script was not loaded.
+		$I->dontSeeInSource('recommendations.js');
 	}
 
 	/**
