@@ -219,7 +219,7 @@ class GFConvertKit extends GFFeedAddOn {
 		}
 
 		// Query API to fetch Creator Network Recommendations script.
-		$result = $this->get_creator_network_recommendations_script();
+		$result = $this->get_creator_network_recommendations_script( true );
 
 		// If an error occured, don't show an option.
 		if ( is_wp_error( $result ) ) {
@@ -1277,17 +1277,21 @@ class GFConvertKit extends GFFeedAddOn {
 	 *
 	 * @since   1.3.7
 	 *
+	 * @param   bool $force  If enabled, queries the API instead of checking the cached data.
+	 *
 	 * @return  WP_Error|bool|string
 	 */
-	private function get_creator_network_recommendations_script() {
+	private function get_creator_network_recommendations_script( $force = true ) {
 
 		// Get Creator Network Recommendations script URL.
-		$script_url = get_option( $this->creator_network_recommendations_script_key );
-		if ( $script_url ) {
-			return $script_url;
+		if ( ! $force ) {
+			$script_url = get_option( $this->creator_network_recommendations_script_key );
+			if ( $script_url ) {
+				return $script_url;
+			}
 		}
 
-		// No cached script; fetch from the API.
+		// No cached script, or we're forcing an API query; fetch from the API.
 		$api = new CKGF_API(
 			$this->api_key(),
 			$this->api_secret(),
@@ -1298,6 +1302,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// If another ConvertKit Plugin is active and out of date, its libraries might
 		// be loaded that don't have this method.
 		if ( ! method_exists( $api, 'recommendations_script' ) ) {
+			delete_option( $this->creator_network_recommendations_script_key );
 			return false;
 		}
 
@@ -1306,15 +1311,17 @@ class GFConvertKit extends GFFeedAddOn {
 
 		// Bail if an error occured.
 		if ( is_wp_error( $result ) ) {
+			delete_option( $this->creator_network_recommendations_script_key );
 			return $result;
 		}
 
 		// Bail if not enabled.
 		if ( ! $result['enabled'] ) {
+			delete_option( $this->creator_network_recommendations_script_key );
 			return false;
 		}
 
-		// Store script URL.
+		// Store script URL, as Creator Network Recommendations are available on this account.
 		update_option( $this->creator_network_recommendations_script_key, $result['embed_js'] );
 
 		// Return.
