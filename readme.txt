@@ -5,7 +5,7 @@ Tags: email, marketing, embed form, convertkit, capture
 Requires at least: 5.0
 Tested up to: 6.2.2
 Requires PHP: 5.6.20
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,10 @@ No. You must first have an account on ConvertKit.com, but you do not have to use
 2. Gravity Forms ConvertKit Settings
 
 == Changelog ==
+
+### 1.3.7 2023-07-17
+* Added: Enable Creator Network Recommendations modal on individual Forms at Forms > Settings
+* Updated: ConvertKit WordPress Libraries to 1.3.7
 
 ### 1.3.6 2023-06-13
 * Updated: ConvertKit WordPress Libraries to 1.3.6
