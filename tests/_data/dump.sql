@@ -7,56 +7,6 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
--- Drop WishList Member tables, as Plugin activation will create these.
-DROP TABLE IF EXISTS `wp_wlcc_contentarchiver`;
-DROP TABLE IF EXISTS `wp_wlcc_contentmanager_move`;
-DROP TABLE IF EXISTS `wp_wlcc_contentmanager_repost`;
-DROP TABLE IF EXISTS `wp_wlcc_contentmanager_set`;
-DROP TABLE IF EXISTS `wp_wlcc_contentsched`;
-DROP TABLE IF EXISTS `wp_wlm_api_queue`;
-DROP TABLE IF EXISTS `wp_wlm_contentlevel_options`;
-DROP TABLE IF EXISTS `wp_wlm_contentlevels`;
-DROP TABLE IF EXISTS `wp_wlm_email_queue`;
-DROP TABLE IF EXISTS `wp_wlm_emailbroadcast`;
-DROP TABLE IF EXISTS `wp_wlm_level_options`;
-DROP TABLE IF EXISTS `wp_wlm_logs`;
-DROP TABLE IF EXISTS `wp_wlm_options`;
-DROP TABLE IF EXISTS `wp_wlm_presto_player_visits`;
-DROP TABLE IF EXISTS `wp_wlm_user_options`;
-DROP TABLE IF EXISTS `wp_wlm_userlevel_options`;
-DROP TABLE IF EXISTS `wp_wlm_userlevels`;
-
--- Drop WooCommerce tables, as Plugin activation will create these.
-DROP TABLE IF EXISTS `wp_wc_admin_note_actions`;
-DROP TABLE IF EXISTS `wp_wc_admin_notes`;
-DROP TABLE IF EXISTS `wp_wc_category_lookup`;
-DROP TABLE IF EXISTS `wp_wc_customer_lookup`;
-DROP TABLE IF EXISTS `wp_wc_download_log`;
-DROP TABLE IF EXISTS `wp_wc_order_coupon_lookup`;
-DROP TABLE IF EXISTS `wp_wc_order_product_lookup`;
-DROP TABLE IF EXISTS `wp_wc_order_stats`;
-DROP TABLE IF EXISTS `wp_wc_order_tax_lookup`;
-DROP TABLE IF EXISTS `wp_wc_product_attributes_lookup`;
-DROP TABLE IF EXISTS `wp_wc_product_meta_lookup`;
-DROP TABLE IF EXISTS `wp_wc_rate_limits`;
-DROP TABLE IF EXISTS `wp_wc_reserved_stock`;
-DROP TABLE IF EXISTS `wp_wc_tax_rate_classes`;
-DROP TABLE IF EXISTS `wp_wc_webhooks`;
-DROP TABLE IF EXISTS `wp_woocommerce_api_keys`;
-DROP TABLE IF EXISTS `wp_woocommerce_attribute_taxonomies`;
-DROP TABLE IF EXISTS `wp_woocommerce_downloadable_product_permissions`;
-DROP TABLE IF EXISTS `wp_woocommerce_log`;
-DROP TABLE IF EXISTS `wp_woocommerce_order_itemmeta`;
-DROP TABLE IF EXISTS `wp_woocommerce_order_items`;
-DROP TABLE IF EXISTS `wp_woocommerce_payment_tokenmeta`;
-DROP TABLE IF EXISTS `wp_woocommerce_payment_tokens`;
-DROP TABLE IF EXISTS `wp_woocommerce_sessions`;
-DROP TABLE IF EXISTS `wp_woocommerce_shipping_zone_locations`;
-DROP TABLE IF EXISTS `wp_woocommerce_shipping_zone_methods`;
-DROP TABLE IF EXISTS `wp_woocommerce_shipping_zones`;
-DROP TABLE IF EXISTS `wp_woocommerce_tax_rate_locations`;
-DROP TABLE IF EXISTS `wp_woocommerce_tax_rates`;
-
 DROP TABLE IF EXISTS `wp_commentmeta`;
 CREATE TABLE `wp_commentmeta` (
   `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -216,7 +166,7 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (86,  'site_icon',  '0',  'yes'),
 (87,  'medium_large_size_w',  '768',  'yes'),
 (88,  'medium_large_size_h',  '0',  'yes'),
-(89,  'wp_page_for_privacy_policy', '3',  'yes'),
+(89,  'wp_page_for_privacy_policy', '',  'yes'),
 (90,  'show_comments_cookies_opt_in', '1',  'yes'),
 (92,  'disallowed_keys',  '', 'no'),
 (93,  'comment_previously_approved',  '1',  'yes'),
@@ -326,7 +276,7 @@ CREATE TABLE `wp_term_taxonomy` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 INSERT INTO `wp_term_taxonomy` (`term_taxonomy_id`, `term_id`, `taxonomy`, `description`, `parent`, `count`) VALUES
-(1, 1,  'category', '', 0,  1);
+(1, 1,  'category', '', 0,  0);
 
 DROP TABLE IF EXISTS `wp_termmeta`;
 CREATE TABLE `wp_termmeta` (
@@ -381,10 +331,12 @@ INSERT INTO `wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALU
 (13,  1,  'wp_user_level',  '10'),
 (14,  1,  'dismissed_wp_pointers',  ''),
 (15,  1,  'show_welcome_panel', '1'),
-(16,  1,  'session_tokens', 'a:5:{s:64:\"29ec70ce629690f37d499d0534d8fd5ca7c73e0ee13026b4851ecda2198f28d6\";a:4:{s:10:\"expiration\";i:1657973464;s:2:\"ip\";s:9:\"127.0.0.1\";s:2:\"ua\";s:130:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/103.0.5060.114 Safari/537.36\";s:5:\"login\";i:1657800664;}s:64:\"84bfb797c2848378d4a35475259d70914fc9d82fcccd4c87cbdcadd1f02c075b\";a:4:{s:10:\"expiration\";i:1657973466;s:2:\"ip\";s:9:\"127.0.0.1\";s:2:\"ua\";s:130:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/103.0.5060.114 Safari/537.36\";s:5:\"login\";i:1657800666;}s:64:\"8796e03d104b082c6bb0fd6d4413be3c5b08020cfd239b96c2822bb3848bf9e4\";a:4:{s:10:\"expiration\";i:1657973467;s:2:\"ip\";s:9:\"127.0.0.1\";s:2:\"ua\";s:130:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/103.0.5060.114 Safari/537.36\";s:5:\"login\";i:1657800667;}s:64:\"464450da61886db9f9cb5bcb2f1376f32f045bfe0377486bcd893da98989a7ea\";a:4:{s:10:\"expiration\";i:1657973469;s:2:\"ip\";s:9:\"127.0.0.1\";s:2:\"ua\";s:130:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/103.0.5060.114 Safari/537.36\";s:5:\"login\";i:1657800669;}s:64:\"f409332c4d3a7637be4fa0b6a00501f247698b87319daadfb778cf3697228dcf\";a:4:{s:10:\"expiration\";i:1657973631;s:2:\"ip\";s:9:\"127.0.0.1\";s:2:\"ua\";s:117:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\";s:5:\"login\";i:1657800831;}}'),
-(17,  1,  'wp_user-settings', 'unfold=1&ampampmfold=o&ampampeditor=html&ampamplibraryContent=browse&ampampsiteorigin_panels_setting_tab=widgets&amplibraryContent=browse&ampeditor=tinymce'),
-(18,  1,  'wp_user-settings-time',  '1657800833'),
-(19,  1,  'wp_dashboard_quick_press_last_post_id',  '4');
+(16,  1,  'session_tokens', 'a:1:{s:64:\"d1edb8c7d17dc41fa6de9833631a6381dca0306f20dfd4b64947e6b8818dd16e\";a:4:{s:10:\"expiration\";i:1676810217;s:2:\"ip\";s:9:\"127.0.0.1\";s:2:\"ua\";s:117:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36\";s:5:\"login\";i:1676637417;}}'),
+(17,  1,  'wp_user-settings', 'unfold=1&ampampmfold=o&ampampeditor=html&ampamplibraryContent=browse&ampampsiteorigin_panels_setting_tab=widgets&amplibraryContent=browse&ampeditor=tinymce&libraryContent=browse&editor=tinymce&siteorigin_panels_setting_tab=welcome'),
+(18,  1,  'wp_user-settings-time',  '1676637417'),
+(19,  1,  'wp_dashboard_quick_press_last_post_id',  '1'),
+(20,  1,  'edit_page_per_page',  '100'),
+(21,  1,  'edit_post_per_page',  '100');
 
 DROP TABLE IF EXISTS `wp_users`;
 CREATE TABLE `wp_users` (
@@ -405,6 +357,6 @@ CREATE TABLE `wp_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 INSERT INTO `wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES
-(1, 'admin',  '$P$BFWXNjd4ZSQJ5WZbwremiLvJgoQKU4/', 'admin',  'dev-email@flywheel.local', 'http://convertkit.local', '2022-01-26 12:34:01',  '', 0,  'admin');
+(1, 'admin',  '$P$BFWXNjd4ZSQJ5WZbwremiLvJgoQKU4/', 'admin',  'dev-email@flywheel.local', 'http://convertkit.local',  '2022-01-26 12:34:01',  '', 0,  'admin');
 
--- 2022-07-14 12:15:39
+-- 2023-02-17 12:37:57
