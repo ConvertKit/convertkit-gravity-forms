@@ -19,9 +19,8 @@ function ckgf_get_settings_link( $query_args = array() ) {
 	$query_args = array_merge(
 		$query_args,
 		array(
-			'page'    => 'wc-settings',
-			'tab'     => 'integration',
-			'section' => 'ckwc',
+			'page'    => 'gf_settings',
+			'subview' => 'ckgf',
 		)
 	);
 
@@ -65,5 +64,18 @@ function ckgf_get_signup_url() {
 function ckgf_get_api_key_url() {
 
 	return 'https://app.convertkit.com/account_settings/advanced_settings/?utm_source=wordpress&utm_content=convertkit-gravity-forms';
+
+}
+
+/**
+ * Helper method to return the URL the user needs to visit on the ConvertKit app to upgrade their account.
+ *
+ * @since   1.3.7
+ *
+ * @return  string  ConvertKit App URL.
+ */
+function ckgf_get_settings_billing_url() {
+
+	return 'https://app.convertkit.com/account_settings/billing/?utm_source=wordpress&utm_content=convertkit-gravity-forms';
 
 }
