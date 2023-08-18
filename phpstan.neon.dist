@@ -28,3 +28,4 @@ parameters:
     # so they're false positives.
     ignoreErrors:
         - '#of method GFAddOn::add_note#'
+        - '#Property GFConvertKit::\$_#'
