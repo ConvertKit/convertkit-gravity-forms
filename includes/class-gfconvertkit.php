@@ -51,7 +51,6 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.0.0
 	 *
 	 * @var     string
-	 * @phpstan-ignore-next-line
 	 */
 	protected $_path = CKGF_PLUGIN_BASENAME; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
@@ -70,7 +69,6 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.0.0
 	 *
 	 * @var     string
-	 * @phpstan-ignore-next-line
 	 */
 	protected $_title = CKGF_TITLE; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
@@ -80,7 +78,6 @@ class GFConvertKit extends GFFeedAddOn {
 	 * @since   1.0.0
 	 *
 	 * @var     string
-	 * @phpstan-ignore-next-line
 	 */
 	protected $_short_title = CKGF_SHORT_TITLE; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
