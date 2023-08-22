@@ -941,7 +941,7 @@ class GFConvertKit extends GFFeedAddOn {
 		// Sort resources ascending by the label property.
 		uasort(
 			$resources,
-			function( $a, $b ) {
+			function ( $a, $b ) {
 				return strcmp( $a['label'], $b['label'] );
 			}
 		);
