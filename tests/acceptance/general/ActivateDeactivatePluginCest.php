@@ -34,6 +34,5 @@ class ActivateDeactivatePluginCest
 	{
 		$I->activateConvertKitPlugin($I);
 		$I->deactivateConvertKitPlugin($I);
-
 	}
 }
