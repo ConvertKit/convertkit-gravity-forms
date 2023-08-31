@@ -8,7 +8,7 @@
  * @wordpress-plugin
  * Plugin Name: ConvertKit for Gravity Forms
  * Description: Integrates Gravity Forms with ConvertKit allowing form submissions to be automatically sent to your ConvertKit account.
- * Version: 1.3.7
+ * Version: 1.3.8
  * Author: ConvertKit
  * Author URI: https://convertkit.com/
  * Text Domain: convertkit
@@ -20,7 +20,7 @@ define( 'CKGF_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'CKGF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CKGF_PLUGIN_PATH', __DIR__ );
 define( 'CKGF_PLUGIN_FILEPATH', __FILE__ );
-define( 'CKGF_PLUGIN_VERSION', '1.3.7' );
+define( 'CKGF_PLUGIN_VERSION', '1.3.8' );
 define( 'CKGF_MIN_GF_VERSION', '1.9.3' );
 define( 'CKGF_SLUG', 'ckgf' );
 define( 'CKGF_TITLE', __( 'ConvertKit Gravity Forms Add-On', 'convertkit' ) );
