@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the ConvertKit for Gravity Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: ConvertKit for Gravity Forms 1.3.8\n"
+"Project-Id-Version: ConvertKit for Gravity Forms 1.3.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/convertkit-gravity-forms\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-08-31T13:01:50+00:00\n"
+"POT-Creation-Date: 2023-10-05T12:52:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: convertkit\n"
@@ -33,92 +33,6 @@ msgstr ""
 
 #: convertkit.php:26
 msgid "ConvertKit Gravity Forms Add-On"
-msgstr ""
-
-#: includes/class-ckgf-api.php:46
-msgid "form_subscribe(): the form_id parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:47
-msgid "form_subscribe(): the email parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:49
-msgid "sequence_subscribe(): the sequence_id parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:50
-msgid "sequence_subscribe(): the email parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:52
-msgid "tag_subscribe(): the tag_id parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:53
-msgid "tag_subscribe(): the email parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:55
-msgid "get_subscriber_by_email(): the email parameter is empty."
-msgstr ""
-
-#. translators: Email Address
-#: includes/class-ckgf-api.php:57
-msgid "No subscriber(s) exist in ConvertKit matching the email address %s."
-msgstr ""
-
-#: includes/class-ckgf-api.php:59
-msgid "get_subscriber_by_id(): the subscriber_id parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:61
-msgid "get_subscriber_tags(): the subscriber_id parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:63
-msgid "unsubscribe(): the email parameter is empty."
-msgstr ""
-
-#: includes/class-ckgf-api.php:65
-msgid "get_all_posts(): the posts_per_request parameter must be equal to or greater than 1."
-msgstr ""
-
-#: includes/class-ckgf-api.php:66
-msgid "get_all_posts(): the posts_per_request parameter must be equal to or less than 50."
-msgstr ""
-
-#: includes/class-ckgf-api.php:68
-msgid "get_posts(): the page parameter must be equal to or greater than 1."
-msgstr ""
-
-#: includes/class-ckgf-api.php:69
-msgid "get_posts(): the per_page parameter must be equal to or greater than 1."
-msgstr ""
-
-#: includes/class-ckgf-api.php:70
-msgid "get_posts(): the per_page parameter must be equal to or less than 50."
-msgstr ""
-
-#. translators: HTTP method
-#: includes/class-ckgf-api.php:73
-msgid "API request method %s is not supported in ConvertKit_API class."
-msgstr ""
-
-#: includes/class-ckgf-api.php:74
-msgid "ConvertKit API Error: Rate limit hit."
-msgstr ""
-
-#: includes/class-ckgf-api.php:75
-msgid "ConvertKit API Error: Internal server error."
-msgstr ""
-
-#: includes/class-ckgf-api.php:76
-msgid "ConvertKit API Error: Bad gateway."
-msgstr ""
-
-#: includes/class-ckgf-api.php:77
-msgid "ConvertKit API Error: The response is not of the expected type array."
 msgstr ""
 
 #: includes/class-gfconvertkit.php:161
