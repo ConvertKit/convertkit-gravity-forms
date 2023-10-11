@@ -5,11 +5,14 @@
 # Use WPDb to set up your initial database fixture.
 # If you need both WPWebDriver and WPBrowser tests - create a separate suite.
 
+# Remember to call `vendor/bin/codecept build` after editing this file.
+
 actor: AcceptanceTester
 modules:
     enabled:
         # wp-browser supplied classes, which provide WordPress specific functions
         - WPDb
+        - WPFilesystem
         - WPWebDriver
 
         # Codeception supplied classes, which provide assertions and filesystem functions
@@ -34,7 +37,7 @@ modules:
             #import the dump before the tests; this means the test site database will be repopulated before the tests.
             populate: true
             # re-import the dump between tests; this means the test site database will be repopulated between the tests.
-            cleanup: true
+            cleanup: false
             waitlock: 10
             url: '%TEST_SITE_WP_URL%'
             urlReplacement: true #replace the hardcoded dump URL with the one above
@@ -47,6 +50,8 @@ modules:
             headers:
                 X_TEST_REQUEST: 1
                 X_WPBROWSER_REQUEST: 1
+        WPFilesystem:
+            wpRootFolder: '%WP_ROOT_FOLDER%'
         WPWebDriver:
             url: '%TEST_SITE_WP_URL%'
             adminUsername: '%TEST_SITE_ADMIN_USERNAME%'
@@ -63,3 +68,5 @@ modules:
                         "--disable-gpu",
                         "--user-agent=HeadlessChrome"
                     ]
+                    prefs:
+                        download.default_directory: '%WP_ROOT_FOLDER%'
