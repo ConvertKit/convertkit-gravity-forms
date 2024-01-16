@@ -1,17 +1,17 @@
-# Copyright (C) 2023 ConvertKit
+# Copyright (C) 2024 ConvertKit
 # This file is distributed under the same license as the ConvertKit for Gravity Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: ConvertKit for Gravity Forms 1.4.0\n"
+"Project-Id-Version: ConvertKit for Gravity Forms 1.4.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/convertkit-gravity-forms\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-09T15:34:39+00:00\n"
+"POT-Creation-Date: 2024-01-16T15:11:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: convertkit\n"
 
 #. Plugin Name of the plugin
