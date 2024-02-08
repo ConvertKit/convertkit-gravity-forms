@@ -112,10 +112,6 @@ class GravityForms extends \Codeception\Module
 		// Wait for the Form Edit screen to load.
 		$I->waitForElementVisible('#no-fields');
 
-		// Open Advanced Fields Panel.
-		$I->click('button[aria-controls="add_advanced_fields"]');
-		$I->wait(2);
-
 		// Add Name Field.
 		$I->click('#add_advanced_fields button[data-type="name"]');
 		$I->wait(2);
