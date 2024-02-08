@@ -69,6 +69,7 @@ class NoticesCest
 		// Confirm no notice from this Plugin displays.
 		$I->dontSee($this->expectedNoticeText);
 
+		// When the official add-on is activated, it checks whether this Plugin is also active, deactivating it if so.
 		// Confirm the official add-on displays its notice that it deactivated this Plugin.
 		$I->see('In order to prevent conflicts, we disabled the existing ConvertKit for Gravity Forms plugin.');
 	}
