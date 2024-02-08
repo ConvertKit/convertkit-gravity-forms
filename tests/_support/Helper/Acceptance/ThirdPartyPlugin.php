@@ -39,6 +39,10 @@ class ThirdPartyPlugin extends \Codeception\Module
 				$I->seePluginActivated('gravityforms');
 				break;
 
+			case 'gravity-forms-convertkit-add-on':
+				$I->seePluginActivated('gravityformsconvertkit');
+				break;
+
 			default:
 				$I->seePluginActivated($name);
 				break;
@@ -70,6 +74,10 @@ class ThirdPartyPlugin extends \Codeception\Module
 		switch ($name) {
 			case 'gravity-forms':
 				$I->deactivatePlugin('gravityforms');
+				break;
+
+			case 'gravity-forms-convertkit-add-on':
+				$I->deactivatePlugin('gravityformsconvertkit');
 				break;
 
 			default:
