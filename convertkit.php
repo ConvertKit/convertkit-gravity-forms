@@ -40,6 +40,7 @@ if ( ! class_exists( 'ConvertKit_Review_Request' ) ) {
 // Load files that are always used.
 require_once CKGF_PLUGIN_PATH . '/includes/functions.php';
 require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-api.php';
+require_once CKGF_PLUGIN_PATH . '/includes/class-ckgf-notices.php';
 require_once CKGF_PLUGIN_PATH . '/includes/class-wp-ckgf.php';
 
 /**

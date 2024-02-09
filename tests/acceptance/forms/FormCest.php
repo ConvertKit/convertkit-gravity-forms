@@ -62,7 +62,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 
 		// Submit Form.
 		$I->click('Submit');
@@ -135,7 +135,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 
 		// Submit Form.
 		$I->click('Submit');
@@ -320,7 +320,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 		$I->selectOption('select.gfield_select', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME']);
 
 		// Submit Form.
@@ -399,7 +399,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 		$I->selectOption('select.gfield_select', $_ENV['CONVERTKIT_API_ADDITIONAL_TAG_NAME']);
 
 		// Submit Form.
@@ -478,7 +478,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 		$I->selectOption( 'select.gfield_select', 'fakeTagNotInConvertKit' );
 
 		// Submit Form.
@@ -557,7 +557,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 
 		// Submit Form.
 		$I->click('Submit');
@@ -641,7 +641,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 
 		// Submit Form.
 		$I->click('Submit');
@@ -720,7 +720,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 
 		// Submit Form.
 		$I->click('Submit');
@@ -790,7 +790,7 @@ class FormCest
 		// Complete Form Fields.
 		$I->fillField('.name_first input[type=text]', $firstName);
 		$I->fillField('.name_last input[type=text]', $lastName);
-		$I->fillField('.ginput_container_email input[type=text]', $emailAddress);
+		$I->fillField('.ginput_container_email input[type=email]', $emailAddress);
 
 		// Submit Form.
 		$I->click('Submit');

@@ -13,6 +13,8 @@ ConvertKit is an email marketing platform for capturing leads from your WordPres
 
 == Description ==
 
+** Please use the official [Gravity Forms ConvertKit Add-On](https://www.gravityforms.com/blog/convertkit-add-on/). Your existing settings will automatically migrate once installed and active. This Add-on will only receive security updates. **
+
 [ConvertKit](https://convertkit.com) makes it easy to capture more leads and sell more products by easily embedding email capture forms anywhere.
 
 This Plugin integrates Gravity Forms with ConvertKit, allowing form submissions to be automatically sent to your ConvertKit account.
